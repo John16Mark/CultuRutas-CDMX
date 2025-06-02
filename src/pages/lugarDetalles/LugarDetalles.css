@@ -1,19 +1,8 @@
-@import "../../var.css";
+@import "../../css/var.css";
 
-/* ---------------- PlacePage.jsx --> Header ------------ */ 
-.pp-header-img {
-    width: 100%;
-    height: 140px;
-    background-attachment: fixed;
+.lugDet-bg {
+    background-color: var(--color-bg);
 }
-
-.pp-header-btn {
-    position: absolute;
-    margin-top: 2%;
-    margin-left: 4%;
-}
-
-/* ---------------- PlacePage.jsx --> Reviews ------------ */ 
 
 .pp-reviews {
     padding: 4%;

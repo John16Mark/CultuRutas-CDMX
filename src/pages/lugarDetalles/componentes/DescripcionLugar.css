@@ -1,0 +1,20 @@
+@import "../../../css/var.css";
+
+
+
+.DesLug-datos {
+    background-color: var(--secondary-verde);
+    margin-left: 5px;
+    margin-right: 5px;
+    padding-top:20px;
+    padding-left:16px;
+    padding-right:16px;
+}
+
+.DesLug-mapa {
+    width: 100%;
+    min-height: 140%;
+    height: 140px;
+    padding-top: 20px;
+    padding-bottom: 20px;
+}

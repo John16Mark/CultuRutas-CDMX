@@ -1,6 +1,10 @@
 import React from "react";
 import {Rating, ImageList, ImageListItem, useMediaQuery, Button } from '@mui/material';
 
+import './DescripcionLugar.css'
+
+import mapa from "./../../../img/maps.webp";
+
 function DescripcionLugar({nombre, resumen}) {
   let isLogged = false
   let value = "2.0"
@@ -13,42 +17,20 @@ function DescripcionLugar({nombre, resumen}) {
   return (
     <section className='pp-descripcion-lugar container-fluid'>
 
-      <div className='row gx-0 pp-descripcion-lugar-row'>
+      <div className='pp-descripcion-lugar-row'>
 
         {/* Sección - Información Principal: Nombre lugar, Calificación, Drescripción, Imágenes */}
-        <div className='col-md-8 pp-informacion-principal'>
+        <div className='pp-informacion-principal'>
           { /* Nombre del lugar */}
           <h2 className='pp-informacion-principal-nombre-lugar'>
             {nombre}
           </h2>
           { /* Calificación del lugar */}
-          <div className='row gx-0 pp-informacion-principal-calificacion'>
+          <div className='pp-informacion-principal-calificacion'>
             { /* Guardar en Favoritos y Deseados */}
             <div className='pp-informacion-principal-btns'>
               {isLogged ?
               <>
-                {/* Botón agregar a Deseados */}
-                <Button
-                  variant='outlined'
-                  className= 'pp-informacion-principal-btnDeseados'
-                  onClick={handleButtonDeseadosClick}
-                  size='small'
-                  sx={{
-                    borderColor: '#FFC001',
-                    color:'#FFC001',
-                    backgroundColor: 'white',
-                    marginLeft: '5px',
-                    '&:hover': {
-                      color: '#FAC902',
-                    },
-                    minWidth: '40px', 
-                    minHeight: '40px',
-                  }}
-                >
-                  {/*
-                  {isClickedDeseados ? <StarIcon /> : <StarBorderIcon />}
-                  */}
-                </Button>
                 {/* Botón agregar a Favoritos */}
                 <Button
                   variant='outlined'
@@ -81,6 +63,19 @@ function DescripcionLugar({nombre, resumen}) {
           <p>
             {resumen}
           </p>
+          {/*Detalles del lugar*/}
+          <div className='DesLug-datos'>
+            
+            <div
+              className='DesLug-mapa'
+              style={{
+                backgroundImage: `url(${mapa})`,
+                }}>
+            </div>
+
+            <p>Contenido
+              contenido</p>
+          </div>
           
           {/* Impagenes del lugar */}
           <div className='pp-informacion-principal-imagenes'>
