@@ -1,0 +1,17 @@
+@import "../../css/var.css";
+
+.div_central {
+    background-color: var(--color-bg);
+}
+
+.text_field {
+    background-color: var(--color-bg2);
+}
+
+.boton_continuar {
+    background-color: var(--primary-verde);
+}
+
+.link_cafe {
+    color: var(--primary-cafe);
+}
