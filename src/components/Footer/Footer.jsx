@@ -60,7 +60,7 @@ function Footer({ showIncorporaLugar }) {
       </Container>
 
       <Box textAlign="center" pt={4} fontSize="0.875rem" color={'#5a3e36'} >
-        © {new Date().getFullYear()} Aztlán Turismo
+        © {new Date().getFullYear()} CultuRutas CDMX
       </Box>
     </Box>
   );

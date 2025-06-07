@@ -4,11 +4,21 @@ import { Container, Grid } from '@mui/material';
 
 import NavBar from "../../components/NavBar/NavBar";
 import HeaderLugar from "./componentes/HeaderLugar";
+import ImagenesLugar from "./componentes/ImagenesLugar";
 import DescripcionLugar from './componentes/DescripcionLugar'
+import Footer from './../../components/Footer/Footer'
 
 import './LugarDetalles.css';
 
+import fondo1 from '../../img/fondo_1.jpg'
+import fondo2 from '../../img/fondo_oscuro1.jpg'
+
 const LugarDetalles = () => {
+
+  let imgs = []
+  imgs.push(fondo1)
+  imgs.push(fondo2)
+
   return (
   <div className='lugDet-bg'>
     <NavBar
@@ -20,11 +30,17 @@ const LugarDetalles = () => {
 
       />
     </div>
-    {<Grid container spacing={2}>
+    {<Grid container spacing={2}  justifyContent="center"
+      >
       <Grid size={{xs:12, md:4}}>
-        <div>Hola</div>
+        <div>
+          <ImagenesLugar
+            imagenes={imgs}
+          />
+          
+        </div>
       </Grid>
-      <Grid size={{xs:12, md:8}}>
+      <Grid size={{xs:12, md:6}}>
         <div style={{backgroundColor:'#cccccc'}}>
           <DescripcionLugar
             nombre="Nombre del lugar"
@@ -34,6 +50,7 @@ const LugarDetalles = () => {
       </Grid>
     </Grid>}
 
+    <Footer></Footer>
   </div>
   )
 }
