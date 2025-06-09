@@ -1,0 +1,22 @@
+@import "../../css/var.css";
+
+.background-home {
+    position: relative;
+    height: 100vh;
+    width: 100%;
+    background-image: linear-gradient(to left, rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.3)), url('../../img/background-home.jpg');
+    background-size: cover;
+    background-position: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.backgroud-home-box {
+    justify-content: center;
+    text-align: center;
+}
+
+.backgroud-home-typography {
+    text-shadow: '2px 2px 4px rgba(255, 255, 255, 0.7)';
+}
