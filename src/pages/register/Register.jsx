@@ -10,8 +10,106 @@ import image from "./../../img/fondo_oscuro1.jpg";
 
 import './Register.css'
 
+import { validarCorreo, validarContraseña, validarConfirmarContraseña } from './../../utils/validaciones';
+import { handleRegistro } from './register_handler';
+
 const Register = () => {
   const [showPassword, setShowPassword] = useState(false);
+
+  const [correo, setCorreo] = useState('');
+  const [contraseña, setContraseña] = useState('');
+  const [contraseña2, setContraseña2] = useState('');
+  const [errors, setErrors] = useState({});
+
+  const handleEmailChange = (e) => {
+    const value = e.target.value;
+    setCorreo(value);
+    setErrors((prevErrors) => ({
+      ...prevErrors,
+      correo: validarCorreo(value),
+    }));
+  };
+
+  const handlePasswordChange = (e) => {
+    const value = e.target.value;
+    setContraseña(value);
+    setErrors((prevErrors) => ({
+      ...prevErrors,
+      contraseña: validarContraseña(value),
+    }));
+  };
+
+  const handleConfirmPasswordChange = (e) => {
+    const value = e.target.value;
+    setContraseña2(value);
+    setErrors((prevErrors) => ({
+      ...prevErrors,
+      contraseña2: validarConfirmarContraseña(contraseña, value),
+    }));
+  };
+
+  const handleFormSubmit = async (e) => {
+    e.preventDefault();
+    
+    // Validar si los campos no están vacíos
+    if(!correo || !contraseña || !contraseña2) {
+      console.log("Favor de completar todos los campos")
+      setErrors((prevErrors) => ({
+        ...prevErrors,
+        camposObligatorios: true, // Añadir error para campos vacíos
+      }));
+      return
+    }
+
+    // Validar correo
+    const correoRules = validarCorreo(correo);
+    if(!correoRules.sinEspacios || !correoRules.arrobaCaracteres || !correoRules.dominioConPunto || !correoRules.noVacio) {
+      console.log("Correo inválido")
+      setErrors((prevErrors) => ({
+        ...prevErrors,
+        correo: correoRules,
+      }));
+      //setAlertContentError('Por favor, verifique correctamente su correo electrónico.');
+      //handleClickOpenError();
+      return;
+    }
+
+    // Validar contraseñas
+    const passwordRules = validarContraseña(contraseña);
+    const passwordsMatch = validarConfirmarContraseña(contraseña, contraseña2);
+    // Si la contraseña no cumple las reglas
+    if (!passwordRules.longitudValida || !passwordRules.mayuscula || !passwordRules.minuscula || !passwordRules.numero || !passwordRules.noVacio) {
+      console.log("La contraseña no cumple los requisitos")
+      setErrors((prevErrors) => ({
+        ...prevErrors,
+        contraseña: passwordRules,
+      }));
+      //setAlertContentError('Por favor, verifique correctamente su contraseña.');
+      //handleClickOpenError();
+      return;
+    }
+    
+    // Si las contraseñas no coinciden
+    if (!passwordsMatch) {
+      console.log("Las contraseñas no coinciden")
+      setErrors((prevErrors) => ({
+        ...prevErrors,
+        contraseña2: false, // Marcar error en confirmar contraseña
+      }));
+      //setAlertContentError('Por favor, verifique que las contraseñas coinciden.');
+      //handleClickOpenError();
+      return;
+    }
+
+    const resultado = await handleRegistro(e, correo, contraseña);
+    console.log(resultado);
+    if(resultado && resultado.resultado) {
+      console.log("Se mandará un correo de confirmación");
+    } else {
+      console.log("ERROR", resultado);
+    }
+
+  }
 
   const togglePasswordVisibility = () => {
     setShowPassword((prev) => !prev);
@@ -64,10 +162,35 @@ const Register = () => {
             fullWidth
             margin="normal"
             variant="outlined"
+            value={correo}
+            onChange={handleEmailChange}
           />
 
           <TextField
+            style={{marginTop: 50}}
             label="Contraseña"
+            value={contraseña}
+            onChange={handlePasswordChange}
+            className='text_field'
+            type={showPassword ? 'text' : 'password'}
+            fullWidth
+            margin="normal"
+            variant="outlined"
+            InputProps={{
+              endAdornment: (
+                <InputAdornment position="end">
+                  <IconButton onClick={togglePasswordVisibility} edge="end">
+                    {showPassword ? <VisibilityOff /> : <Visibility />}
+                  </IconButton>
+                </InputAdornment>
+              )
+            }}
+          />
+
+          <TextField
+            label="Confirmar Contraseña"
+            value={contraseña2}
+            onChange={handleConfirmPasswordChange}
             className='text_field'
             type={showPassword ? 'text' : 'password'}
             fullWidth
@@ -90,6 +213,7 @@ const Register = () => {
             style={{backgroundColor: '#415b2a'}}
             className='boton_continuar'
             sx={{ mt: 3 }}
+            onClick={handleFormSubmit}
           >
             Registrarse
           </Button>
