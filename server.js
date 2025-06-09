@@ -11,3 +11,7 @@ app.use(express.json());
 const PORT = 3001;
 
 app.post('/register', register_cont.registro_regular);
+
+app.listen(PORT, () => {
+  console.log(`Servidor en funcionamiento en http://localhost:${PORT}`);
+});

@@ -11,6 +11,7 @@ import image from "./../../img/fondo_oscuro1.jpg";
 import './Register.css'
 
 import { validarCorreo, validarContraseña, validarConfirmarContraseña } from './../../utils/validaciones';
+import { handleRegistro } from './register_handler';
 
 const Register = () => {
   const [showPassword, setShowPassword] = useState(false);
@@ -99,6 +100,15 @@ const Register = () => {
       //handleClickOpenError();
       return;
     }
+
+    const resultado = await handleRegistro(e, correo, contraseña);
+    console.log(resultado);
+    if(resultado && resultado.resultado) {
+      console.log("Se mandará un correo de confirmación");
+    } else {
+      console.log("ERROR", resultado);
+    }
+
   }
 
   const togglePasswordVisibility = () => {

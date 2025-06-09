@@ -1,5 +1,5 @@
 # Usuario Registro
-DROP PROCEDURE IF EXISTS UsuarioRegistro;
+DROP PROCEDURE IF EXISTS usuario_registro;
 DROP PROCEDURE IF EXISTS UsuarioConfirmarCorreo;
 DROP PROCEDURE IF EXISTS UsuarioRegistroGoogle;
 DROP PROCEDURE IF EXISTS UsuarioConfirmarCuenta;
@@ -15,14 +15,14 @@ DELIMITER //
 -- ---------------------------------------------------------------------------------------------------
 
 -- -----------------------------------------------------
--- Process `CultuRutasCDMX`.`UsuarioRegistro`
+-- Process `CultuRutasCDMX`.`usuario_registro`
 -- -----------------------------------------------------
-CREATE PROCEDURE UsuarioRegistro (
-   IN p_username VARCHAR(60),
+CREATE PROCEDURE usuario_registro (
    IN p_correo VARCHAR(320),
    IN p_contraseña VARCHAR(255)
 )
 BEGIN
+
    DECLARE usuarioExistente INT;
    DECLARE confirmacionStatus INT;
 
@@ -34,7 +34,7 @@ BEGIN
       -- Validar formato del correo
       IF p_correo REGEXP '^[a-zA-Z0-9]+([._-]?[a-zA-Z0-9]+)*@[a-zA-Z0-9]+([\-]?[a-zA-Z0-9]+)*(\.[a-zA-Z0-9]+([\-]?[a-zA-Z0-9]+)*)*\.[a-zA-Z]{2,63}$' THEN
          INSERT INTO Usuario (username, correo, contraseña, auditoria, confirmacion)
-         VALUES (p_username, p_correo, p_contraseña, NOW(), 0);
+         VALUES ('', p_correo, p_contraseña, NOW(), 0);
          
          SELECT id FROM Usuario WHERE correo = p_correo;
       ELSE
@@ -53,6 +53,7 @@ BEGIN
          SELECT 'correo_ya_registrado' AS 'error';
       END IF;
    END IF;
+   
 END //
 
 -- -----------------------------------------------------

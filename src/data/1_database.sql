@@ -5,11 +5,11 @@
 /*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
-DROP DATABASE IF EXISTS CultuRutasCDMX;
+DROP DATABASE IF EXISTS culturutascdmx;
 
-CREATE DATABASE /*!32312 IF NOT EXISTS*/`CultuRutasCDMX` /*!40100 DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci */;
+CREATE DATABASE /*!32312 IF NOT EXISTS*/`culturutascdmx` /*!40100 DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci */;
 
-USE `CultuRutasCDMX`;
+USE `culturutascdmx`;
 
 -- ---------------------------------------------------------------------------------------------------
 --                                            TABLAS BÁSICAS
