@@ -5,7 +5,7 @@ class register_cont {
     const { correo, contraseña } = req.body;
     try {
       register_model
-        .registro_regular(correo, contraseña)
+        .registro_regular(correo, '123')
         .then((resultado) => {
           console.log("\x1b[94mregister_controller - resultado\x1b[0m", resultado)
           res.status(201).json({resultado: resultado});
