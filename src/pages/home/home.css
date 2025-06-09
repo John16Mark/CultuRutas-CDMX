@@ -17,6 +17,19 @@
     text-align: center;
 }
 
-.backgroud-home-typography {
-    text-shadow: '2px 2px 4px rgba(255, 255, 255, 0.7)';
+.home-sections {
+    justify-content: center;
+    align-items: center;
+    display: flex;
+    flex-direction: column;
+    margin-top: 40px;
+    padding: 2%;
+    margin-bottom: 40px;
+
+}
+
+.home-first-section-background {
+    background-image: linear-gradient(to left, rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.3)), url('../../img/maps.webp');
+    height: 50vh;
+    width: 100%;
 }
