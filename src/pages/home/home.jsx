@@ -1,10 +1,12 @@
-import { Container, TextField, Button, Typography, Divider, Box, Paper } from '@mui/material';
+import { Container, Divider, Grid, Typography, Box, Paper } from '@mui/material';
 import Navbar from '../../components/NavBar/NavBar';
 import Footer from '../../components/Footer/Footer';
+import Cards from '../../components/Home/Cards';
 
 import './home.css';
 
 const home = () => {
+  const cardData = [1, 2, 3, 4, 5, 6];
 
   return (
     <Box
@@ -30,54 +32,32 @@ const home = () => {
         </Box>
       </Box>
 
-      <Container
-        component="main"
-        maxWidth="sm"
-        style={{paddingTop:100, paddingBottom:100}}
-        sx={{
-          flexGrow: 1,
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-        }}
-      >
-        <Paper elevation={6} sx={{ p: 6, width: '100%', maxWidth: 500 }} className='div_central'>
-          <Typography variant="h5" align="center" gutterBottom>
-            Iniciar sesión
+      <Container>
+        <section className='home-sections'>
+          <Typography variant='h5' marginBottom={'50px'} fontWeight='bold'>
+            ¡Lugares cercanos a ti!
           </Typography>
+          <Box className='home-first-section-background'>
+          </Box>
+        </section>
 
-          <Button
-            fullWidth
-            variant="contained"
-           style={{backgroundColor: '#a9825a', color: 'rgb(20,20,20)'}}
-            sx={{ mt: 1, mb: 3 }}
-          >
-            Iniciar sesión con Google
-          </Button>
-
-          <Divider sx={{ mb: 3 }}>o inicia sesión con un correo personal</Divider>
-
-          <TextField
-            label="Correo electrónico"
-            className='text_field'
-            type="email"
-            fullWidth
-            margin="normal"
-            variant="outlined"
-          />
-
-          
-          <Button
-            fullWidth
-            variant="contained"
-            style={{backgroundColor: '#415b2a'}}
-            className='boton_continuar'
-            sx={{ mt: 3 }}
-          >
-            Iniciar sesión
-          </Button>
-        </Paper>
+        <section className='home-sections'>   
+          <Typography variant='h5' marginBottom={'20px'} fontWeight='bold'>
+            Explora lugares
+          </Typography>
+          <Divider sx={{ width: '100%' }}/>
+          <Box sx={{ flexGrow: 1, marginTop: '30px' }}>
+            <Grid container spacing={2}>
+              {cardData.map((item, index) => (
+                <Grid size={{ md: 4, xs: 6}}>
+                  <Cards />
+                </Grid>
+              ))}
+            </Grid>
+          </Box>
+        </section>
       </Container>
+      
 
       <Footer/>
     </Box>
