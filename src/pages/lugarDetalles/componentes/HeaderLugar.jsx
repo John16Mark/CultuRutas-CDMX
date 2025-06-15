@@ -30,14 +30,14 @@ function HeaderLugar({  }) {
         startIcon={<ArrowBackIcon />}
       />      */}
       <Button
-      style={{
-        backgroundColor: '#415b2a',
-        paddingTop: 10,
-        paddingBottom: 10,
-        paddingLeft: 15,
-        paddingRight: 15,
-        color: '#ffffff',
-        textTransform: 'none'}}>
+        style={{
+          backgroundColor: '#415b2a',
+          paddingTop: 10,
+          paddingBottom: 10,
+          paddingLeft: 15,
+          paddingRight: 15,
+          color: '#ffffff',
+          textTransform: 'none'}}>
           Regresar
       </Button>
       </div>

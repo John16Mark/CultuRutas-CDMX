@@ -1,16 +1,15 @@
 import React from "react";
-import { useNavigate } from 'react-router-dom';
 import {Rating, ImageList, ImageListItem, useMediaQuery, Button } from '@mui/material';
 import LocationOnIcon from '@mui/icons-material/LocationOn';
 import AttachMoneyIcon from '@mui/icons-material/AttachMoney';
 import AccessTimeIcon from '@mui/icons-material/AccessTime';
 import AccessibleIcon from '@mui/icons-material/Accessible';
 
-import './DescripcionLugar.css'
+//import './../lugarDetalles'
 
-import mapa from "./../../../img/maps.webp";
+import mapa from "./../../img/maps.webp";
 
-function DescripcionLugar({nombre,
+function LugarRepositorio({nombre,
   resumen,
   ubicacion,
   costo,
@@ -18,11 +17,6 @@ function DescripcionLugar({nombre,
   accesibilidad,
   ma,
 }){
-  const navigate = useNavigate();
-  const ir_a_repositorio = () => {
-    navigate('/lugar-repositorio');
-  };
-
   let isLogged = false
   let value = "2.0"
   let Rating = "2.0"
@@ -98,8 +92,7 @@ function DescripcionLugar({nombre,
                 paddingLeft: 15,
                 paddingRight: 15,
                 color: '#ffffff',
-                textTransform: 'none'}}
-              onClick={ir_a_repositorio}>
+                textTransform: 'none'}}>
                 Ir al repositorio
             </Button>
           </div>
@@ -138,4 +131,4 @@ function DescripcionLugar({nombre,
   );
 }
 
-export default DescripcionLugar;
+export default LugarRepositorio;
