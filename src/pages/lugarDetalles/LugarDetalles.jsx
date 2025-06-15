@@ -3,9 +3,9 @@ import React from "react";
 import { Container, Grid } from '@mui/material';
 
 import NavBar from "../../components/NavBar/NavBar";
-import HeaderLugar from "./componentes/HeaderLugar";
-import ImagenesLugar from "./componentes/ImagenesLugar";
-import DescripcionLugar from './componentes/DescripcionLugar'
+import HeaderLugar from "./components/HeaderLugar";
+import ImagenesLugar from "./components/ImagenesLugar";
+import DescripcionLugar from './components/DescripcionLugar'
 import Footer from './../../components/Footer/Footer'
 
 import './LugarDetalles.css';

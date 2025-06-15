@@ -1,88 +1,75 @@
 import React from "react";
-import {Rating, ImageList, ImageListItem, useMediaQuery, Button } from '@mui/material';
-import LocationOnIcon from '@mui/icons-material/LocationOn';
-import AttachMoneyIcon from '@mui/icons-material/AttachMoney';
-import AccessTimeIcon from '@mui/icons-material/AccessTime';
-import AccessibleIcon from '@mui/icons-material/Accessible';
+import { useNavigate } from 'react-router-dom';
+import { Container, Grid, Button } from '@mui/material';
 
-//import './../lugarDetalles'
+import NavBar from "../../components/NavBar/NavBar";
+import HeaderLugar from "./../lugarDetalles/components/HeaderLugar";
+import Footer from './../../components/Footer/Footer'
 
+import DescargasGrid from './components/DescargasGrid';
+
+import './LugarRepositorio.css';
+
+import fondo1 from '../../img/fondo_1.jpg'
+import fondo2 from '../../img/fondo_oscuro1.jpg'
 import mapa from "./../../img/maps.webp";
+import { blue } from "@mui/material/colors";
 
-function LugarRepositorio({nombre,
-  resumen,
-  ubicacion,
-  costo,
-  horario,
-  accesibilidad,
-  ma,
-}){
-  let isLogged = false
-  let value = "2.0"
-  let Rating = "2.0"
-  let isClickedDeseados = false
-  let isClickedFavoritos = false
-  const handleButtonDeseadosClick = () => {}
-  const handleButtonFavoritosClick = () => {}
+const LugarRepositorio = () => {
+  const navigate = useNavigate();
+    const ir_a_detalles = () => {
+      navigate('/lugar-detalles');
+    };
+  let nombre = "NOMBRE"
 
-  const detalles = [
-    { icon: <LocationOnIcon />, texto: ubicacion },
-    { icon: <AttachMoneyIcon />, texto: costo },
-    { icon: <AccessTimeIcon />, texto: horario },
-    { icon: <AccessibleIcon />, texto: accesibilidad },
-    // Puedes añadir más campos aquí si lo deseas
+  const categorias = [
+    {
+      tipo: "Documentos Oficiales",
+      archivos: ["reglamento.pdf", "convocatoria.docx"]
+    },
+    {
+      tipo: "Imágenes del Evento",
+      archivos: ["foto1.png", "foto2.jpg"]
+    }
   ];
 
   return (
-    <section className='pp-descripcion-lugar container-fluid'>
-
-      <div className='pp-descripcion-lugar-row'>
-
-        {/* Sección - Información Principal: Nombre lugar, Calificación, Drescripción, Imágenes */}
-        <div className='pp-informacion-principal'>
-          { /* Nombre del lugar */}
-          <h2 className='pp-informacion-principal-nombre-lugar'>
-            {nombre}
-          </h2>
-          { /* Calificación del lugar */}
-          <div className='pp-informacion-principal-calificacion'>
-            { /* Guardar en Favoritos y Deseados */}
-            <div className='pp-informacion-principal-btns'>
-              {isLogged ?
-              <>
-                {/* Botón agregar a Favoritos */}
-                <Button
-                  variant='outlined'
-                  onClick={handleButtonFavoritosClick}
-                  size='small' 
-                  sx={{
-                    borderColor:'red',
-                    color: 'red',
-                    backgroundColor: 'white',
-                    marginLeft: '5px',
-                    '&:hover': {
-                      color: 'red',
-                    },
-                    minWidth: '40px', 
-                    minHeight: '40px', 
-
-                  }}
-                >
-                  {/*
-                  {isClickedFavoritos ? <FavoriteIcon /> : <FavoriteBorderIcon />}
-                  */}
-                </Button>
-              </>
-              :
-                ''
-              }
+  <div style={{
+    display: 'flex',
+    flexDirection: 'column',
+    minHeight: '100vh' // asegura que ocupe toda la altura de la ventana
+  }}>
+    <div className='lugDet-bg'>
+      <NavBar
+        esTransparente={false}
+        esEstatica={false}
+      />
+      <div>
+        <HeaderLugar/>
+      </div>
+      {
+      <Grid container spacing={2}  justifyContent="center"
+        >
+        <Grid container size={{xs:12, md:10}}>
+          <Grid style={{marginTop: 30, marginBottom: 30, backgroundColor: '#cccccc'}} size={{xs:12, md:4}}>
+            <div
+              style={{backgroundImage: `url(${fondo2})`}}
+              className="imagen"
+              >
+                Hola amigos
             </div>
-          </div>
-          {/* Descripción del lugar */}
-          <p style={{marginBottom:20}}>
-            {resumen}
-          </p>
-          
+          </Grid>
+          <Grid size={{xs:12, md:8}} style={{marginTop: 30, marginBottom: 30}}>
+            <div
+              style={{}}
+              >
+              <h2 style={{marginBottom: 0}}>{nombre}</h2>
+              <p style={{marginTop:0, paddingTop:0}}>Consulta el repositorio informativo disponible para este lugar</p>
+            </div>
+          </Grid>
+        </Grid>
+
+        <Grid container size={{xs:12, md:10}} justifyContent='right'>
           <div>
             <Button
               style={{
@@ -92,43 +79,30 @@ function LugarRepositorio({nombre,
                 paddingLeft: 15,
                 paddingRight: 15,
                 color: '#ffffff',
-                textTransform: 'none'}}>
-                Ir al repositorio
+                textTransform: 'none'}}
+              onClick={ir_a_detalles}>
+                Regresar a detalles
             </Button>
           </div>
+        </Grid>
 
-          {/*Detalles del lugar*/}
-          <div className='DesLug-datos'
-            style={{marginTop:30}}>
-            
-            <div
-              className='DesLug-mapa'
-              style={{
-                backgroundImage: `url(${mapa})`,
-                }}>
-            </div>
-            
-            <ul className='DesLug-lista-detalles'>
-              {detalles.map((item, index) =>
-                item.texto ? (
-                  <li key={index} className='DesLug-detalle-item'>
-                    {item.icon}
-                    <span>{item.texto}</span>
-                  </li>
-                ) : null
-              )}
-            </ul>
+        <Grid container size={{xs:12, md:9}} justifyContent='left'>
+          <div>
+            <DescargasGrid
+              categorias={categorias}></DescargasGrid>
           </div>
-          
-          {/* Impagenes del lugar */}
-          <div className='pp-informacion-principal-imagenes'>
-            {/*galeria()*/}
-          </div>
-        </div>
+        </Grid>
+      </Grid>}
+
+
+
+      <div style={{ flex: 1 }}>
 
       </div>
-    </section>
-  );
+      <Footer />
+    </div>
+  </div>
+  )
 }
 
 export default LugarRepositorio;
