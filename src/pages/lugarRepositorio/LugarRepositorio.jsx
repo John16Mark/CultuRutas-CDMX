@@ -13,14 +13,14 @@ import './LugarRepositorio.css';
 import fondo1 from '../../img/fondo_1.jpg'
 import fondo2 from '../../img/fondo_oscuro1.jpg'
 import mapa from "./../../img/maps.webp";
-import { blue } from "@mui/material/colors";
+import { blue, red } from "@mui/material/colors";
 
 const LugarRepositorio = () => {
   const navigate = useNavigate();
     const ir_a_detalles = () => {
       navigate('/lugar-detalles');
     };
-  let nombre = "NOMBRE"
+  let nombre = "Nombre del lugar"
 
   const categorias = [
     {
@@ -56,7 +56,6 @@ const LugarRepositorio = () => {
               style={{backgroundImage: `url(${fondo2})`}}
               className="imagen"
               >
-                Hola amigos
             </div>
           </Grid>
           <Grid size={{xs:12, md:8}} style={{marginTop: 30, marginBottom: 30}}>
@@ -87,10 +86,8 @@ const LugarRepositorio = () => {
         </Grid>
 
         <Grid container size={{xs:12, md:9}} justifyContent='left'>
-          <div>
-            <DescargasGrid
-              categorias={categorias}></DescargasGrid>
-          </div>
+          <DescargasGrid
+            categorias={categorias}></DescargasGrid>
         </Grid>
       </Grid>}
 
