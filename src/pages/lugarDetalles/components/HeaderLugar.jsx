@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-
+import { useNavigate } from 'react-router-dom';
 import Button from '@mui/material/Button';
 
 import './HeaderLugar.css'
@@ -7,10 +7,13 @@ import './HeaderLugar.css'
 import image from "./../../../img/banner.png";
 
 function HeaderLugar({  }) {
-
+  const navigate = useNavigate();
   const handleHomePageClick = () => {
     
   }
+  const regresar = () => {
+    navigate('/lugares');
+  };
 
   return(
     <div className='pp-header-img'
@@ -37,7 +40,8 @@ function HeaderLugar({  }) {
           paddingLeft: 15,
           paddingRight: 15,
           color: '#ffffff',
-          textTransform: 'none'}}>
+          textTransform: 'none'}}
+        onClick={regresar}>
           Regresar
       </Button>
       </div>

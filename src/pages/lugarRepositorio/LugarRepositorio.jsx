@@ -13,13 +13,13 @@ import './LugarRepositorio.css';
 import fondo1 from '../../img/fondo_1.jpg'
 import fondo2 from '../../img/fondo_oscuro1.jpg'
 import mapa from "./../../img/maps.webp";
-import { blue, red } from "@mui/material/colors";
 
 const LugarRepositorio = () => {
   const navigate = useNavigate();
-    const ir_a_detalles = () => {
-      navigate('/lugar-detalles');
-    };
+  const ir_a_detalles = () => {
+    navigate('/lugar-detalles');
+  };
+
   let nombre = "Nombre del lugar"
 
   const categorias = [
@@ -48,8 +48,7 @@ const LugarRepositorio = () => {
         <HeaderLugar/>
       </div>
       {
-      <Grid container spacing={2}  justifyContent="center"
-        >
+      <Grid container spacing={2}  justifyContent="center">
         <Grid container size={{xs:12, md:10}}>
           <Grid style={{marginTop: 30, marginBottom: 30, backgroundColor: '#cccccc'}} size={{xs:12, md:4}}>
             <div
