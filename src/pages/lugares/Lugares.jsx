@@ -115,10 +115,12 @@ const Lugares = () => {
       </Grid>
 
       {/* Barra de búsqueda */}
-      <Grid container justifyContent="flex-end" mt={4} mb={2}>
-        <Grid item size={{xs: 12, md: 4}}>
+      <Grid container justifyContent="flex-end" mt={4} mb={2}
+      style={{marginRight: 25}}>
+        <Grid item size={{xs: 12, md: 4, lg:3}}>
           <TextField
             fullWidth
+            size="small"
             variant="outlined"
             placeholder="Filtrar"
             InputProps={{
@@ -127,7 +129,21 @@ const Lugares = () => {
                   <SearchIcon />
                 </InputAdornment>
               ),
-              sx: { borderRadius: '30px', backgroundColor: '#ffffff', }
+            }}
+            sx={{
+              '& .MuiOutlinedInput-root': {
+                borderRadius: 15,
+                backgroundColor: '#ffffff',
+                '& fieldset': {
+                  borderColor: '#415b2a', // normal
+                },
+                '&:hover fieldset': {
+                  borderColor: '#32461f', // al pasar el mouse
+                },
+                '&.Mui-focused fieldset': {
+                  borderColor: '#2b4a1c', // al hacer foco (click o tab)
+                },
+              },
             }}
           />
         </Grid>
@@ -359,8 +375,19 @@ const Lugares = () => {
         >
         {lugares.map((lugar, index) => (
           <Grid item size={{xs: 12, md: 6, lg: 4}} key={index}>
-            <Card sx={{ display: 'flex', height: 160 }}
-            onClick={() => ir_a_detalles(lugar.id)}>
+            <Card
+              sx={{
+                display: 'flex',
+                height: 160,
+                transition: 'transform 0.2s ease, box-shadow 0.2s ease',
+                boxShadow: '2px 2px 5px rgba(0, 0, 0, 0.2)',
+                cursor: 'pointer',
+                '&:hover': {
+                  transform: 'translateY(-4px)',
+                  boxShadow: '4px 4px 3px rgba(0, 0, 0, 0.5)',
+                },
+              }}
+              onClick={() => ir_a_detalles(lugar.id)}>
               {/* Imagen a la izquierda */}
               <CardMedia
                 component="img"
@@ -369,7 +396,14 @@ const Lugares = () => {
                 sx={{ width: '40%', objectFit: 'cover' }}
               />
               {/* Contenido a la derecha */}
-              <CardContent sx={{ width: '60%', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
+              <CardContent
+                sx={{
+                  width: '60%',
+                  display: 'flex',
+                  flexDirection: 'column',
+                  justifyContent: 'center',
+                }}
+              >
                 <Typography variant="h6" align="center">
                   {lugar.nombre}
                 </Typography>
