@@ -126,7 +126,8 @@ const Register = () => {
         flexDirection: 'column',
       }}
     >
-      <Navbar />
+      <Navbar
+        esTransparente={false}/>
 
       <Container
         component="main"

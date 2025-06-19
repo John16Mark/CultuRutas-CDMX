@@ -85,11 +85,16 @@ const Lugares = () => {
                 sx={{
                   backgroundColor: '#415b2a',
                   color: '#ffffff',
+                  paddingY: 1, // equivalente a paddingTop y paddingBottom de 8px
+                  paddingX: 3, // equivalente a paddingLeft y paddingRight de 25px aprox
+                  marginRight:12,
                   textTransform: 'none',
-                  px: 2,
-                  py: 1,
-                  mr: 2
-                }}
+                  boxShadow: '2px 2px 5px rgba(0, 0, 0, 0.3)', // sombra normal
+                  '&:hover': {
+                    backgroundColor: '#32461f', // tono más oscuro para hover
+                    boxShadow: '4px 4px 2px rgba(0, 0, 0, 0.75)', // sombra más intensa
+                  },
+                  }}
                 onClick={ir_a_home}
               >
                 Regresar

@@ -91,15 +91,18 @@ function DescripcionLugar({nombre,
           
           <Box sx={{ display: 'flex', justifyContent: 'flex-end', mt: 2 }}>
             <Button
-              style={{
+              sx={{
                 backgroundColor: '#415b2a',
-                paddingTop: 8,
-                paddingBottom: 8,
-                paddingLeft: 25,
-                paddingRight: 25,
                 color: '#ffffff',
-                textTransform: 'none'
-              }}
+                paddingY: 1, // equivalente a paddingTop y paddingBottom de 8px
+                paddingX: 3, // equivalente a paddingLeft y paddingRight de 25px aprox
+                textTransform: 'none',
+                boxShadow: '2px 2px 5px rgba(0, 0, 0, 0.3)', // sombra normal
+                '&:hover': {
+                  backgroundColor: '#32461f', // tono más oscuro para hover
+                  boxShadow: '4px 4px 3px rgba(0, 0, 0, 0.75)', // sombra más intensa
+                },
+                }}
               onClick={ir_a_repositorio}
             >
               Ir al repositorio
