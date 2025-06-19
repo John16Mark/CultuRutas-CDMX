@@ -1,6 +1,6 @@
 import React from "react";
 import { useNavigate } from 'react-router-dom';
-import {Rating, ImageList, ImageListItem, useMediaQuery, Button } from '@mui/material';
+import { Box, Rating, ImageList, ImageListItem, useMediaQuery, Button } from '@mui/material';
 import LocationOnIcon from '@mui/icons-material/LocationOn';
 import AttachMoneyIcon from '@mui/icons-material/AttachMoney';
 import AccessTimeIcon from '@mui/icons-material/AccessTime';
@@ -47,9 +47,9 @@ function DescripcionLugar({nombre,
         {/* Sección - Información Principal: Nombre lugar, Calificación, Drescripción, Imágenes */}
         <div className='pp-informacion-principal'>
           { /* Nombre del lugar */}
-          <h2 className='pp-informacion-principal-nombre-lugar'>
+          <h1 className='pp-informacion-principal-nombre-lugar'>
             {nombre}
-          </h2>
+          </h1>
           { /* Calificación del lugar */}
           <div className='pp-informacion-principal-calificacion'>
             { /* Guardar en Favoritos y Deseados */}
@@ -89,19 +89,25 @@ function DescripcionLugar({nombre,
             {resumen}
           </p>
           
-          <div>
+          <Box sx={{ display: 'flex', justifyContent: 'flex-end', mt: 2 }}>
             <Button
               style={{
                 backgroundColor: '#415b2a',
-                paddingTop: 10,
-                paddingBottom: 10,
-                paddingLeft: 15,
-                paddingRight: 15,
+                paddingTop: 8,
+                paddingBottom: 8,
+                paddingLeft: 25,
+                paddingRight: 25,
                 color: '#ffffff',
-                textTransform: 'none'}}
-              onClick={ir_a_repositorio}>
-                Ir al repositorio
+                textTransform: 'none'
+              }}
+              onClick={ir_a_repositorio}
+            >
+              Ir al repositorio
             </Button>
+          </Box>
+
+          <div style={{justifyContent: 'right'}} >
+            
           </div>
 
           {/*Detalles del lugar*/}

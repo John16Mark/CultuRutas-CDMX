@@ -44,8 +44,8 @@ const LugarDetalles = () => {
       <Grid size={{xs:12, md:6}}>
         <div style={{/*backgroundColor:'#cccccc'*/}}>
           <DescripcionLugar
-            nombre="Nombre del lugar"
-            resumen="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis at tincidunt ex, eu tincidunt nulla. Nam congue cursus diam sed commodo. Nam elit turpis, tempor eu blandit at, convallis vitae ipsum. Duis vel placerat turpis. Etiam ut sem ut turpis tincidunt posuere. Proin non luctus sem. Nullam sed tortor sed lorem hendrerit vehicula. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Ut eu dignissim elit. Suspendisse tempus lobortis turpis quis euismod. Ut congue euismod felis, a posuere neque auctor tristique. Nullam ut elit tortor. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia curae;."
+            nombre="Biblioteca de México"
+            resumen="Desde su fundación, a comienzos de 1990, la revista Biblioteca de México ha publicado 172 números impresos y 4 números digitales. A lo largo de más de 30 años, ha dado espacio a trabajos de creación, investigación y crítica a autores de habla hispana y de otros idiomas. Pensada originalmente como una revista de letras en el sentido clásico y más generoso del término, que busca dar relieve y difusión a obras inasequibles de los acervos de la biblioteca misma, en esta nueva etapa digital también se tiene el propósito de acercarse a las nuevas generaciones de lectores, publicando a jóvenes escritores e ilustradores. Se trata, así, de sostener un esfuerzo de divulgación literaria que, de la manera más incluyente, brinde hospitalidad a la belleza y la inteligencia de la creación."
             ubicacion='hola'
             costo='hola'
             horario='hola'
