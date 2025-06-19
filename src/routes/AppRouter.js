@@ -12,7 +12,7 @@ function AppRouter() {
   return(
     <Router>
       <Routes>
-        <Route path='/register' element={<Register/>} />
+        <Route path='/registro' element={<Register/>} />
         <Route path='/login' element={<Login/>} />
 
         <Route path='/lugares' element={<Lugares/>} />
