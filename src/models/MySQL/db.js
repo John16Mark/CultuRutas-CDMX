@@ -4,7 +4,7 @@ const db = mysql.createConnection({
   host: 'localhost',
   user: 'root',
   password: '',
-  database: 'culturutascdmx',
+  database: 'culturutas',
   port: 3306,
   charset: 'utf8mb4',
 });

@@ -1,19 +1,19 @@
 const db = require('./db');
 
-class login_model {
+class lugar_model {
   
-  static async login_regular(correo) {
-    console.log("\x1b[94m .: login_model :.\x1b[0m")
-    console.log("Datos recibidos:\n  \x1b[96mcorreo: \x1b[0m", correo)
-    const query = 'CALL usuario_login(?);';
+  static async get_todos() {
+    console.log("\x1b[94m .: lugar_model :.\x1b[0m")
+    //console.log("Datos recibidos:\n  \x1b[96mcorreo: \x1b[0m", correo, "\n  \x1b[96mcontraseña: \x1b[0m", contraseña)
+    const query = 'SELECT * FROM Sitio_turistico_historico;';
     return new Promise((resolve, reject) => {
-      db.query(query, [correo], (err, results) => {
+      db.query(query, [], (err, results) => {
         if(err) {
           reject(err);
         }
         console.log("Resultados: ");
         console.log("\x1b[96m  results: \x1b[0m", results)
-        const resultado = results[0][0] || null;
+        const resultado = results || null;
         console.log("\x1b[96m  resultado: \x1b[0m", resultado)
 
         if(resultado && resultado.error)
@@ -21,10 +21,10 @@ class login_model {
         else if(resultado && resultado.warning)
           resolve({ warning: resultado.warning});
         else
-          resolve({ id: resultado ? resultado.id : null});
+          resolve({ registros: resultado ? resultado : null});
       });
     });
   }
 }
 
-module.exports = login_model;
+module.exports = lugar_model;

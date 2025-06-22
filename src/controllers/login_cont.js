@@ -3,6 +3,8 @@ const login_model = require('../models/MySQL/login_model');
 class login_cont{
   static async login(req, res) {
     const { correo, contraseña } = req.body;
+    console.log("\n\x1b[93m .: login_controller :.\x1b[0m")
+    console.log("Datos recibidos:\n  \x1b[33mcorreo: \x1b[0m", correo, "\n  \x1b[33mcontraseña: \x1b[0m", contraseña)
 
     /*const tokenJWT = (id, username, nombre, apellido, correo, imagen) => {
       return jwt.sign({
@@ -12,14 +14,14 @@ class login_cont{
 
     try {
       const resultado = await login_model.login_regular(correo);
-      console.log("\x1b[94mlogin_controller - resultado\x1b[0m", resultado)
+      console.log("\x1b[33m  resultado: \x1b[0m", resultado)
       // Validar contraseña
       /*const passwordMatch = await bcrypt.compare(contraseña, resultado.hashedPassword);
       if (!passwordMatch) {
         return res.status(400).json({ error: 'Contraseña incorrecta.' });
       }*/
       // Validar confirmación por correo
-      if(resultado.confirmacion == '0') {
+      if(resultado.warning) {
         //let error = errorHandler('correo_no_confirmado');
         let error = 'Correo no confirmado'
         return res.status(400).json({ error: error})
