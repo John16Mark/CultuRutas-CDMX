@@ -15,7 +15,8 @@ const PORT = 3001;
 app.post('/register', register_cont.registro_regular);
 app.post('/login', login_cont.login);
 
-app.post('/get_lugares', lugares_cont.get_todos)
+app.post('/get_lugares', lugares_cont.get_todos);
+app.post('/get_detalles_lugar', lugares_cont.get_detalles_lugar);
 
 app.listen(PORT, () => {
   console.log(`Servidor en funcionamiento en http://localhost:${PORT}`);

@@ -32,10 +32,10 @@ function DescripcionLugar({nombre,
   const handleButtonFavoritosClick = () => {}
 
   const detalles = [
-    { icon: <LocationOnIcon />, texto: ubicacion },
-    { icon: <AttachMoneyIcon />, texto: costo },
-    { icon: <AccessTimeIcon />, texto: horario },
-    { icon: <AccessibleIcon />, texto: accesibilidad },
+    { icon: <LocationOnIcon />, titulo: 'Ubicación', texto: ubicacion },
+    { icon: <AttachMoneyIcon />, titulo: 'Costos', texto: costo },
+    { icon: <AccessTimeIcon />, titulo: 'Horarios', texto: horario },
+    { icon: <AccessibleIcon />, titulo: 'Accesibilidad', texto: accesibilidad },
     // Puedes añadir más campos aquí si lo deseas
   ];
 
@@ -124,22 +124,47 @@ function DescripcionLugar({nombre,
                 }}>
             </div>
             
-            <ul className='DesLug-lista-detalles'>
-              {detalles.map((item, index) =>
-                item.texto ? (
-                  <li key={index} className='DesLug-detalle-item'>
-                    {item.icon}
-                    <span>{item.texto}</span>
-                  </li>
-                ) : null
+            <table className='DesLug-tabla-detalles'>
+  <tbody>
+    {detalles.map((item, index) => {
+      const esVacio =
+        item.texto === null ||
+        item.texto === undefined ||
+        item.texto === '' ||
+        (Array.isArray(item.texto) && item.texto.length === 0);
+
+      return (
+        <React.Fragment key={index}>
+          {/* Encabezado */}
+          <tr className='DesLug-encabezado'>
+            <td>
+              <span className='DesLug-encabezado-contenido'>
+                {item.icon}
+                <strong style={{ marginLeft: 8 }}>{item.titulo}</strong>
+              </span>
+            </td>
+          </tr>
+          {/* Contenido */}
+          <tr className='DesLug-detalle'>
+            <td>
+              {esVacio ? (
+                <span>Datos desconocidos</span>
+              ) : Array.isArray(item.texto) ? (
+                item.texto.map((linea, i) => <div key={i}>{linea}</div>)
+              ) : (
+                item.texto
               )}
-            </ul>
+            </td>
+          </tr>
+        </React.Fragment>
+      );
+    })}
+  </tbody>
+</table>
+
+
           </div>
           
-          {/* Impagenes del lugar */}
-          <div className='pp-informacion-principal-imagenes'>
-            {/*galeria()*/}
-          </div>
         </div>
 
       </div>

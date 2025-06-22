@@ -3,6 +3,12 @@ const path = require('path');
 
 const lugar_model = require('../models/MySQL/lugar_model');
 
+function asegurarDirectorioExiste(ruta) {
+  if (!fs.existsSync(ruta)) {
+    fs.mkdirSync(ruta, { recursive: true });
+  }
+}
+
 function normalizarNombre(nombre) {
   return nombre
     .normalize("NFD")                      // Quita acentos
@@ -16,10 +22,10 @@ function normalizarNombre(nombre) {
 function getPrimeraImagen(nombreLugar) {
   const nombreNormalizado = normalizarNombre(nombreLugar);
   const dirPath = path.join(__dirname, '..', '..', 'public', 'lugares', nombreNormalizado, 'imagenes');
-  console.log(dirPath)
+  
+  asegurarDirectorioExiste(dirPath);
   try {
     const archivos = fs.readdirSync(dirPath).filter(file => /\.(jpe?g|png|gif|webp)$/i.test(file));
-    
     if (archivos.length > 0) {
       return `/lugares/${nombreNormalizado}/imagenes/${archivos[0]}`;
     }
@@ -28,6 +34,20 @@ function getPrimeraImagen(nombreLugar) {
   }
   return '/imgs/no_image.jpg';
 }
+
+function getTodasLasImagenes(nombreLugar) {
+  const nombreNormalizado = normalizarNombre(nombreLugar);
+  const dirPath = path.join(__dirname, '..', '..', 'public', 'lugares', nombreNormalizado, 'imagenes');
+
+  asegurarDirectorioExiste(dirPath);
+  try {
+    const archivos = fs.readdirSync(dirPath).filter(file => /\.(jpe?g|png|gif|webp)$/i.test(file));
+    return archivos.map(file => `/lugares/${nombreNormalizado}/imagenes/${file}`);
+  } catch (err) {
+    return [];
+  }
+}
+
 
 class lugar_cont {
   static async get_todos(req, res) {
@@ -42,7 +62,8 @@ class lugar_cont {
           const lugaresConImagen = resultado.registros.map(lugar => {
             return {
               ...lugar,
-              imagen: getPrimeraImagen(lugar.nombre)  // ← nueva propiedad
+              imagen: getPrimeraImagen(lugar.nombre),
+              nombre_normalizado: normalizarNombre(lugar.nombre)
             };
           });
 
@@ -60,6 +81,33 @@ class lugar_cont {
         return res.status(500).json({ error: err.message });
       });
   }
+
+  static async get_detalles_lugar(req, res) {
+    const { id } = req.body;
+    console.log("\n\x1b[93m .: lugar_controller :.\x1b[0m")
+    console.log("Datos recibidos:\n  \x1b[33mid: \x1b[0m", id)
+    lugar_model
+      .get_detalles_lugar(id)
+      .then((resultado) => {
+        console.log("\x1b[33m  resultado: \x1b[0m", resultado)
+        
+        if (resultado.registro) {
+          let lugar_imagenes = { ...resultado.registro }
+          lugar_imagenes.imagenes = getTodasLasImagenes(resultado.registro.nombre)
+
+          return res.status(200).json({ resultado: lugar_imagenes });
+        } else {
+          return res.status(500).json({ error: 'Error desconocido' });
+        }
+      })
+      .catch((err) => {
+        if (err.message) {
+          let mensajeError = err.message;
+          return res.status(400).json({ error: mensajeError });
+        }
+        return res.status(500).json({ error: err.message });
+      });
+  } 
 }
 
 

@@ -30,9 +30,9 @@ const Lugares = () => {
   const ir_a_home = () => {
     navigate('/');
   };
-  const ir_a_detalles = (id) => {
+  const ir_a_detalles = (id, nombre) => {
     //navigate(`/lugar/${id}`);
-    navigate(`/lugar-detalles/`);
+    navigate(`/lugar/${id}/${nombre}`);
   }
   
   useEffect(() => {
@@ -414,7 +414,7 @@ const Lugares = () => {
                   boxShadow: '4px 4px 3px rgba(0, 0, 0, 0.5)',
                 },
               }}
-              onClick={() => ir_a_detalles(lugar.id)}>
+              onClick={() => ir_a_detalles(lugar.id_sitio, lugar.nombre_normalizado)}>
               {/* Imagen a la izquierda */}
               <CardMedia
                 component="img"
