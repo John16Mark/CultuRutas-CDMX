@@ -2,7 +2,7 @@ const nodemailer = require('nodemailer');
 require('dotenv').config();
 
 const transporter = nodemailer.createTransport({
-  service: 'gmail', // Cambia según tu proveedor: 'hotmail', 'outlook', etc.
+  service: 'gmail', // Cambia según el proveedor: 'hotmail', 'outlook', etc.
   auth: {
     user: process.env.EMAIL_USER,
     pass: process.env.EMAIL_PASS
@@ -10,12 +10,12 @@ const transporter = nodemailer.createTransport({
 });
 
 /**
- * Envía un correo electrónico con un enlace personalizado.
+ * Envío de correo
  * 
- * @param {string} correo - Dirección de correo del destinatario.
+ * @param {string} correo
  * @param {string} token - Token único generado para el enlace.
  * @param {string} urlDestino - Ruta base del enlace de acción (por ejemplo: '/confirmar-correo' o '/restablecer-contrasena').
- * @param {string} asunto - Asunto del correo (ej. "Confirmación de cuenta").
+ * @param {string} asunto 
  * @param {string} mensajeHTML - Mensaje HTML personalizado para el cuerpo del correo.
  */
 const enviarCorreo = async (correo, token, urlDestino, asunto, mensajeHTML) => {
