@@ -6,6 +6,9 @@ import AttachMoneyIcon from '@mui/icons-material/AttachMoney';
 import AccessTimeIcon from '@mui/icons-material/AccessTime';
 import AccessibleIcon from '@mui/icons-material/Accessible';
 
+
+import {APIProvider, Map} from '@vis.gl/react-google-maps';
+
 import './DescripcionLugar.css'
 
 import mapa from "./../../../img/maps.webp";
@@ -17,6 +20,8 @@ function DescripcionLugar({nombre,
   horario,
   accesibilidad,
   ma,
+  latitud,
+  longitud
 }){
   const navigate = useNavigate();
   const ir_a_repositorio = () => {
@@ -117,50 +122,54 @@ function DescripcionLugar({nombre,
           <div className='DesLug-datos'
             style={{marginTop:30}}>
             
-            <div
-              className='DesLug-mapa'
-              style={{
-                backgroundImage: `url(${mapa})`,
-                }}>
+            <div>
+
+              <div id="map" className='pp-informacion-lugar-card-mapa' style={{height: '300px', margin: 0, padding: 0, backgroundColor: '#cccccc'}}>
+                <APIProvider apiKey={process.env.REACT_APP_GOOGLE_API_KEY} onLoad={() => console.log('Maps API has loaded.')}style={{height: '100%', margin: 0, padding: 0, backgroundColor: '#cccccc'}}> 
+                  <Map defaultZoom={18} defaultCenter={ { lat: latitud, lng: longitud } } style={{height: '100%', margin: 0, padding: 0}}>
+                  </Map>
+                </APIProvider>
+              </div>
+              <a className="pp-informacion-lugar-card-link" href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(nombre)}`} >Ver en GoogleMaps</a>
             </div>
             
             <table className='DesLug-tabla-detalles'>
-  <tbody>
-    {detalles.map((item, index) => {
-      const esVacio =
-        item.texto === null ||
-        item.texto === undefined ||
-        item.texto === '' ||
-        (Array.isArray(item.texto) && item.texto.length === 0);
+              <tbody>
+                {detalles.map((item, index) => {
+                  const esVacio =
+                    item.texto === null ||
+                    item.texto === undefined ||
+                    item.texto === '' ||
+                    (Array.isArray(item.texto) && item.texto.length === 0);
 
-      return (
-        <React.Fragment key={index}>
-          {/* Encabezado */}
-          <tr className='DesLug-encabezado'>
-            <td>
-              <span className='DesLug-encabezado-contenido'>
-                {item.icon}
-                <strong style={{ marginLeft: 8 }}>{item.titulo}</strong>
-              </span>
-            </td>
-          </tr>
-          {/* Contenido */}
-          <tr className='DesLug-detalle'>
-            <td>
-              {esVacio ? (
-                <span>Datos desconocidos</span>
-              ) : Array.isArray(item.texto) ? (
-                item.texto.map((linea, i) => <div key={i}>{linea}</div>)
-              ) : (
-                item.texto
-              )}
-            </td>
-          </tr>
-        </React.Fragment>
-      );
-    })}
-  </tbody>
-</table>
+                  return (
+                    <React.Fragment key={index}>
+                      {/* Encabezado */}
+                      <tr className='DesLug-encabezado' style={{/*backgroundColor: '#415b2a'*/}}>
+                        <td>
+                          <span className='DesLug-encabezado-contenido'>
+                            {item.icon}
+                            <strong style={{ marginLeft: 8 }}>{item.titulo}</strong>
+                          </span>
+                        </td>
+                      </tr>
+                      {/* Contenido */}
+                      <tr className='DesLug-detalle'>
+                        <td>
+                          {esVacio ? (
+                            <span>Datos desconocidos</span>
+                          ) : Array.isArray(item.texto) ? (
+                            item.texto.map((linea, i) => <div key={i}>{linea}</div>)
+                          ) : (
+                            item.texto
+                          )}
+                        </td>
+                      </tr>
+                    </React.Fragment>
+                  );
+                })}
+              </tbody>
+            </table>
 
 
           </div>

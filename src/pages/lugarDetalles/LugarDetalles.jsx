@@ -124,6 +124,8 @@ const LugarDetalles = () => {
             horario={detalles && detalles.horario ? detalles.horario : '-'}
             accesibilidad={detalles && detalles.accesibilidad ? detalles.accesibilidad : '-'}
             ma={mapa}
+            latitud={detalles && detalles.latitud ? detalles.latitud : 0.0}
+            longitud={detalles && detalles.longitud ? detalles.longitud : 0.0}
           />
         </div>
       </Grid>
