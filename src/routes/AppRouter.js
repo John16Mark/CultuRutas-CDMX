@@ -6,7 +6,7 @@ import Login from '../pages/login/Login';
 import Lugares from '../pages/lugares/Lugares';
 import LugarDetalles from '../pages/lugarDetalles/LugarDetalles';
 import LugarRepositorio from '../pages/lugarRepositorio/LugarRepositorio';
-import Home from '../pages/home/home';
+import Home from '../pages/home/Home';
 
 function AppRouter() {
   return(
@@ -17,7 +17,7 @@ function AppRouter() {
 
         <Route path='/lugares' element={<Lugares/>} />
         <Route path='/lugar/:id/:nombre' element={<LugarDetalles/>} />
-        <Route path='/lugar-repositorio' element={<LugarRepositorio/>} />
+        <Route path='/lugar/:id/:nombre/repositorio' element={<LugarRepositorio/>} />
         <Route path='/' element={<Home/>} />
 
       </Routes>

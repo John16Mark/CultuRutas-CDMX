@@ -7,7 +7,6 @@ function NavBar({ esTransparente, esEstatica, logged }) {
     <AppBar
       position={esTransparente ? 'fixed' : esEstatica ? 'absolute' : 'static'}
       color={esTransparente ? 'transparent' : '#f5f5dc'}
-      backgroundColor={esTransparente ? 'transparent' : '#f5f5dc'}
       style={esTransparente ? {backgroundColor: 'none'} : {backgroundColor: '#f5f5dc'}}
       elevation={esTransparente ? 0 : 4}
     >

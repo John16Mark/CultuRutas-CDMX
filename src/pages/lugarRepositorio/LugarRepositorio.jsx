@@ -1,6 +1,6 @@
 import React from "react";
-import { useNavigate } from 'react-router-dom';
-import { Container, Grid, Button } from '@mui/material';
+import { useParams, useNavigate } from 'react-router-dom';
+import { Grid, Button } from '@mui/material';
 
 import NavBar from "../../components/NavBar/NavBar";
 import HeaderLugar from "./../lugarDetalles/components/HeaderLugar";
@@ -10,17 +10,19 @@ import DescargasGrid from './components/DescargasGrid';
 
 import './LugarRepositorio.css';
 
-import fondo1 from '../../img/fondo_1.jpg'
 import fondo2 from '../../img/fondo_oscuro1.jpg'
-import mapa from "./../../img/maps.webp";
 
 const LugarRepositorio = () => {
+  const { id, nombre } = useParams();
   const navigate = useNavigate();
+  console.log(id)
+  console.log(nombre)
+
   const ir_a_detalles = () => {
-    navigate('/lugar-detalles');
+    navigate(`/lugar/${id}/${nombre}`);
   };
 
-  let nombre = "Nombre del lugar"
+  let nombreA = "Nombre del lugar"
 
   const categorias = [
     {
@@ -61,7 +63,7 @@ const LugarRepositorio = () => {
             <div
               style={{}}
               >
-              <h2 style={{marginBottom: 0}}>{nombre}</h2>
+              <h2 style={{marginBottom: 0}}>{nombreA}</h2>
               <p style={{marginTop:0, paddingTop:0}}>Consulta el repositorio informativo disponible para este lugar</p>
             </div>
           </Grid>

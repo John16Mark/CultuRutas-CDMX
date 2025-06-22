@@ -1,13 +1,83 @@
-import { Container, Divider, Grid, Typography, Box, Paper } from '@mui/material';
+import React, { useEffect, useState } from 'react';
+
+import { Container, Divider, Grid, Typography, Box } from '@mui/material';
 import Navbar from '../../components/NavBar/NavBar';
 import Footer from '../../components/Footer/Footer';
 import Cards from '../../components/Home/Cards';
 
 import './home.css';
 
-const home = () => {
+import { MapContainer, TileLayer, Marker, Popup, useMap } from 'react-leaflet';
+import 'leaflet/dist/leaflet.css';
+import L from 'leaflet';
+
+  const RecentrarMapa = ({ lat, lng }) => {
+    const map = useMap();
+
+    useEffect(() => {
+      if (lat && lng) {
+        map.setView([lat, lng], map.getZoom());
+      }
+    }, [lat, lng, map]);
+
+    return null;
+  };
+
+const Home = () => {
+
+  const [latitud, setLatitud] = useState(19.504879996863785);
+  const [longitud, setLongitud] = useState(-99.14628598505446)
+
+
   const cardData = [1, 2, 3, 4, 5, 6];
 
+  let nombre = "¡Estás Aquí!"
+
+  useEffect(() => {
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(
+        (position) => {
+          setLatitud(position.coords.latitude);
+          setLongitud(position.coords.longitude);
+          console.log(position.coords.latitude)
+          console.log(position.coords.longitude)
+        },
+        (error) => {
+          switch (error.code) {
+            case error.PERMISSION_DENIED:
+              console.error("User denied the request for Geolocation.");
+              break;
+            case error.POSITION_UNAVAILABLE:
+              console.error("Location information is unavailable.");
+              break;
+            case error.TIMEOUT:
+              console.error("The request to get user location timed out.");
+              break;
+            default:
+              console.error("An unknown error occurred.");
+              break;
+          }
+        },
+        {
+          enableHighAccuracy: false, // Cambia a true si quieres más precisión (más propenso a fallar)
+          timeout: 10000,            // Espera hasta 10 segundos
+          maximumAge: 60000          // Usa cache si es reciente (1 minuto)
+        }
+      );
+    }
+  }, []);
+/*
+  useEffect(() => {
+    if (latitud && longitud) {
+      fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${latitud}&lon=${longitud}`)
+        .then((res) => res.json())
+        .then((data) => {
+          const lugar = data.address.city || data.address.town || data.address.village || data.address.county || data.address.municipality;
+          console.log("Ubicación aproximada:", lugar);
+        });
+    }
+  }, [latitud, longitud]);
+*/
   return (
     <Box
       sx={{
@@ -38,6 +108,25 @@ const home = () => {
             ¡Lugares cercanos a ti!
           </Typography>
           <Box className='home-first-section-background'>
+            {latitud !== 0.0 && longitud !== 0.0 && (
+              <MapContainer
+                center={[latitud, longitud]}
+                zoom={18}
+                scrollWheelZoom={false}
+                style={{ height: '100%', width: '100%' }}
+              >
+                <TileLayer
+                  url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                  attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
+                />
+                <Marker position={[latitud, longitud]}>
+                  <Popup>{nombre}</Popup>
+                </Marker>
+
+                {/* Este componente actualizará la vista del mapa */}
+                <RecentrarMapa lat={latitud} lng={longitud} />
+              </MapContainer>
+            )}
           </Box>
         </section>
 
@@ -64,4 +153,4 @@ const home = () => {
   );
 };
 
-export default home;
+export default Home;

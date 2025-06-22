@@ -8,9 +8,7 @@ import image from "./../../../img/banner.png";
 
 function HeaderLugar({  }) {
   const navigate = useNavigate();
-  const handleHomePageClick = () => {
-    
-  }
+
   const regresar = () => {
     navigate('/lugares');
   };

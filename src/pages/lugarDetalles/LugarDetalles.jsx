@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 
-import { Container, Grid } from '@mui/material';
+import { Grid } from '@mui/material';
 
 import NavBar from "../../components/NavBar/NavBar";
 import HeaderLugar from "./components/HeaderLugar";
@@ -15,7 +15,6 @@ import axios from 'axios';
 
 import fondo1 from '../../img/fondo_1.jpg'
 import fondo2 from '../../img/fondo_oscuro1.jpg'
-import mapa from "./../../img/maps.webp";
 
 const LugarDetalles = () => {
   const { id, nombre } = useParams();
@@ -62,23 +61,23 @@ const LugarDetalles = () => {
 
         // Accesibilidad
         nuevo_objeto.accesibilidad = "";
-        if(nuevo_objeto.accesibilidadParking == 1) {
-          if(nuevo_objeto.accesibilidad != "")
+        if(nuevo_objeto.accesibilidadParking === 1) {
+          if(nuevo_objeto.accesibilidad !== "")
             nuevo_objeto.accesibilidad += ", "
           nuevo_objeto.accesibilidad += "con estacionamiento accesible"
         }
-        if(nuevo_objeto.accesibilidadEntrance == 1) {
-          if(nuevo_objeto.accesibilidad != "")
+        if(nuevo_objeto.accesibilidadEntrance === 1) {
+          if(nuevo_objeto.accesibilidad !== "")
             nuevo_objeto.accesibilidad += ", "
           nuevo_objeto.accesibilidad += "con entrada accesible"
         }
-        if(nuevo_objeto.accesibilidadRestroom == 1) {
-          if(nuevo_objeto.accesibilidad != "")
+        if(nuevo_objeto.accesibilidadRestroom === 1) {
+          if(nuevo_objeto.accesibilidad !== "")
             nuevo_objeto.accesibilidad += ", "
           nuevo_objeto.accesibilidad += "con baños accesibles"
         }
-        if(nuevo_objeto.accesibilidadSeating == 1) {
-          if(nuevo_objeto.accesibilidad != "")
+        if(nuevo_objeto.accesibilidadSeating === 1) {
+          if(nuevo_objeto.accesibilidad !== "")
             nuevo_objeto.accesibilidad += ", "
           nuevo_objeto.accesibilidad += "con asientos accesibles"
         }
@@ -121,11 +120,12 @@ const LugarDetalles = () => {
             resumen={detalles && detalles.descripcion ? detalles.descripcion : 'Sin descripción.'}
             ubicacion={detalles && detalles.ubicacion ? detalles.ubicacion : '-'}
             costo={detalles && detalles.costos ? detalles.costos : 'Sin información de costos'}
-            horario={detalles && detalles.horario ? detalles.horario : '-'}
-            accesibilidad={detalles && detalles.accesibilidad ? detalles.accesibilidad : '-'}
-            ma={mapa}
+            horario={detalles && detalles.horario ? detalles.horario : ''}
+            accesibilidad={detalles && detalles.accesibilidad ? detalles.accesibilidad : ''}
             latitud={detalles && detalles.latitud ? detalles.latitud : 0.0}
             longitud={detalles && detalles.longitud ? detalles.longitud : 0.0}
+            nombre_normalizado={nombre}
+            id_lugar={id}
           />
         </div>
       </Grid>

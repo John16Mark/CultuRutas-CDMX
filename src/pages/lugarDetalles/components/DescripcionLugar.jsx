@@ -1,17 +1,23 @@
 import React from "react";
 import { useNavigate } from 'react-router-dom';
-import { Box, Rating, ImageList, ImageListItem, useMediaQuery, Button } from '@mui/material';
+import { Box, Button } from '@mui/material';
 import LocationOnIcon from '@mui/icons-material/LocationOn';
 import AttachMoneyIcon from '@mui/icons-material/AttachMoney';
 import AccessTimeIcon from '@mui/icons-material/AccessTime';
 import AccessibleIcon from '@mui/icons-material/Accessible';
 
-
-import {APIProvider, Map} from '@vis.gl/react-google-maps';
+import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
+import 'leaflet/dist/leaflet.css';
+import L from 'leaflet';
 
 import './DescripcionLugar.css'
 
-import mapa from "./../../../img/maps.webp";
+delete L.Icon.Default.prototype._getIconUrl;
+L.Icon.Default.mergeOptions({
+  iconRetinaUrl: require('leaflet/dist/images/marker-icon-2x.png'),
+  iconUrl: require('leaflet/dist/images/marker-icon.png'),
+  shadowUrl: require('leaflet/dist/images/marker-shadow.png'),
+});
 
 function DescripcionLugar({nombre,
   resumen,
@@ -19,13 +25,14 @@ function DescripcionLugar({nombre,
   costo,
   horario,
   accesibilidad,
-  ma,
   latitud,
-  longitud
+  longitud,
+  nombre_normalizado,
+  id_lugar,
 }){
   const navigate = useNavigate();
   const ir_a_repositorio = () => {
-    navigate('/lugar-repositorio');
+    navigate(`/lugar/${id_lugar}/${nombre_normalizado}/repositorio`);
   };
 
   let isLogged = false
@@ -123,15 +130,39 @@ function DescripcionLugar({nombre,
             style={{marginTop:30}}>
             
             <div>
+      <div
+        id="map"
+        className="pp-informacion-lugar-card-mapa"
+        style={{ height: '300px', margin: 0, padding: 0 }}
+      >
+        {latitud !== 0.0 && longitud !== 0.0 && (
+          <MapContainer
+            center={[latitud, longitud]}
+            zoom={18}
+            scrollWheelZoom={false}
+            style={{ height: '100%', width: '100%' }}
+          >
+            <TileLayer
+              url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+              attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
+            />
+            <Marker position={[latitud, longitud]}>
+              <Popup>{nombre}</Popup>
+            </Marker>
+          </MapContainer>
+        )}
 
-              <div id="map" className='pp-informacion-lugar-card-mapa' style={{height: '300px', margin: 0, padding: 0, backgroundColor: '#cccccc'}}>
-                <APIProvider apiKey={process.env.REACT_APP_GOOGLE_API_KEY} onLoad={() => console.log('Maps API has loaded.')}style={{height: '100%', margin: 0, padding: 0, backgroundColor: '#cccccc'}}> 
-                  <Map defaultZoom={18} defaultCenter={ { lat: latitud, lng: longitud } } style={{height: '100%', margin: 0, padding: 0}}>
-                  </Map>
-                </APIProvider>
-              </div>
-              <a className="pp-informacion-lugar-card-link" href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(nombre)}`} >Ver en GoogleMaps</a>
-            </div>
+      </div>
+
+      <a
+        className="pp-informacion-lugar-card-link"
+        href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(nombre)}`}
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        Ver en Google Maps
+      </a>
+    </div>
             
             <table className='DesLug-tabla-detalles'>
               <tbody>

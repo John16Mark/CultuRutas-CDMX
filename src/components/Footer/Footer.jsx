@@ -9,14 +9,14 @@ function Footer({ showIncorporaLugar }) {
     <Box component="footer" sx={{ backgroundColor: '#a9825a', color: '#000', pt: 4, pb: 2, mt: 4 }}>
       <Container>
         <Grid container spacing={1.5}>
-          <Grid item xs={12} sm={6} md={3}>
+          <Grid size={{xs: 12, sm: 6, md:3}}>
             <Typography variant="h6" gutterBottom>CultuRutas CDMX</Typography>
             <Typography variant="body2">
               Descubre de historia y arqueología en la CDMX, desde lugares icónicos hasta rincones menos conocidos.
             </Typography>
           </Grid>
 
-          <Grid item xs={12} sm={6} md={3}>
+          <Grid size={{xs: 12, sm: 6, md:3}}>
             <Typography variant="h6" gutterBottom>Más de nosotros</Typography>
             {showIncorporaLugar && (
               <Typography variant="body2">
@@ -32,7 +32,7 @@ function Footer({ showIncorporaLugar }) {
             </Typography>
           </Grid>
 
-          <Grid item xs={12} sm={6} md={3}>
+          <Grid size={{xs: 12, sm: 6, md:3}}>
             <Typography variant="h6" gutterBottom>Contacto</Typography>
             <Typography variant="body2" display="flex" alignItems="center" gap={1}>
               <Home fontSize="small" /> Ciudad de México, México
@@ -45,7 +45,7 @@ function Footer({ showIncorporaLugar }) {
             </Typography>
           </Grid>
 
-          <Grid item xs={12} sm={6} md={3}>
+          <Grid size={{xs: 12, sm: 6, md:3}}>
             <Typography variant="h6" gutterBottom>Síguenos</Typography>
             <Box>
               <IconButton component={Link} to="/" color="inherit"><Facebook /></IconButton>
