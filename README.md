@@ -6,6 +6,20 @@ This project was bootstrapped with [Create React App](https://github.com/faceboo
 
 In the project directory, you can run:
 
+## Abre PowerShell como Administrador:
+
+## Presiona Win + X y selecciona "Windows PowerShell (Admin)" o "Terminal (Admin)".
+
+## Si usas Windows 11, busca "PowerShell" en el menú Inicio, haz clic derecho y elige "Ejecutar como administrador".
+
+## Ejecuta el comando correctamente:
+
+## Set-ExecutionPolicy RemoteSigned -Scope CurrentUser
+
+## En terminal del projecto ejecuta:
+
+## npm install
+
 ### `npm start`
 
 Runs the app in the development mode.\

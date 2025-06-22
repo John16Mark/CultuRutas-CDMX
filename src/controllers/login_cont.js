@@ -1,44 +1,33 @@
-const login_model = require('../models/MySQL/login_model');
+const visitante_model = require('../models/MySQL/visitante_model');
 
-class login_cont{
+class login_cont {
   static async login(req, res) {
     const { correo, contraseña } = req.body;
 
-    /*const tokenJWT = (id, username, nombre, apellido, correo, imagen) => {
-      return jwt.sign({
-        id: id, username: username, nombre: nombre, apellido: apellido, correo: correo, imagen: imagen},
-      process.env.JWT_SECRET, { expiresIn: '1h' });
-    }*/
-
     try {
-      const resultado = await login_model.login_regular(correo);
-      console.log("\x1b[94mlogin_controller - resultado\x1b[0m", resultado)
-      // Validar contraseña
-      /*const passwordMatch = await bcrypt.compare(contraseña, resultado.hashedPassword);
-      if (!passwordMatch) {
-        return res.status(400).json({ error: 'Contraseña incorrecta.' });
-      }*/
-      // Validar confirmación por correo
-      if(resultado.confirmacion == '0') {
-        //let error = errorHandler('correo_no_confirmado');
-        let error = 'Correo no confirmado'
-        return res.status(400).json({ error: error})
+      const resultado = await visitante_model.login_regular(correo);
+
+      if (!resultado.correo_verificado) {
+        return res.status(400).json({ error: 'Correo no confirmado' });
       }
-      
-      //const newToken = tokenJWT(resultado.id, resultado.username, resultado.nombre, resultado.apellido, correo, resultado.imagen);
-      const newToken = 2;
-      res.json({resultado: resultado, token: newToken});
+
+      // Aquí podrías usar bcrypt si contraseñas están hasheadas
+      if (contraseña !== resultado.contrasena) {
+        return res.status(400).json({ error: 'Contraseña incorrecta' });
+      }
+
+      res.json({
+        resultado: {
+          id: resultado.id,
+          correo: correo,
+          token: resultado.token
+        }
+      });
 
     } catch (err) {
-      if (err.message) {
-        //let mensajeError = errorHandler(err.message);
-        let mensajeError = 'Correo no confirmado'
-        return res.status(400).json({ error: mensajeError });
-      }
-      res.status(500).json({ error: err });
+      res.status(400).json({ error: err.message });
     }
-
   }
 }
 
-module.exports = login_cont
+module.exports = login_cont;
