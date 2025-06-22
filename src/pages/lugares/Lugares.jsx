@@ -25,7 +25,7 @@ import { Margin } from "@mui/icons-material";
 const Lugares = () => {
   const navigate = useNavigate();
   
-  const [lugares, setLugares] = useState([]);  // ← estado para almacenar los lugares
+  const [lugares, setLugares] = useState([]);
  
   const ir_a_home = () => {
     navigate('/');
@@ -36,8 +36,6 @@ const Lugares = () => {
   }
   
   useEffect(() => {
-    // Esta función se llama al cargar la página
-    
     const fetchLugares = async () => {
       try {
         const response = await axios.post('http://localhost:3001/get_lugares', {
@@ -54,40 +52,7 @@ const Lugares = () => {
     };
 
     fetchLugares();
-  }, []); // ← se ejecuta solo una vez al montar el componente
-
-  let places = [
-    {
-      nombre: "Templo Mayor",
-      descripcion: "Antiguo centro ceremonial mexica ubicado en el corazón del Centro Histórico.",
-      imagen: "/imagenes/templo_mayor.jpg"
-    },
-    {
-      nombre: "Museo Nacional de Antropología",
-      descripcion: "Exhibe el legado arqueológico e histórico de los pueblos de México.",
-      imagen: "/imagenes/museo_antropologia.jpg"
-    },
-      {
-      nombre: "Templo Mayor",
-      descripcion: "Antiguo centro ceremonial mexica ubicado en el corazón del Centro Histórico.",
-      imagen: "/imagenes/templo_mayor.jpg"
-    },
-    {
-      nombre: "Museo Nacional de Antropología",
-      descripcion: "Exhibe el legado arqueológico e histórico de los pueblos de México.",
-      imagen: "/imagenes/museo_antropologia.jpg"
-    },
-      {
-      nombre: "Templo Mayor",
-      descripcion: "Antiguo centro ceremonial mexica ubicado en el corazón del Centro Histórico.",
-      imagen: "/imagenes/templo_mayor.jpg"
-    },
-    {
-      nombre: "Museo Nacional de Antropología",
-      descripcion: "Exhibe el legado arqueológico e histórico de los pueblos de México.",
-      imagen: "/imagenes/museo_antropologia.jpg"
-    },
-  ]
+  }, []);
 
   return (
   <div style={{
