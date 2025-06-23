@@ -4,21 +4,19 @@ import { Container, TextField, Button, Typography, Divider, IconButton, InputAdo
 import { Visibility, VisibilityOff } from '@mui/icons-material';
 import Navbar from '../../components/NavBar/NavBar';
 import Footer from '../../components/Footer/Footer';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 import image from "./../../img/fondo_1.jpg";
-
 import './Login.css'
-
 import { validarCorreo, validarContraseña } from './../../utils/validaciones';
 import { handleLogin } from './login_handler';
 
 const Login = () => {
   const [showPassword, setShowPassword] = useState(false);
-
   const [correo, setCorreo] = useState('');
   const [contraseña, setContraseña] = useState('');
   const [errors, setErrors] = useState({});
+  const navigate = useNavigate(); // Mueve el hook aquí al nivel superior
 
   const handleEmailChange = (e) => {
     const value = e.target.value;
@@ -46,9 +44,9 @@ const Login = () => {
       console.log("Favor de completar todos los campos")
       setErrors((prevErrors) => ({
         ...prevErrors,
-        camposObligatorios: true, // Añadir error para campos vacíos
+        camposObligatorios: true,
       }));
-      return
+      return;
     }
 
     // Validar correo
@@ -59,35 +57,39 @@ const Login = () => {
         ...prevErrors,
         correo: correoRules,
       }));
-      //setAlertContentError('Por favor, verifique correctamente su correo electrónico.');
-      //handleClickOpenError();
       return;
     }
 
     // Validar contraseñas
     const passwordRules = validarContraseña(contraseña);
-    // Si la contraseña no cumple las reglas
     if (!passwordRules.longitudValida || !passwordRules.mayuscula || !passwordRules.minuscula || !passwordRules.numero || !passwordRules.noVacio) {
       console.log("La contraseña no cumple los requisitos")
       setErrors((prevErrors) => ({
         ...prevErrors,
         contraseña: passwordRules,
       }));
-      //setAlertContentError('Por favor, verifique correctamente su contraseña.');
-      //handleClickOpenError();
       return;
     }
 
     const resultado = await handleLogin(e, correo, contraseña);
-    console.log(resultado);
-    if(resultado && resultado.resultado) {
-      console.log("ACCESO CONCEDIDO", resultado.resultado);
-    } else {
-      console.log("ERROR", resultado);
+    console.log(resultado.success);
+    console.log(resultado.resultado);
+    
+    if (resultado.success && resultado.usuario) {
+      const usuario = resultado.usuario;
+      console.log("ACCESO CONCEDIDO", usuario);
+
+      if (usuario.esGestor) {
+        navigate('/repositorio');
+      } else {
+        navigate('/lugares');
+      }
+    } 
+    else {
+      console.log("ERROR", resultado.error);
+      setErrors({ general: resultado.error });
     }
-
-  }
-
+  };
 
   const togglePasswordVisibility = () => {
     setShowPassword((prev) => !prev);
@@ -97,15 +99,14 @@ const Login = () => {
     <Box
       sx={{
         minHeight: '100vh',
-        backgroundImage: `url(${image})`, // Cambia a tu imagen real
+        backgroundImage: `url(${image})`,
         backgroundSize: 'cover',
         backgroundPosition: 'center',
         display: 'flex',
         flexDirection: 'column',
       }}
     >
-      <Navbar
-        esTransparente={false}/>
+      <Navbar esTransparente={false}/>
 
       <Container
         component="main"
@@ -126,7 +127,7 @@ const Login = () => {
           <Button
             fullWidth
             variant="contained"
-           style={{backgroundColor: '#a9825a', color: 'rgb(20,20,20)'}}
+            style={{backgroundColor: '#a9825a', color: 'rgb(20,20,20)'}}
             sx={{ mt: 1, mb: 3 }}
           >
             Iniciar sesión con Google
@@ -164,6 +165,12 @@ const Login = () => {
               )
             }}
           />
+
+          {errors.general && (
+            <Typography color="error" variant="body2" sx={{ mt: 1 }}>
+              {errors.general}
+            </Typography>
+          )}
 
           <Button
             fullWidth

@@ -1,119 +1,139 @@
-# Visitante Registro
-DROP PROCEDURE IF EXISTS usuario_registro;
-DROP PROCEDURE IF EXISTS usuario_confirmar_correo;
-DROP PROCEDURE IF EXISTS UsuarioRegistroGoogle;
-DROP PROCEDURE IF EXISTS UsuarioConfirmarCuenta;
-DROP PROCEDURE IF EXISTS UsuarioConfirmarCuentaId;
-# Visitante Inicio de Sesión
-DROP PROCEDURE IF EXISTS usuario_login;
-DROP PROCEDURE IF EXISTS UsuarioIniciarSesionGoogle;
-
+-- En MySQL o en tu archivo 2_procesos.sql
 DELIMITER //
-
--- ---------------------------------------------------------------------------------------------------
---                                         USUARIO REGISTRO
--- ---------------------------------------------------------------------------------------------------
-
--- -----------------------------------------------------
--- Process `CultuRutas`.`usuario_registro`
--- -----------------------------------------------------
-CREATE PROCEDURE usuario_registro (
+CREATE PROCEDURE visitante_registro (
    IN p_correo VARCHAR(320),
-   IN p_contraseña VARCHAR(255)
+   IN p_contrasena VARCHAR(100),
+   IN p_token VARCHAR(64)
 )
 BEGIN
+   DECLARE existente INT;
 
-   DECLARE usuarioExistente INT;
-   DECLARE confirmacionStatus INT;
-
-   SELECT COUNT(*) INTO usuarioExistente
-   FROM Visitante
-   WHERE UPPER(correo_electronico) = UPPER(p_correo);
-    
-   IF usuarioExistente = 0 THEN
-      -- Validar formato del correo
-      IF p_correo REGEXP '^[a-zA-Z0-9]+([._-]?[a-zA-Z0-9]+)*@[a-zA-Z0-9]+([\-]?[a-zA-Z0-9]+)*(\.[a-zA-Z0-9]+([\-]?[a-zA-Z0-9]+)*)*\.[a-zA-Z]{2,63}$' THEN
-         INSERT INTO Visitante (correo_electronico, contrasena, fecha_creacion, correo_verificado)
-         VALUES (p_correo, p_contraseña, NOW(), 0);
-         
-         SELECT id_visitante FROM Visitante WHERE correo_electronico = p_correo;
-      ELSE
-         SELECT 'correo_invalido' AS 'error';
-      END IF;
-   ELSE
-      -- Obtener el valor de confirmacion
-      SELECT correo_verificado INTO confirmacionStatus
-      FROM Visitante
-      WHERE UPPER(correo_electronico) = UPPER(p_correo);
-
-      -- Verificar el estado de confirmacion
-      IF confirmacionStatus = 0 THEN
-         SELECT 'sin_confirmacion' AS 'warning';
-      ELSE
-         SELECT 'correo_ya_registrado' AS 'error';
-      END IF;
-   END IF;
-   
-END //
-
--- -----------------------------------------------------
--- Process `CultuRutasCDMX`.`UsuarioConfirmarCorreo`
--- -----------------------------------------------------
-CREATE PROCEDURE usuario_confirmar_correo (
-   IN p_correo VARCHAR(320)
-)
-BEGIN
-   DECLARE usuarioExistente INT;
-
-   SELECT COUNT(*) INTO usuarioExistente
-   FROM Visitante
-   WHERE correo_electronico = UPPER(p_correo);
-    
-   IF usuarioExistente = 0 THEN
-      SELECT 'correo_no_registrado' AS 'error';
-   ELSE
-      UPDATE Visitante SET correo_verificado = 1
-      WHERE correo_electronico = UPPER(p_correo);
-   END IF;
-END //
-
--- ---------------------------------------------------------------------------------------------------
---                                        USUARIO INICIAR SESIÓN
--- ---------------------------------------------------------------------------------------------------
-
--- -----------------------------------------------------
--- Process `CultuRutasCDMX`.`usuario_login`
--- -----------------------------------------------------
-CREATE PROCEDURE usuario_login (
-   IN p_correo VARCHAR(320)
-)
-BEGIN
-   DECLARE correoInvalido BOOLEAN;
-   DECLARE v_id INT;
-   DECLARE v_contraseña VARCHAR(255);
-   DECLARE v_imagen VARCHAR(512);
-   DECLARE v_confirmacion BOOLEAN;
-   DECLARE v_ultimaConexion DATETIME;
-   
-   SELECT id_visitante, contrasena, fecha_ultimo_login, correo_verificado
-   INTO v_id, v_contraseña, v_ultimaConexion, v_confirmacion
+   SELECT COUNT(*) INTO existente
    FROM Visitante
    WHERE correo_electronico = p_correo;
-   
-   SET correoInvalido = NOT (p_correo REGEXP '^[a-zA-Z0-9]+([._-]?[a-zA-Z0-9]+)*@[a-zA-Z0-9]+([\-]?[a-zA-Z0-9]+)*(\.[a-zA-Z0-9]+([\-]?[a-zA-Z0-9]+)*)*\.[a-zA-Z]{2,63}$');
 
-   IF correoInvalido THEN
-      SELECT 'correo_invalido' AS 'error';
+   IF existente = 0 THEN
+      INSERT INTO Visitante (
+        correo_electronico, contrasena, correo_verificado, token_verificacion
+      )
+      VALUES (
+        p_correo, p_contrasena, FALSE, p_token
+      );
+
+      SELECT 'registro_exitoso' AS mensaje;
    ELSE
-      IF v_id IS NULL THEN
-         SELECT 'correo_no_registrado' AS 'error';
-      ELSEIF v_confirmacion = 0 THEN
-         SELECT 'correo_no_confirmado' AS 'warning';
-      ELSE
-         SELECT
-            v_id AS id_visitante,
-            v_contraseña AS contrasena,
-            v_ultimaConexion AS fecha_ultimo_login;
-      END IF;
+      SELECT 'correo_ya_registrado' AS error;
    END IF;
 END //
+DELIMITER ;
+
+
+
+
+DELIMITER //
+CREATE PROCEDURE visitante_login (
+   IN p_correo VARCHAR(320)
+)
+BEGIN
+   DECLARE v_id INT;
+   DECLARE v_contrasena VARCHAR(100);
+   DECLARE v_correo_verificado BOOLEAN;
+   DECLARE v_token VARCHAR(64);
+   DECLARE v_fecha_creacion TIMESTAMP;
+
+   SELECT id_visitante, contrasena, correo_verificado, token_verificacion, fecha_creacion
+   INTO v_id, v_contrasena, v_correo_verificado, v_token, v_fecha_creacion
+   FROM Visitante
+   WHERE correo_electronico = p_correo;
+
+   IF v_id IS NULL THEN
+      SELECT 'correo_no_registrado' AS error;
+   ELSE
+      SELECT
+         v_id AS id,
+         v_contrasena AS contrasena,
+         v_correo_verificado AS correo_verificado,
+         v_token AS token,
+         v_fecha_creacion AS fecha_creacion;
+   END IF;
+END //
+DELIMITER ;
+
+DELIMITER //
+CREATE PROCEDURE gestor_login (
+   IN p_correo VARCHAR(320)
+)
+BEGIN
+   DECLARE v_id INT;
+   DECLARE v_contrasena VARCHAR(100);
+   DECLARE v_correo_verificado BOOLEAN;
+   DECLARE v_token VARCHAR(64);
+   DECLARE v_fecha_creacion TIMESTAMP;
+
+   SELECT id_gestor, contrasena, correo_verificado, token_verificacion, fecha_creacion
+   INTO v_id, v_contrasena, v_correo_verificado, v_token, v_fecha_creacion
+   FROM Gestor
+   WHERE correo_electronico = p_correo;
+
+   IF v_id IS NULL THEN
+      SELECT 'correo_no_registrado' AS error;
+   ELSE
+      SELECT
+         v_id AS id,
+         v_contrasena AS contrasena,
+         v_correo_verificado AS correo_verificado,
+         v_token AS token,
+         v_fecha_creacion AS fecha_creacion;
+   END IF;
+END //
+DELIMITER ;
+
+-- Nuevo procedimiento para obtener sitios de un gestor
+DELIMITER //
+CREATE PROCEDURE obtener_sitios_gestor (
+   IN p_id_gestor INT
+)
+BEGIN
+   SELECT * FROM Sitio_turistico_historico
+   WHERE id_gestor = p_id_gestor;
+END //
+DELIMITER ;
+
+DELIMITER //
+CREATE PROCEDURE generar_token_recuperacion (
+    IN p_correo VARCHAR(320),
+    IN p_tipo_usuario ENUM('gestor', 'visitante')
+)
+BEGIN
+    DECLARE v_id INT;
+    DECLARE token_generado VARCHAR(64);
+
+    IF p_tipo_usuario = 'visitante' THEN
+        SELECT id_visitante INTO v_id FROM Visitante WHERE correo_electronico = p_correo;
+    ELSE
+        SELECT id_gestor INTO v_id FROM Gestor WHERE correo_electronico = p_correo;
+    END IF;
+
+    IF v_id IS NOT NULL THEN
+        SET token_generado = UUID();
+
+        INSERT INTO Tokens_Recuperacion (
+            id_usuario,
+            token,
+            tipo_usuario,
+            fecha_expiracion,
+            utilizado
+        ) VALUES (
+            v_id,
+            token_generado,
+            p_tipo_usuario,
+            DATE_ADD(NOW(), INTERVAL 1 HOUR),
+            FALSE
+        );
+
+        SELECT token_generado AS token;
+    ELSE
+        SELECT 'correo_no_registrado' AS error;
+    END IF;
+END //
+DELIMITER ;

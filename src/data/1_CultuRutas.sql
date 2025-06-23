@@ -1,12 +1,24 @@
-DROP DATABASE IF EXISTS CultuRutas;
-
 CREATE DATABASE IF NOT EXISTS CultuRutas CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 USE CultuRutas;
 
+CREATE TABLE Gestor (
+    id_gestor INT AUTO_INCREMENT PRIMARY KEY,
+    nombre VARCHAR(30) NOT NULL,
+    apellido_p VARCHAR(20) NOT NULL,
+    apellido_m VARCHAR(20) NOT NULL,
+    correo_electronico VARCHAR(320) NOT NULL UNIQUE,
+    contrasena VARCHAR(100) NOT NULL,
+    numero_telefonico VARCHAR(15),
+    rfc VARCHAR(20),
+    correo_verificado BOOLEAN DEFAULT FALSE,
+    token_verificacion VARCHAR(64),
+    fecha_creacion TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+) ENGINE=InnoDB;
 
 CREATE TABLE Sitio_turistico_historico (
     id_sitio INT AUTO_INCREMENT PRIMARY KEY,
+    id_gestor INT,
     nombre VARCHAR(100) NOT NULL,
     municipio_delegacion VARCHAR(40) NOT NULL,
     calle VARCHAR(150) NOT NULL,
@@ -24,32 +36,16 @@ CREATE TABLE Sitio_turistico_historico (
     costos VARCHAR(100),
     tipo VARCHAR(250) NOT NULL,
     descripcion VARCHAR(1000),
-    accesibilidadParking BOOLEAN NULL DEFAULT '0',
-    accesibilidadEntrance BOOLEAN NULL DEFAULT '0',
-    accesibilidadRestroom BOOLEAN NULL DEFAULT '0',
-    accesibilidadSeating BOOLEAN NULL DEFAULT '0',
-    petfriendly BOOLEAN NULL DEFAULT '0',
+    accesibilidadParking BOOLEAN NULL DEFAULT 0,
+    accesibilidadEntrance BOOLEAN NULL DEFAULT 0,
+    accesibilidadRestroom BOOLEAN NULL DEFAULT 0,
+    accesibilidadSeating BOOLEAN NULL DEFAULT 0,
+    petfriendly BOOLEAN NULL DEFAULT 0,
     calificacion INT DEFAULT 0,
     total_calificaciones INT DEFAULT 0,
-    CONSTRAINT chk_calificacion CHECK (calificacion BETWEEN 0 AND 5)
-) ENGINE=INNODB;
-
-
-CREATE TABLE Gestor (
-    id_gestor INT AUTO_INCREMENT PRIMARY KEY,
-    id_sitio INT,
-    nombre VARCHAR(30) NOT NULL,
-    apellido_p VARCHAR(20) NOT NULL,
-    apellido_m VARCHAR(20) NOT NULL,
-    correo_electronico VARCHAR(320) NOT NULL UNIQUE,
-    contrasena VARCHAR(100) NOT NULL,
-    numero_telefonico VARCHAR(15),
-    rfc VARCHAR(20),
-    correo_verificado BOOLEAN DEFAULT FALSE,
-    token_verificacion VARCHAR(64),
-    fecha_creacion TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (id_sitio) REFERENCES Sitio_turistico_historico(id_sitio) ON DELETE SET NULL
-) ENGINE=INNODB;
+    CONSTRAINT chk_calificacion CHECK (calificacion BETWEEN 0 AND 5),
+    FOREIGN KEY (id_gestor) REFERENCES Gestor(id_gestor) ON DELETE SET NULL
+) ENGINE=InnoDB;
 
 
 CREATE TABLE Visitante (
@@ -60,7 +56,7 @@ CREATE TABLE Visitante (
     token_verificacion VARCHAR(64),
     fecha_creacion TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     fecha_ultimo_login TIMESTAMP NULL
-) ENGINE=INNODB;
+) ENGINE=InnoDB;
 
 
 CREATE TABLE Evento (
@@ -72,7 +68,7 @@ CREATE TABLE Evento (
     descripcion VARCHAR(1000) NOT NULL,
     imagen VARCHAR(1000),
     FOREIGN KEY (id_sitio) REFERENCES Sitio_turistico_historico(id_sitio) ON DELETE CASCADE
-) ENGINE=INNODB;
+) ENGINE=InnoDB;
 
 
 CREATE TABLE A_Multimedia (
@@ -85,7 +81,7 @@ CREATE TABLE A_Multimedia (
     ruta_local VARCHAR(255),
     id_sitio INT,
     FOREIGN KEY (id_sitio) REFERENCES Sitio_turistico_historico(id_sitio) ON DELETE SET NULL
-) ENGINE=INNODB;
+) ENGINE=InnoDB;
 
 
 CREATE TABLE A_Documentos (
@@ -98,7 +94,7 @@ CREATE TABLE A_Documentos (
     ruta_local VARCHAR(255),
     id_sitio INT,
     FOREIGN KEY (id_sitio) REFERENCES Sitio_turistico_historico(id_sitio) ON DELETE SET NULL
-) ENGINE=INNODB;
+) ENGINE=InnoDB;
 
 
 CREATE TABLE Repositorio (
@@ -108,7 +104,7 @@ CREATE TABLE Repositorio (
     tipo_apartado ENUM('multimedia', 'documentos') NOT NULL,
     FOREIGN KEY (id_multimedia) REFERENCES A_Multimedia(id_multimedia) ON DELETE SET NULL,
     FOREIGN KEY (id_documento) REFERENCES A_Documentos(id_documento) ON DELETE SET NULL
-) ENGINE=INNODB;
+) ENGINE=InnoDB;
 
 
 CREATE TABLE Tokens_Recuperacion (
@@ -116,7 +112,7 @@ CREATE TABLE Tokens_Recuperacion (
     id_usuario INT NOT NULL,
     token VARCHAR(64) NOT NULL,
     tipo_usuario ENUM('gestor', 'visitante') NOT NULL,
-    fecha_creacion TIMESTAMP DEFAULT NOW(),
-    fecha_expiracion TIMESTAMP NOT NULL DEFAULT NOW(),
+    fecha_creacion TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    fecha_expiracion TIMESTAMP NOT NULL,
     utilizado BOOLEAN DEFAULT FALSE
-) ENGINE=INNODB;
+) ENGINE=InnoDB;

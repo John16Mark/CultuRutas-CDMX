@@ -7,38 +7,48 @@ const handleRegistro = async (e, correo, contraseña) => {
       correo,
       contraseña,
     });
-    //console.log("handleRegistro response.data: ", response.data);
-    if(response.data.resultado.id) {
-      return response.data;
-      /*const responseCorreo = await enviarCorreoVerificacion(nombre, correo);
-      if(responseCorreo)
-        return response.data;
-      else
-        throw({error: 'Error mandando el correo de confirmación. Favor de reintentar'});*/
-    } else if(response.data.resultado.warning) {
-      //console.log("Aún no se confirma el correo")
-      return response.data;
-      /*const responseCorreo = await enviarCorreoVerificacion(nombre, correo);
-      if(responseCorreo)
-        return response.data;
-      else
-        throw({error: 'Error mandando el correo de confirmación. Favor de reintentar'});*/
+    
+    // Respuesta esperada ahora es { mensaje: string, correoEnviado?: boolean }
+    if (response.data.mensaje) {
+      return {
+        success: true,
+        message: response.data.mensaje,
+        emailSent: response.data.correoEnviado || false
+      };
     } else {
-      throw(new Error('Algo falló en la solicitud'));
+      throw new Error('La respuesta del servidor no contiene los datos esperados');
     }
 
   } catch (error) {
-    if (error.response && error.response.data && error.response.data.error) {
-      return error.response.data.error
-    } else if(error.error) {
-      return error.error;
+    console.error("Error en handleRegistro:", error);
+    
+    // Manejo mejorado de errores
+    if (error.response) {
+      // El servidor respondió con un status code fuera del rango 2xx
+      if (error.response.data && error.response.data.error) {
+        return {
+          success: false,
+          error: error.response.data.error
+        };
+      }
+      return {
+        success: false,
+        error: `Error en la solicitud: ${error.response.status} - ${error.response.statusText}`
+      };
+    } else if (error.request) {
+      // La solicitud fue hecha pero no se recibió respuesta
+      return {
+        success: false,
+        error: 'No se recibió respuesta del servidor'
+      };
     } else {
-      console.error("Error al intentar iniciar sesión:", error);
-      return 'Algo falló en la solicitud';
+      // Error al configurar la solicitud
+      return {
+        success: false,
+        error: error.message || 'Error al configurar la solicitud'
+      };
     }
   }
 };
 
-export {
-  handleRegistro
-};
+export { handleRegistro };
