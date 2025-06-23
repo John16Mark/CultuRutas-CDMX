@@ -88,9 +88,6 @@ const Home = () => {
   const [lugares, setLugares] = useState([]);
   const [lugaresCercanos, setLugaresCercanos] = useState([]);
 
-  const cardData = [1, 2, 3, 4, 5, 6];
-  let nombre = "¡Estás Aquí!"
-
   useEffect(() => {
     const geoLocalizacion = () => {
       if (navigator.geolocation) {

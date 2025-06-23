@@ -6,7 +6,7 @@ import { Link } from 'react-router-dom';
 
 function Footer({ showIncorporaLugar }) {
   return (
-    <Box component="footer" sx={{ backgroundColor: '#a9825a', color: '#000', pt: 4, pb: 2, mt: 4 }}>
+    <Box component="footer" sx={{ backgroundColor: '#a9825a', color: '#000', pt: 4, pb: 2, mt: 4, marginTop: 0 }}>
       <Container>
         <Grid container spacing={1.5}>
           <Grid size={{xs: 12, sm: 6, md:3}}>
