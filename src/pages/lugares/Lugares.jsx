@@ -1,4 +1,3 @@
-import React from "react";
 import { useEffect, useState, useMemo } from "react";
 import { useNavigate } from 'react-router-dom';
 import { Grid,
@@ -7,21 +6,19 @@ import { Grid,
   Typography,
   InputAdornment,
   TextField,
-  FormControl,
-  InputLabel,
-  Select,
   Card,
   CardMedia,
   CardContent,
-  MenuItem} from '@mui/material';
+  Stack,
+  } from '@mui/material';
 import SearchIcon from '@mui/icons-material/Search';
+import FestivalIcon from '@mui/icons-material/Festival';
 
 import axios from 'axios';
 
 import NavBar from "../../components/NavBar/NavBar";
 import Footer from './../../components/Footer/Footer'
 import Dropdown from './components/Dropdown';
-import { Margin } from "@mui/icons-material";
 
 const clasificarUbicacion = (lat) => {
   if (lat >= 19.45) return 'norte';
@@ -131,7 +128,7 @@ const Lugares = () => {
   <div style={{
     display: 'flex',
     flexDirection: 'column',
-    minHeight: '100vh', // asegura que ocupe toda la altura de la ventana
+    minHeight: '100vh', 
     backgroundColor: '#f5f5dc'
   }}>
     <NavBar
@@ -139,200 +136,189 @@ const Lugares = () => {
       esEstatica={false}
     />
 
-    <Box sx={{ px: 2, py: 4 }}>
-      {/* Título y botón */}
-      <Grid container spacing={2} justifyContent="center" alignItems="center">
-        <Grid item xs={12} md={10}>
-          <Grid container alignItems="center">
-            {/* Botón */}
-            <Grid item>
-              <Button
-                sx={{
-                  backgroundColor: '#415b2a',
-                  color: '#ffffff',
-                  paddingY: 1, // equivalente a paddingTop y paddingBottom de 8px
-                  paddingX: 3, // equivalente a paddingLeft y paddingRight de 25px aprox
-                  marginRight:12,
-                  textTransform: 'none',
-                  boxShadow: '2px 2px 5px rgba(0, 0, 0, 0.3)', // sombra normal
-                  '&:hover': {
-                    backgroundColor: '#32461f', // tono más oscuro para hover
-                    boxShadow: '4px 4px 2px rgba(0, 0, 0, 0.75)', // sombra más intensa
-                  },
-                  }}
-                onClick={ir_a_home}
-              >
-                Regresar
-              </Button>
-            </Grid>
-
-            {/* Título */}
-            <Grid item xs>
-              <Typography variant="h4" align="center">
-                Catálogo de lugares
-              </Typography>
-              <Typography variant="subtitle1" align="center">
-                ¡Que nuestra galería de opciones te motiven a seguir explorando!
-              </Typography>
-            </Grid>
-          </Grid>
-        </Grid>
-      </Grid>
-
-      {/* Barra de búsqueda */}
-      <Grid container justifyContent="flex-end" mt={4} mb={2}
-      style={{marginRight: 25}}>
-        <Grid item size={{xs: 12, md: 4, lg:3}}>
-          <TextField
-            value={busqueda}
-            onChange={(e) => setBusqueda(e.target.value)}
-            fullWidth
-            size="small"
-            variant="outlined"
-            placeholder="Filtrar"
-            InputProps={{
-              startAdornment: (
-                <InputAdornment position="start">
-                  <SearchIcon />
-                </InputAdornment>
-              ),
-            }}
+    <Stack direction='column' sx={{ width: 'auto', display: 'flex', paddingLeft: {md: '10%', xs: '3%'}, paddingRight: {md: '10%', xs: '3%'}, minHeight: '100vh', paddingTop: '3%' }}>
+      {/* Botón de regreso ---------------------------------------------------- */}
+      <Box sx={{ width: '100%', display: 'flex', justifyContent: 'flex-start', marginBottom: '30px' }}>
+        <Button
             sx={{
-              '& .MuiOutlinedInput-root': {
-                borderRadius: 15,
-                backgroundColor: '#ffffff',
-                '& fieldset': {
-                  borderColor: '#415b2a', // normal
-                },
-                '&:hover fieldset': {
-                  borderColor: '#32461f', // al pasar el mouse
-                },
-                '&.Mui-focused fieldset': {
-                  borderColor: '#2b4a1c', // al hacer foco (click o tab)
-                },
+              backgroundColor: '#415b2a',
+              color: '#ffffff',
+              paddingY: 1,
+              paddingX: 3,
+              textTransform: 'none',
+              boxShadow: '2px 2px 5px rgba(0, 0, 0, 0.3)',
+              '&:hover': {
+                backgroundColor: '#32461f',
+                boxShadow: '4px 4px 2px rgba(0, 0, 0, 0.75)',
               },
-            }}
-          />
-        </Grid>
-      </Grid>
+              }}
+            onClick={ir_a_home}
+          >
+            Regresar
+          </Button>
+      </Box>
 
-      {/* Filtros adicionales */}
-      <Grid container justifyContent="center" mb={4}>
-        <Grid item size={{xs: 12, md: 10}}>
+      {/* Título y texto -------------------------------------------------------- */}
+      <Stack direction='row' sx={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'center' }}>
+        <FestivalIcon sx={{ fontSize: {md: '2.5rem', sm: '2rem', xs: '1.5rem' } }} />
+        <Typography fontWeight='bold' sx= {{fontSize: {md: '2.5rem', sm: '2rem', xs: '1.5rem'}, lineHeight: 1 }}>
+          Catálogo de lugares
+        </Typography>
+      </Stack>
+      <Box sx={{ display: 'flex', justifyContent: 'center', width: '100%', marginTop: '10px' }}>
+        <Typography>
+          ¡Que nuestra galería de opciones te motiven a seguir explorando!
+        </Typography>
+      </Box>
+
+      {/* Barra de búsqueda/filtro ----------------------------------------------------- */}
+      <Box sx={{ display: 'flex', justifyContent: 'center', width: '100%', marginTop: '40px' }}>
+        <TextField
+          value={busqueda}
+          onChange={(e) => setBusqueda(e.target.value)}
+          fullWidth
+          size="small"
+          variant="outlined"
+          placeholder="Filtrar"
+          InputProps={{
+            startAdornment: (
+              <InputAdornment position="start">
+                <SearchIcon />
+              </InputAdornment>
+            ),
+          }}
+          sx={{
+            '& .MuiOutlinedInput-root': {
+              borderRadius: 15,
+              backgroundColor: '#ffffff',
+              '& fieldset': {
+                borderColor: '#415b2a',
+              },
+              '&:hover fieldset': {
+                borderColor: '#32461f',
+              },
+              '&.Mui-focused fieldset': {
+                borderColor: '#2b4a1c',
+              },
+            },
+          }}
+        />
+      </Box>
+      
+      {/* Cajón para filtrar lugares ----------------------------------------------- */}
+      <Box
+          sx={{
+            backgroundColor: '#a9c2a4',
+            borderRadius: 2,
+            boxShadow: '0px 4px 8px rgba(0, 0, 0, 0.2)',
+            overflow: 'hidden',
+            marginTop: '25px',
+          }}
+        >
+          {/* Encabezado */}
           <Box
             sx={{
-              backgroundColor: '#a9c2a4',
-              borderRadius: 2,
-              boxShadow: '0px 4px 8px rgba(0, 0, 0, 0.2)', // sombra inferior
-              overflow: 'hidden',
+              backgroundColor: '#789262',
+              py: 1,
+              px: 2,
+              borderTopLeftRadius: 8,
+              borderTopRightRadius: 8,
             }}
           >
-            {/* Encabezado */}
-            <Box
-              sx={{
-                backgroundColor: '#789262',
-                py: 1,
-                px: 2,
-                borderTopLeftRadius: 8,
-                borderTopRightRadius: 8,
-              }}
+            <Typography
+              variant="subtitle1"
+              align="center"
+              fontWeight="bold"
+              color="white"
             >
-              <Typography
-                variant="subtitle1"
-                align="center"
-                fontWeight="bold"
-                color="white"
-              >
-                Filtrar por:
-              </Typography>
-            </Box>
-
-            {/* Cuerpo con filtros */}
-            <Box sx={{ p: 2 }}>
-              <Grid container spacing={2} justifyContent="center">
-                {/* Filtro: Categoría */}
-                <Grid item size={{xs: 12, md:3, lg: 3}} style={{paddingLeft: 10, paddingRight: 10}}>
-                  <Dropdown
-                    label="Categoría"
-                    value={categoria}
-                    onChange={(e) => setCategoria(e.target.value)}
-                    opciones={opcionesCategoria}
-                  />
-                </Grid>
-
-                {/* Filtro: Ubicación */}
-                <Grid item size={{xs: 12, md:3, lg: 3}} style={{paddingLeft: 10, paddingRight: 10}}>
-                  <Dropdown
-                    label="Ubicación"
-                    value={ubicacion}
-                    onChange={(e) => setUbicacion(e.target.value)}
-                    opciones={opcionesUbicacion}
-                  />
-                </Grid>
-
-                {/* Filtro: Orden */}
-                <Grid item size={{xs: 12, md:3, lg: 3}} style={{paddingLeft: 10, paddingRight: 10}}>
-                  <Dropdown
-                    label="Orden"
-                    value={orden}
-                    onChange={(e) => setOrden(e.target.value)}
-                    opciones={opcionesOrden}
-                  />
-                </Grid>
-              </Grid>
-            </Box>
+              Filtrar por:
+            </Typography>
           </Box>
-        </Grid>
-      </Grid>
 
-      <Grid container
-        spacing={3}
-        size={{xs:12, md: 10}}
-        style={{backgroundColor: '#a9825a', padding: 16, marginLeft: 25, marginRight: 25}}
+          {/* Cuerpo con filtros */}
+          <Box sx={{ p: 2 }}>
+            <Grid container spacing={2} justifyContent="center">
+              {/* Filtro: Categoría */}
+              <Grid item size={{xs: 12, md:3, lg: 3}} style={{paddingLeft: 10, paddingRight: 10}}>
+                <Dropdown
+                  label="Categoría"
+                  value={categoria}
+                  onChange={(e) => setCategoria(e.target.value)}
+                  opciones={opcionesCategoria}
+                />
+              </Grid>
+
+              {/* Filtro: Ubicación */}
+              <Grid item size={{xs: 12, md:3, lg: 3}} style={{paddingLeft: 10, paddingRight: 10}}>
+                <Dropdown
+                  label="Ubicación"
+                  value={ubicacion}
+                  onChange={(e) => setUbicacion(e.target.value)}
+                  opciones={opcionesUbicacion}
+                />
+              </Grid>
+
+              {/* Filtro: Orden */}
+              <Grid item size={{xs: 12, md:3, lg: 3}} style={{paddingLeft: 10, paddingRight: 10}}>
+                <Dropdown
+                  label="Orden"
+                  value={orden}
+                  onChange={(e) => setOrden(e.target.value)}
+                  opciones={opcionesOrden}
+                />
+              </Grid>
+            </Grid>
+          </Box>
+        </Box>
+
+        <Grid container
+          spacing={3}
+          size={{xs:12, md: 10}}
+          style={{backgroundColor: '#a9825a', padding: 16, marginTop: '50px' }}
         >
-        {lugaresFiltrados.map((lugar, index) => (
-          <Grid item size={{xs: 12, md: 6, lg: 4}} key={index}>
-            <Card
-              sx={{
-                display: 'flex',
-                height: 160,
-                transition: 'transform 0.2s ease, box-shadow 0.2s ease',
-                boxShadow: '2px 2px 5px rgba(0, 0, 0, 0.2)',
-                cursor: 'pointer',
-                '&:hover': {
-                  transform: 'translateY(-4px)',
-                  boxShadow: '4px 4px 3px rgba(0, 0, 0, 0.5)',
-                },
-              }}
-              onClick={() => ir_a_detalles(lugar.id_sitio, lugar.nombre_normalizado)}>
-              {/* Imagen a la izquierda */}
-              <CardMedia
-                component="img"
-                image={lugar.imagen}
-                alt={lugar.nombre}
-                sx={{ width: '40%', objectFit: 'cover' }}
-              />
-              {/* Contenido a la derecha */}
-              <CardContent
+          {lugaresFiltrados.map((lugar, index) => (
+            <Grid item size={{xs: 12, md: 6, lg: 4}} key={index}>
+              <Card
                 sx={{
-                  width: '60%',
                   display: 'flex',
-                  flexDirection: 'column',
-                  justifyContent: 'center',
+                  height: 160,
+                  transition: 'transform 0.2s ease, box-shadow 0.2s ease',
+                  boxShadow: '2px 2px 5px rgba(0, 0, 0, 0.2)',
+                  cursor: 'pointer',
+                  '&:hover': {
+                    transform: 'translateY(-4px)',
+                    boxShadow: '4px 4px 3px rgba(0, 0, 0, 0.5)',
+                  },
                 }}
-              >
-                <Typography variant="h6" align="center">
-                  {lugar.nombre}
-                </Typography>
-                <Typography variant="body2" color="text.secondary" mt={1}>
-                  {lugar.descripcion}
-                </Typography>
-              </CardContent>
-            </Card>
-          </Grid>
-        ))}
-      </Grid>
-    </Box>
+                onClick={() => ir_a_detalles(lugar.id_sitio, lugar.nombre_normalizado)}>
+                {/* Imagen a la izquierda */}
+                <CardMedia
+                  component="img"
+                  image={lugar.imagen}
+                  alt={lugar.nombre}
+                  sx={{ width: '40%', objectFit: 'cover' }}
+                />
+                {/* Contenido a la derecha */}
+                <CardContent
+                  sx={{
+                    width: '60%',
+                    display: 'flex',
+                    flexDirection: 'column',
+                    justifyContent: 'center',
+                  }}
+                >
+                  <Typography variant="h6" align="center">
+                    {lugar.nombre}
+                  </Typography>
+                  <Typography variant="body2" color="text.secondary" mt={1}>
+                    {lugar.descripcion}
+                  </Typography>
+                </CardContent>
+              </Card>
+            </Grid>
+          ))}
+        </Grid>
+    </Stack>
 
     <Footer />
   </div>

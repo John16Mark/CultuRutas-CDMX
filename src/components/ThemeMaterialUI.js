@@ -3,9 +3,9 @@ import { createTheme } from '@mui/material/styles';
 const ThemeMaterialUI = createTheme({
   palette: {
     primary: {
-      main: '#415B2A', // Rosa Mexicano
-      dark: '#ca006b', // Rosa Mexicano más oscuro (hover)
-      light: '#ff66a1', // Opcional: Rosa Mexicano claro
+      main: '#415B2A', 
+      dark: '#ca006b', 
+      light: '#ff66a1',
     },
     secondary: {
       main: '#489abb', // Azul Maya
