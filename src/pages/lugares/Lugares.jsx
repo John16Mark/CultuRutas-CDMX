@@ -20,6 +20,7 @@ import axios from 'axios';
 
 import NavBar from "../../components/NavBar/NavBar";
 import Footer from './../../components/Footer/Footer'
+import Dropdown from './components/Dropdown';
 import { Margin } from "@mui/icons-material";
 
 const Lugares = () => {
@@ -27,6 +28,28 @@ const Lugares = () => {
   
   const [lugares, setLugares] = useState([]);
  
+  const [categoria, setCategoria] = useState('');
+  const opcionesCategoria = [
+    { value: '', label: 'Todas' },
+    { value: 'museos', label: 'Museos' },
+    { value: 'monumentos', label: 'Monumentos' },
+    { value: 'zonas_arq', label: 'Zonas arqueológicas' },
+  ];
+
+  const [ubicacion, setUbicacion] = useState('');
+  const opcionesUbicacion = [
+    { value: '', label: 'Todas' },
+    { value: 'centro', label: 'Centro' },
+    { value: 'norte', label: 'Norte' },
+    { value: 'sur', label: 'Sur' },
+  ];
+
+  const [orden, setOrden] = useState('');
+  const opcionesOrden = [
+    { value: '', label: 'A-Z' },
+    { value: 'z-a', label: 'Z-A' },
+  ];
+
   const ir_a_home = () => {
     navigate('/');
   };
@@ -177,182 +200,32 @@ const Lugares = () => {
               <Grid container spacing={2} justifyContent="center">
                 {/* Filtro: Categoría */}
                 <Grid item size={{xs: 12, md:3, lg: 3}} style={{paddingLeft: 10, paddingRight: 10}}>
-                  <FormControl
-                    fullWidth
-                    size="small"
-                    sx={{
-                      width: '100%', // o un ancho fijo como '220px'
-                      backgroundColor: 'white',
-                      borderRadius: 2,
-                      '& .MuiOutlinedInput-root': {
-                        borderRadius: 2,
-                        '& fieldset': {
-                          borderColor: '#415b2a', // color personalizado del borde
-                        },
-                        '&:hover fieldset': {
-                          borderColor: '#32461f',
-                        },
-                        '&.Mui-focused fieldset': {
-                          borderColor: '#2b4a1c',
-                        },
-                      },
-                    }}
-                  >
-                    <InputLabel
-                      sx={{
-                        color: '#415b2a',
-                        '&.Mui-focused': {
-                          color: '#2b4a1c',
-                        },
-                      }}>Categoría</InputLabel>
-                    <Select
-                      defaultValue=""
-                      label="Categoría"
-                      // No renderValue cuando no hay valor
-                      renderValue={(selected) =>
-                        selected ? (
-                          <span
-                            style={{
-                              overflow: 'hidden',
-                              textOverflow: 'ellipsis',
-                              whiteSpace: 'nowrap',
-                              display: 'block',
-                            }}
-                          >
-                            {selected}
-                          </span>
-                        ) : (
-                          // Si no hay valor, no se muestra nada extra — solo el label actúa como placeholder
-                          ''
-                        )
-                      }
-                    >
-                      <MenuItem value="">Todas</MenuItem>
-                      <MenuItem value="museo">Museo de Historia Natural y Cultura Ambiental</MenuItem>
-                      <MenuItem value="zona_arqueologica">Zona arqueológica</MenuItem>
-                    </Select>
-                  </FormControl>
+                  <Dropdown
+                    label="Categoría"
+                    value={categoria}
+                    onChange={(e) => setCategoria(e.target.value)}
+                    opciones={opcionesCategoria}
+                  />
                 </Grid>
 
                 {/* Filtro: Ubicación */}
                 <Grid item size={{xs: 12, md:3, lg: 3}} style={{paddingLeft: 10, paddingRight: 10}}>
-                  <FormControl
-                    fullWidth
-                    size="small"
-                    sx={{
-                      width: '100%', // o un ancho fijo como '220px'
-                      backgroundColor: 'white',
-                      borderRadius: 2,
-                      '& .MuiOutlinedInput-root': {
-                        borderRadius: 2,
-                        '& fieldset': {
-                          borderColor: '#415b2a', // color personalizado del borde
-                        },
-                        '&:hover fieldset': {
-                          borderColor: '#32461f',
-                        },
-                        '&.Mui-focused fieldset': {
-                          borderColor: '#2b4a1c',
-                        },
-                      },
-                    }}
-                  >
-                    <InputLabel
-                      sx={{
-                        color: '#415b2a',
-                        '&.Mui-focused': {
-                          color: '#2b4a1c',
-                        },
-                      }}>
-                      Ubicación</InputLabel>
-                    <Select
-                      defaultValue=""
-                      label="Categoría"
-                      // No renderValue cuando no hay valor
-                      renderValue={(selected) =>
-                        selected ? (
-                          <span
-                            style={{
-                              overflow: 'hidden',
-                              textOverflow: 'ellipsis',
-                              whiteSpace: 'nowrap',
-                              display: 'block',
-                            }}
-                          >
-                            {selected}
-                          </span>
-                        ) : (
-                          // Si no hay valor, no se muestra nada extra — solo el label actúa como placeholder
-                          ''
-                        )
-                      }
-                    >
-                      <MenuItem value="">Todas</MenuItem>
-                      <MenuItem value="centro">Centro</MenuItem>
-                      <MenuItem value="norte">Norte</MenuItem>
-                      <MenuItem value="sur">Sur</MenuItem>
-                    </Select>
-                  </FormControl>
+                  <Dropdown
+                    label="Ubicación"
+                    value={ubicacion}
+                    onChange={(e) => setUbicacion(e.target.value)}
+                    opciones={opcionesUbicacion}
+                  />
                 </Grid>
 
                 {/* Filtro: Orden */}
                 <Grid item size={{xs: 12, md:3, lg: 3}} style={{paddingLeft: 10, paddingRight: 10}}>
-                  <FormControl
-                    fullWidth
-                    size="small"
-                    sx={{
-                      width: '100%', // o un ancho fijo como '220px'
-                      backgroundColor: 'white',
-                      borderRadius: 2,
-                      '& .MuiOutlinedInput-root': {
-                        borderRadius: 2,
-                        '& fieldset': {
-                          borderColor: '#415b2a', // color personalizado del borde
-                        },
-                        '&:hover fieldset': {
-                          borderColor: '#32461f',
-                        },
-                        '&.Mui-focused fieldset': {
-                          borderColor: '#2b4a1c',
-                        },
-                      },
-                    }}
-                  >
-                    <InputLabel
-                      sx={{
-                        color: '#415b2a',
-                        '&.Mui-focused': {
-                          color: '#2b4a1c',
-                        },
-                      }}>Orden</InputLabel>
-                    <Select
-
-                      defaultValue=""
-                      label="Categoría"
-                      // No renderValue cuando no hay valor
-                      renderValue={(selected) =>
-                        selected ? (
-                          <span
-                            style={{
-                              overflow: 'hidden',
-                              textOverflow: 'ellipsis',
-                              whiteSpace: 'nowrap',
-                              display: 'block',
-                            }}
-                          >
-                            {selected}
-                          </span>
-                        ) : (
-                          // Si no hay valor, no se muestra nada extra — solo el label actúa como placeholder
-                          ''
-                        )
-                      }
-                    >
-                      <MenuItem value="asc">A-Z</MenuItem>
-                      <MenuItem value="desc">Z-A</MenuItem>
-                      <MenuItem value="pop">Más visitados</MenuItem>
-                    </Select>
-                  </FormControl>
+                  <Dropdown
+                    label="Orden"
+                    value={orden}
+                    onChange={(e) => setOrden(e.target.value)}
+                    opciones={opcionesOrden}
+                  />
                 </Grid>
               </Grid>
             </Box>

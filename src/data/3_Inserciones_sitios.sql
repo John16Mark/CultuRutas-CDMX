@@ -129,23 +129,6 @@ INSERT INTO Sitio_turistico_historico (
     accesibilidadParking, accesibilidadEntrance, accesibilidadRestroom, accesibilidadSeating, petfriendly,
     costos, calificacion, total_calificaciones
 ) VALUES (
-    'Lago', 19.4172144, -99.19964499999999,
-    'Miguel Hidalgo', 'Bosque de Chapultepec, Pista El Sope S/N, Bosque de Chapultepec II Secc', '11100',
-    NULL, NULL, NULL, NULL, NULL, NULL, NULL,
-    "['museum', 'cultural_center', 'restaurant', 'food', 'point_of_interest', 'establishment']", 'Restaurante mexicano refinado con impresionante vista al lago y patio exterior amplio.',
-    1, 1,
-    0, 1, 1,
-    '"No disponible"', 4, 7885
-);
-
-INSERT INTO Sitio_turistico_historico (
-    nombre, latitud, longitud,
-    municipio_delegacion, calle, codigo_postal,
-    h_lunes, h_martes, h_miercoles, h_jueves, h_viernes, h_sabado, h_domingo,
-    tipo, descripcion,
-    accesibilidadParking, accesibilidadEntrance, accesibilidadRestroom, accesibilidadSeating, petfriendly,
-    costos, calificacion, total_calificaciones
-) VALUES (
     'Templo de San Felipe Neri (La Profesa)', 19.433606800000003, -99.13634499999999,
     'Cuauhtémoc', 'Isabel La Católica 21, Centro Histórico de la Cdad. de México, Centro', '06000',
     NULL, NULL, NULL, NULL, NULL, NULL, NULL,
@@ -170,40 +153,6 @@ INSERT INTO Sitio_turistico_historico (
     0, 1,
     0, 0, 1,
     '"No disponible"', 4, 1462
-);
-
-INSERT INTO Sitio_turistico_historico (
-    nombre, latitud, longitud,
-    municipio_delegacion, calle, codigo_postal,
-    h_lunes, h_martes, h_miercoles, h_jueves, h_viernes, h_sabado, h_domingo,
-    tipo, descripcion,
-    accesibilidadParking, accesibilidadEntrance, accesibilidadRestroom, accesibilidadSeating, petfriendly,
-    costos, calificacion, total_calificaciones
-) VALUES (
-    'Acuario paraíso', 19.425829999999998, -99.15500999999999,
-    'Cuauhtémoc', 'Av Chapultepec 8, Juárez', '06600',
-    '10:00–18:00', '10:00–18:00', '10:00–18:00', '10:00–18:00', '10:00–18:00', '10:00–18:00', '10:00–18:00',
-    "['aquarium', 'point_of_interest', 'establishment']", '',
-    0, 0,
-    0, 0, 1,
-    '"No disponible"', 3, 4
-);
-
-INSERT INTO Sitio_turistico_historico (
-    nombre, latitud, longitud,
-    municipio_delegacion, calle, codigo_postal,
-    h_lunes, h_martes, h_miercoles, h_jueves, h_viernes, h_sabado, h_domingo,
-    tipo, descripcion,
-    accesibilidadParking, accesibilidadEntrance, accesibilidadRestroom, accesibilidadSeating, petfriendly,
-    costos, calificacion, total_calificaciones
-) VALUES (
-    'Aqua Landscape', 19.440573099999998, -99.1177792,
-    'Venustiano Carranza', 'Local F, Morelos', '15270',
-    'Cerrado', '9:30–17:00', '9:30–17:00', '9:30–17:00', '9:30–17:00', '9:30–17:00', '10:00–17:00',
-    "['aquarium', 'pet_store', 'shopping_mall', 'point_of_interest', 'store', 'establishment']", '',
-    0, 0,
-    0, 0, 1,
-    '"No disponible"', 4, 125
 );
 
 INSERT INTO Sitio_turistico_historico (
@@ -418,23 +367,6 @@ INSERT INTO Sitio_turistico_historico (
     accesibilidadParking, accesibilidadEntrance, accesibilidadRestroom, accesibilidadSeating, petfriendly,
     costos, calificacion, total_calificaciones
 ) VALUES (
-    'Acuario Las Güeras', 19.441153699999997, -99.16997719999999,
-    'Miguel Hidalgo', 'Tlaloc y, Cda. Tonantzin 11, Tlaxpana', '11370',
-    '8:00–18:00', '8:00–18:00', '8:00–18:00', '8:00–18:00', '8:00–18:00', '8:00–18:00', '8:00–18:00',
-    "['aquarium', 'point_of_interest', 'establishment']", '',
-    0, 0,
-    0, 0, 1,
-    '"No disponible"', 4, 87
-);
-
-INSERT INTO Sitio_turistico_historico (
-    nombre, latitud, longitud,
-    municipio_delegacion, calle, codigo_postal,
-    h_lunes, h_martes, h_miercoles, h_jueves, h_viernes, h_sabado, h_domingo,
-    tipo, descripcion,
-    accesibilidadParking, accesibilidadEntrance, accesibilidadRestroom, accesibilidadSeating, petfriendly,
-    costos, calificacion, total_calificaciones
-) VALUES (
     'Palacio de Cultura Banamex - Palacio de Iturbide', 19.4337824, -99.13905129999999,
     'Cuauhtémoc', 'Av Francisco I. Madero 17, Centro Histórico de la Cdad. de México, Centro', '06000',
     '10:00–19:00', '10:00–19:00', '10:00–19:00', '10:00–19:00', '10:00–19:00', '10:00–19:00', '10:00–19:00',
@@ -544,23 +476,6 @@ INSERT INTO Sitio_turistico_historico (
     1, 1,
     0, 0, 1,
     '"No disponible"', 4, 61417
-);
-
-INSERT INTO Sitio_turistico_historico (
-    nombre, latitud, longitud,
-    municipio_delegacion, calle, codigo_postal,
-    h_lunes, h_martes, h_miercoles, h_jueves, h_viernes, h_sabado, h_domingo,
-    tipo, descripcion,
-    accesibilidadParking, accesibilidadEntrance, accesibilidadRestroom, accesibilidadSeating, petfriendly,
-    costos, calificacion, total_calificaciones
-) VALUES (
-    'Monumento a Cristóbal Colón', 19.440544199999998, -99.15269190000001,
-    'Cuauhtémoc', 'Esq Buenavista, Heroes Ferrocarrileros sn, Buenavista', '06350',
-    '00:00 23:59', '00:00 23:59', '00:00 23:59', '00:00 23:59', '00:00 23:59', '00:00 23:59', '00:00 23:59',
-    "['monument', 'point_of_interest', 'establishment']", '',
-    0, 0,
-    0, 0, 1,
-    '"No disponible"', 4, 20
 );
 
 INSERT INTO Sitio_turistico_historico (
@@ -962,23 +877,6 @@ INSERT INTO Sitio_turistico_historico (
     accesibilidadParking, accesibilidadEntrance, accesibilidadRestroom, accesibilidadSeating, petfriendly,
     costos, calificacion, total_calificaciones
 ) VALUES (
-    'ACUARIO ROSARIO', 19.511775, -99.20618499999999,
-    'Azcapotzalco', 'Herreros 1, El Rosario', '02100',
-    '12:00–16:00, 17:00–19:00', '12:00–16:00, 17:00–19:00', '12:00–16:00, 17:00–19:00', '12:00–16:00, 17:00–19:00', '12:00–16:00, 17:00–19:00', '12:00–16:00, 17:00–19:00', 'Cerrado',
-    "['aquarium', 'point_of_interest', 'establishment']", '',
-    0, 0,
-    0, 0, 1,
-    '"No disponible"', 4, 71
-);
-
-INSERT INTO Sitio_turistico_historico (
-    nombre, latitud, longitud,
-    municipio_delegacion, calle, codigo_postal,
-    h_lunes, h_martes, h_miercoles, h_jueves, h_viernes, h_sabado, h_domingo,
-    tipo, descripcion,
-    accesibilidadParking, accesibilidadEntrance, accesibilidadRestroom, accesibilidadSeating, petfriendly,
-    costos, calificacion, total_calificaciones
-) VALUES (
     'Altar a la Patria', 19.421479899999998, -99.1794044,
     'Miguel Hidalgo', 'Bosque de Chapultepec I, Bosque de Chapultepec I Secc', '11580',
     'Cerrado', '6:00–18:00', '6:00–18:00', '6:00–18:00', '6:00–18:00', '6:00–18:00', '6:00–18:00',
@@ -1309,23 +1207,6 @@ INSERT INTO Sitio_turistico_historico (
     1, 1,
     0, 0, 1,
     '"No disponible"', 4, 67195
-);
-
-INSERT INTO Sitio_turistico_historico (
-    nombre, latitud, longitud,
-    municipio_delegacion, calle, codigo_postal,
-    h_lunes, h_martes, h_miercoles, h_jueves, h_viernes, h_sabado, h_domingo,
-    tipo, descripcion,
-    accesibilidadParking, accesibilidadEntrance, accesibilidadRestroom, accesibilidadSeating, petfriendly,
-    costos, calificacion, total_calificaciones
-) VALUES (
-    'El faro del norte, cafe & árte', 19.5945644, -99.2384204,
-    'San Juan Ixtacala Plano Nte', 'Loma Huizache 39', '52928',
-    '10:30–23:30', '10:30–23:30', '10:30–23:30', '10:30–23:30', '10:30–23:30', '10:30–23:30', '18:00–23:30',
-    "['coffee_shop', 'karaoke', 'library', 'night_club', 'bar', 'cafe', 'food_store', 'store', 'food', 'point_of_interest', 'establishment']", '',
-    0, 0,
-    0, 0, 1,
-    '"No disponible"', 3, 4
 );
 
 INSERT INTO Sitio_turistico_historico (
