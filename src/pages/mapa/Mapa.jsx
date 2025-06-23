@@ -23,6 +23,63 @@ const iconoRojo = new L.Icon({
   shadowSize: [41, 41],
 });
 
+const iconoMuseo = new L.Icon({
+  iconUrl: '/icons/museum.png',
+  shadowUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-shadow.png',
+  iconSize: [25, 41],
+  iconAnchor: [12, 41],
+  popupAnchor: [1, -34],
+  shadowSize: [41, 41],
+});
+
+const iconoMonumento = new L.Icon({
+  iconUrl: '/icons/monument.png',
+  shadowUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-shadow.png',
+  iconSize: [25, 41],
+  iconAnchor: [12, 41],
+  popupAnchor: [1, -34],
+  shadowSize: [41, 41],
+});
+
+const iconoZonaArq = new L.Icon({
+  iconUrl: '/icons/archaeological_zone.png',
+  shadowUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-shadow.png',
+  iconSize: [25, 41],
+  iconAnchor: [12, 41],
+  popupAnchor: [1, -34],
+  shadowSize: [41, 41],
+});
+
+const iconoDefault = new L.Icon({
+  iconUrl: '/icons/default.png',
+  shadowUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-shadow.png',
+  iconSize: [25, 41],
+  iconAnchor: [12, 41],
+  popupAnchor: [1, -34],
+  shadowSize: [41, 41],
+});
+
+const getIconByTipo = (tipos) => {
+  if (!tipos || !Array.isArray(tipos)) return iconoDefault;
+
+  const lowerTipos = tipos.map(t => t.toLowerCase());
+
+  if (lowerTipos.some(t => t.includes('museum'))) return iconoMuseo;
+  if (lowerTipos.some(t => t.includes('monument'))) return iconoMonumento;
+  if (lowerTipos.some(t => t.includes('archaeological_zone'))) return iconoZonaArq;
+
+  return iconoDefault;
+};
+
+const parsearTipo = (tipoStr) => {
+  try {
+    const parsed = JSON.parse(tipoStr.replace(/'/g, '"'));
+    return Array.isArray(parsed) ? parsed : [];
+  } catch (e) {
+    return [];
+  }
+};
+
 const AjustarVista = ({ markers }) => {
   const map = useMap();
 
@@ -85,7 +142,14 @@ const Mapa = () => {
         });
         if(response.data && response.data.resultado){
           //console.log(response.data.resultado);
-          setLugares(response.data.resultado)
+          let lugares = []
+          response.data.resultado.forEach(element => {
+            let tipo = parsearTipo(element.tipo);
+            let nuevo_lugar = element; 
+            nuevo_lugar.tipo = tipo;
+            lugares.push(nuevo_lugar)
+          });
+          setLugares(lugares)
         } else {
           console.error("Error")
         }
@@ -142,7 +206,7 @@ const Mapa = () => {
                         <Marker
                           key={index}
                           position={[lugar.latitud, lugar.longitud]}
-                          //icon={iconoLugar} // si tienes uno
+                          icon={getIconByTipo(lugar.tipo)}  // <- lugar.tipo debe ser arreglo
                           eventHandlers={{
                             click: () => {
                               setLugarSeleccionado(lugar);
