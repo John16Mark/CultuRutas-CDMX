@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
-import { Grid, Box, Typography, Card, CardMedia, CardContent } from '@mui/material';
+import { useNavigate } from 'react-router-dom';
+import { Grid, Box, Typography, Card, CardMedia, CardContent, Button } from '@mui/material';
 
 import NavBar from "../../components/NavBar/NavBar";
 import Footer from "../../components/Footer/Footer";
@@ -94,6 +95,8 @@ const AjustarVista = ({ markers }) => {
 };
 
 const Mapa = () => {
+  const navigate = useNavigate();
+
   const [latitud, setLatitud] = useState(19.504879996863785);
   const [longitud, setLongitud] = useState(-99.14628598505446)
   const [lugares, setLugares] = useState([]);
@@ -147,6 +150,8 @@ const Mapa = () => {
             let tipo = parsearTipo(element.tipo);
             let nuevo_lugar = element; 
             nuevo_lugar.tipo = tipo;
+            if(!(nuevo_lugar?.descripcion))
+              nuevo_lugar.descripcion = 'Sin descripción.'
             lugares.push(nuevo_lugar)
           });
           setLugares(lugares)
@@ -226,42 +231,67 @@ const Mapa = () => {
               </div>
             </Grid>
             <Grid size={{xs:12, md:4}}>
-              <Card sx={{
-                backgroundColor: '#a9825a',
-                display: 'flex',
-                height: 160,
-                transition: 'transform 0.2s ease, box-shadow 0.2s ease',
-                boxShadow: '2px 2px 5px rgba(0, 0, 0, 0.2)',
-                cursor: 'pointer',
-                '&:hover': {
-                  transform: 'translateY(-4px)',
-                  boxShadow: '4px 4px 3px rgba(0, 0, 0, 0.5)',
-                },
-              }}
+              <Card
+                sx={{
+                  backgroundColor: '#a9825a',
+                  width: '100%',
+                  transition: 'transform 0.2s ease, box-shadow 0.2s ease',
+                  boxShadow: '2px 2px 5px rgba(0, 0, 0, 0.2)',
+                }}
               >
+                {/* Imagen arriba */}
                 <CardMedia
                   component="img"
-                  image={lugarSeleccionado.imagen}
-                  alt={lugarSeleccionado.nombre}
-                  sx={{ width: '100%', objectFit: 'cover' }}
+                  image={lugarSeleccionado?.imagen || 'logo_stretched.png'}
+                  alt={lugarSeleccionado?.nombre || 'Lugar'}
+                  sx={{ width: '100%', height: 200, objectFit: 'cover' }}
                 />
+
+                {/* Contenido debajo de la imagen */}
                 <CardContent
                   sx={{
-                    width: '100%',
                     display: 'flex',
                     flexDirection: 'column',
-                    justifyContent: 'center',
+                    gap: 1,
+                    padding: 2,
                   }}
                 >
+                  {/* Nombre centrado */}
                   <Typography variant="h6" align="center">
-                    {lugarSeleccionado.nombre}
+                    {lugarSeleccionado?.nombre || 'Busca lugares'}
                   </Typography>
-                  <Typography variant="body2" color="text.secondary" mt={1}>
-                    {lugarSeleccionado.descripcion}
-                  </Typography>
-                </CardContent>
 
+                  {/* Descripción alineada a la izquierda */}
+                  <Typography variant="body2" color="text.primary" align="left">
+                    {lugarSeleccionado?.descripcion || 'Haz clic en alguno de los marcadores de lugar para obtener información de él.'}
+                  </Typography>
+
+                  {/* Botón alineado a la derecha */}
+                  <Box display="flex" justifyContent="flex-end" mt={2}>
+                    {lugarSeleccionado.id_sitio ?                     <Button
+                      sx={{
+                        backgroundColor: '#415b2a',
+                        color: '#ffffff',
+                        paddingY: 1, // equivalente a paddingTop y paddingBottom de 8px
+                        paddingX: 3, // equivalente a paddingLeft y paddingRight de 25px aprox
+                        textTransform: 'none',
+                        boxShadow: '2px 2px 5px rgba(0, 0, 0, 0.3)', // sombra normal
+                        '&:hover': {
+                          backgroundColor: '#32461f', // tono más oscuro para hover
+                          boxShadow: '4px 4px 2px rgba(0, 0, 0, 0.75)', // sombra más intensa
+                        },
+                      }}
+                      onClick={() =>
+                        navigate(`/lugar/${lugarSeleccionado.id_sitio}/${lugarSeleccionado.nombre_normalizado}`)
+                      }
+                    >
+                      Ver más
+                    </Button> : <></>}
+
+                  </Box>
+                </CardContent>
               </Card>
+
             </Grid>
           </Grid>
         </Grid>
