@@ -18,26 +18,14 @@ const LugarRepositorio = () => {
   const { id, nombre } = useParams();
   const navigate = useNavigate();
 
-  const [detalles, setDetalles] = useState([])
+  const [detalles, setDetalles] = useState([]);
+  const [imagenFondo, setImagenFondo] = useState(null);
 
   const ir_a_detalles = () => {
     navigate(`/lugar/${id}/${nombre}`);
   };
-
-  let nombreA = "Nombre del lugar"
-
-  const categorias = [
-    {
-      tipo: "Documentos Oficiales",
-      archivos: ["reglamento.pdf", "convocatoria.docx"]
-    },
-    {
-      tipo: "Imágenes del Evento",
-      archivos: ["foto1.png", "foto2.jpg"]
-    }
-  ];
   
-    useEffect(() => {
+  useEffect(() => {
     if (!id || !nombre) {
       navigate("/");
       return;
@@ -50,7 +38,30 @@ const LugarRepositorio = () => {
       if(resultado && resultado.data && resultado.data.resultado) {
         console.log(resultado.data.resultado);
         let nuevo_objeto = resultado.data.resultado;
-        setDetalles(nuevo_objeto)
+        setDetalles(nuevo_objeto);
+
+        // Calcular la imagen más ancha
+        if (nuevo_objeto.imagenes && nuevo_objeto.imagenes.length > 0) {
+          let imagenes = nuevo_objeto.imagenes;
+          
+          const promesas = imagenes.map(src =>
+            new Promise(resolve => {
+              const img = new Image();
+              img.onload = () => resolve({ src, width: img.width });
+              img.onerror = () => resolve(null); // Si hay error al cargar
+              img.src = src;
+            })
+          );
+
+          const resultados = await Promise.all(promesas);
+          const imagenMasAncha = resultados
+            .filter(Boolean)
+            .sort((a, b) => b.width - a.width)[0];
+
+          if (imagenMasAncha) {
+            setImagenFondo(imagenMasAncha.src);
+          }
+        }
       }
     }
 
@@ -73,25 +84,25 @@ const LugarRepositorio = () => {
       </div>
       {
       <Grid container spacing={2}  justifyContent="center">
-        <Grid container size={{xs:12, md:10}}>
-          <Grid style={{marginTop: 30, marginBottom: 30, backgroundColor: '#cccccc'}} size={{xs:12, md:4}}>
+        <Grid container size={{xs:12, md:9}}
+          style={{marginTop: 30}}>
+        
             <div
-              style={{backgroundImage: `url(${fondo2})`}}
-              className="imagen"
-              >
+              style={{
+                backgroundImage: `url(${imagenFondo || fondo2})`,
+                width: '100%',
+                backgroundSize: 'cover',
+                backgroundPosition: 'center'
+              }}
+            >
+              <div style={{marginLeft: 20, textShadow: '2.5px 2.5px 1px rgba(0,0,0, 0.9)', color: 'white'}} >
+                <h2 style={{marginBottom: 0}}>{detalles.nombre}</h2>
+                <p style={{marginTop:0, paddingTop:0}}>Consulta el repositorio informativo disponible para este lugar</p>
+              </div>
             </div>
-          </Grid>
-          <Grid size={{xs:12, md:8}} style={{marginTop: 30, marginBottom: 30}}>
-            <div
-              style={{}}
-              >
-              <h2 style={{marginBottom: 0}}>{detalles.nombre}</h2>
-              <p style={{marginTop:0, paddingTop:0}}>Consulta el repositorio informativo disponible para este lugar</p>
-            </div>
-          </Grid>
         </Grid>
 
-        <Grid container size={{xs:12, md:10}} justifyContent='right'>
+        <Grid container size={{xs:12, md:9}} justifyContent='right'>
           <div>
             <Button
               sx={{
