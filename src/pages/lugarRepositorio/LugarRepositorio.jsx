@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState }from "react";
 import { useParams, useNavigate } from 'react-router-dom';
 import { Grid, Button } from '@mui/material';
 
@@ -10,13 +10,15 @@ import DescargasGrid from './components/DescargasGrid';
 
 import './LugarRepositorio.css';
 
+import axios from 'axios';
+
 import fondo2 from '../../img/fondo_oscuro1.jpg'
 
 const LugarRepositorio = () => {
   const { id, nombre } = useParams();
   const navigate = useNavigate();
-  console.log(id)
-  console.log(nombre)
+
+  const [detalles, setDetalles] = useState([])
 
   const ir_a_detalles = () => {
     navigate(`/lugar/${id}/${nombre}`);
@@ -34,6 +36,26 @@ const LugarRepositorio = () => {
       archivos: ["foto1.png", "foto2.jpg"]
     }
   ];
+  
+    useEffect(() => {
+    if (!id || !nombre) {
+      navigate("/");
+      return;
+    }
+    
+    const fetchPlace = async () => {
+      const resultado = await axios.post('http://localhost:3001/get_repositorio_lugar', {
+        id
+      });
+      if(resultado && resultado.data && resultado.data.resultado) {
+        console.log(resultado.data.resultado);
+        let nuevo_objeto = resultado.data.resultado;
+        setDetalles(nuevo_objeto)
+      }
+    }
+
+    fetchPlace();
+  }, []);
 
   return (
   <div style={{
@@ -63,7 +85,7 @@ const LugarRepositorio = () => {
             <div
               style={{}}
               >
-              <h2 style={{marginBottom: 0}}>{nombreA}</h2>
+              <h2 style={{marginBottom: 0}}>{detalles.nombre}</h2>
               <p style={{marginTop:0, paddingTop:0}}>Consulta el repositorio informativo disponible para este lugar</p>
             </div>
           </Grid>
@@ -92,7 +114,7 @@ const LugarRepositorio = () => {
 
         <Grid container size={{xs:12, md:9}} justifyContent='left'>
           <DescargasGrid
-            categorias={categorias}></DescargasGrid>
+            categorias={detalles && detalles.categorias_descarga ? detalles.categorias_descarga : []}></DescargasGrid>
         </Grid>
       </Grid>}
 

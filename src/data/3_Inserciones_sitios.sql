@@ -166,7 +166,7 @@ INSERT INTO Sitio_turistico_historico (
     'Museo del Templo Mayor', 19.434603799999998, -99.13188099999999,
     'Cuauhtémoc', 'Seminario 8, Centro Histórico de la Cdad. de México, Centro', '06060',
     'Cerrado', '9:00–17:00', '9:00–17:00', '9:00–17:00', '9:00–17:00', '9:00–17:00', '9:00–17:00',
-    "['museum', 'tourist_attraction', 'point_of_interest', 'establishment']", 'Museo con hallazgos arqueológicos y exposiciones relacionadas con la civilización azteca.',
+    "['museum', 'tourist_attraction', 'point_of_interest', 'establishment', 'archaeological_zone']", 'Museo con hallazgos arqueológicos y exposiciones relacionadas con la civilización azteca.',
     0, 1,
     0, 0, 1,
     '"No disponible"', 4, 31913
@@ -931,7 +931,7 @@ INSERT INTO Sitio_turistico_historico (
     'Templo Mayor de México-Tenochtitlan', 19.434928499999998, -99.13135899999999,
     'Cuauhtémoc', 'República de Guatemala 60, Centro Histórico de la Cdad. de México, Centro', '06060',
     'Cerrado', '9:00–17:00', '9:00–17:00', '9:00–17:00', '9:00–17:00', '9:00–17:00', '9:00–17:00',
-    "['historical_landmark', 'historical_place', 'point_of_interest', 'establishment']", '',
+    "['historical_landmark', 'historical_place', 'point_of_interest', 'establishment', 'archaeological_zone']", '',
     0, 1,
     0, 0, 1,
     '"No disponible"', 4, 733
@@ -1322,7 +1322,7 @@ INSERT INTO Sitio_turistico_historico (
     'Ruinas Palacio de Axayácatl', 19.4345168, -99.13454879999999,
     'Cuauhtémoc', 'C. de la Palma 12, Centro Histórico de la Cdad. de México, Centro', '06000',
     NULL, NULL, NULL, NULL, NULL, NULL, NULL,
-    "['historical_landmark', 'historical_place', 'point_of_interest', 'establishment']", '',
+    "['historical_landmark', 'historical_place', 'point_of_interest', 'establishment', 'archaeological_zone']", '',
     0, 0,
     0, 0, 1,
     '"No disponible"', 4, 4

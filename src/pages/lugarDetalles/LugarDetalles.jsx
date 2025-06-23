@@ -92,6 +92,7 @@ const LugarDetalles = () => {
 
     fetchPlace();
   }, []);
+  
   return (
   <div className='lugDet-bg'>
     <NavBar

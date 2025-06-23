@@ -48,6 +48,35 @@ function getTodasLasImagenes(nombreLugar) {
   }
 }
 
+function getArchivosPorCategoria(nombreLugar) {
+  const nombreNormalizado = normalizarNombre(nombreLugar);
+  const baseDir = path.join(__dirname, '..', '..', 'public', 'lugares', nombreNormalizado);
+
+  const categorias = [];
+
+  try {
+    const carpetas = fs.readdirSync(baseDir, { withFileTypes: true })
+      .filter(dirent => dirent.isDirectory());
+
+    for (const carpeta of carpetas) {
+      const carpetaPath = path.join(baseDir, carpeta.name);
+      const archivos = fs.readdirSync(carpetaPath)
+        .filter(file => fs.statSync(path.join(carpetaPath, file)).isFile());
+
+      categorias.push({
+        tipo: carpeta.name,
+        archivos: archivos.map(nombreArchivo =>
+          `/lugares/${nombreNormalizado}/${carpeta.name}/${nombreArchivo}`)
+      });
+    }
+
+    return categorias;
+
+  } catch (error) {
+    console.error("Error al leer carpetas del lugar:", error);
+    return [];  // Devuelve vacío si hay algún error
+  }
+}
 
 class lugar_cont {
   static async get_todos(req, res) {
@@ -96,6 +125,36 @@ class lugar_cont {
           lugar_imagenes.imagenes = getTodasLasImagenes(resultado.registro.nombre)
 
           return res.status(200).json({ resultado: lugar_imagenes });
+        } else {
+          return res.status(500).json({ error: 'Error desconocido' });
+        }
+      })
+      .catch((err) => {
+        if (err.message) {
+          let mensajeError = err.message;
+          return res.status(400).json({ error: mensajeError });
+        }
+        return res.status(500).json({ error: err.message });
+      });
+  }
+
+  static async get_repositorio_lugar(req, res) {
+    const { id } = req.body;
+    console.log("\n\x1b[93m .: lugar_controller :.\x1b[0m")
+    console.log("Datos recibidos:\n  \x1b[33mid: \x1b[0m", id)
+    lugar_model
+      .get_detalles_lugar(id)
+      .then((resultado) => {
+        console.log("\x1b[33m  resultado: \x1b[0m", resultado)
+        
+        if (resultado.registro) {
+          const lugar = { ...resultado.registro };
+          lugar.imagenes = getTodasLasImagenes(lugar.nombre);
+          lugar.nombre_normalizado = normalizarNombre(lugar.nombre);
+          lugar.categorias_descarga = getArchivosPorCategoria(lugar.nombre);  // ⬅️ nuevo campo
+
+
+          return res.status(200).json({ resultado: lugar });
         } else {
           return res.status(500).json({ error: 'Error desconocido' });
         }

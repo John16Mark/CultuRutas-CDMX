@@ -1,5 +1,5 @@
 import React from "react";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useMemo } from "react";
 import { useNavigate } from 'react-router-dom';
 import { Grid,
   Box,
@@ -23,17 +23,33 @@ import Footer from './../../components/Footer/Footer'
 import Dropdown from './components/Dropdown';
 import { Margin } from "@mui/icons-material";
 
+const clasificarUbicacion = (lat) => {
+  if (lat >= 19.45) return 'norte';
+  if (lat <= 19.35) return 'sur';
+  return 'centro';
+};
+
+const parsearTipo = (tipoStr) => {
+  try {
+    const parsed = JSON.parse(tipoStr.replace(/'/g, '"'));
+    return Array.isArray(parsed) ? parsed : [];
+  } catch (e) {
+    return [];
+  }
+};
+
 const Lugares = () => {
   const navigate = useNavigate();
   
   const [lugares, setLugares] = useState([]);
- 
+  const [busqueda, setBusqueda] = useState('');
+
   const [categoria, setCategoria] = useState('');
   const opcionesCategoria = [
     { value: '', label: 'Todas' },
-    { value: 'museos', label: 'Museos' },
-    { value: 'monumentos', label: 'Monumentos' },
-    { value: 'zonas_arq', label: 'Zonas arqueológicas' },
+    { value: 'museum', label: 'Museos' },
+    { value: 'monument', label: 'Monumentos' },
+    { value: 'archaeological_zone', label: 'Zonas arqueológicas' },
   ];
 
   const [ubicacion, setUbicacion] = useState('');
@@ -44,17 +60,51 @@ const Lugares = () => {
     { value: 'sur', label: 'Sur' },
   ];
 
-  const [orden, setOrden] = useState('');
+  const [orden, setOrden] = useState('az');
   const opcionesOrden = [
-    { value: '', label: 'A-Z' },
-    { value: 'z-a', label: 'Z-A' },
+    { value: 'az', label: 'A-Z' },
+    { value: 'za', label: 'Z-A' },
   ];
+
+  const lugaresFiltrados = useMemo(() => {
+    let resultado = [...lugares];
+
+    // Filtro por búsqueda (nombre)
+    if (busqueda.trim() !== '') {
+      resultado = resultado.filter((lugar) =>
+        lugar.nombre.toLowerCase().includes(busqueda.trim().toLowerCase())
+      );
+    }
+    // Filtro por categoría
+    if (categoria !== '') {
+      resultado = resultado.filter((lugar) => {
+        const tipos = Array.isArray(lugar.tipo)
+          ? lugar.tipo
+          : parsearTipo(lugar.tipo);
+
+        return tipos.includes(categoria);
+      });
+    }
+    // Filtro por ubicación (norte/centro/sur)
+    if (ubicacion !== '') {
+      resultado = resultado.filter(
+        (lugar) => clasificarUbicacion(lugar.latitud) === ubicacion
+      );
+    }
+    // Orden alfabético
+    if (orden === 'az') {
+      resultado.sort((a, b) => a.nombre.localeCompare(b.nombre));
+    } else if (orden === 'za') {
+      resultado.sort((a, b) => b.nombre.localeCompare(a.nombre));
+    }
+
+    return resultado;
+  }, [busqueda, categoria, ubicacion, orden, lugares]);
 
   const ir_a_home = () => {
     navigate('/');
   };
   const ir_a_detalles = (id, nombre) => {
-    //navigate(`/lugar/${id}`);
     navigate(`/lugar/${id}/${nombre}`);
   }
   
@@ -64,7 +114,7 @@ const Lugares = () => {
         const response = await axios.post('http://localhost:3001/get_lugares', {
         });
         if(response.data && response.data.resultado){
-          console.log(response.data.resultado);
+          //console.log(response.data.resultado);
           setLugares(response.data.resultado)
         } else {
           console.error("Error")
@@ -134,6 +184,8 @@ const Lugares = () => {
       style={{marginRight: 25}}>
         <Grid item size={{xs: 12, md: 4, lg:3}}>
           <TextField
+            value={busqueda}
+            onChange={(e) => setBusqueda(e.target.value)}
             fullWidth
             size="small"
             variant="outlined"
@@ -238,7 +290,7 @@ const Lugares = () => {
         size={{xs:12, md: 10}}
         style={{backgroundColor: '#a9825a', padding: 16, marginLeft: 25, marginRight: 25}}
         >
-        {lugares.map((lugar, index) => (
+        {lugaresFiltrados.map((lugar, index) => (
           <Grid item size={{xs: 12, md: 6, lg: 4}} key={index}>
             <Card
               sx={{

@@ -5,7 +5,7 @@ class lugar_model {
   static async get_todos() {
     console.log("\x1b[94m .: lugar_model :.\x1b[0m")
     //console.log("Datos recibidos:\n  \x1b[96mcorreo: \x1b[0m", correo, "\n  \x1b[96mcontraseña: \x1b[0m", contraseña)
-    const query = 'SELECT id_sitio, nombre, descripcion, latitud, longitud FROM Sitio_turistico_historico;';
+    const query = 'SELECT id_sitio, nombre, descripcion, latitud, longitud, tipo FROM Sitio_turistico_historico;';
     return new Promise((resolve, reject) => {
       db.query(query, [], (err, results) => {
         if(err) {

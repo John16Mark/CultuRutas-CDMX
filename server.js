@@ -1,5 +1,6 @@
 const axios = require('axios');
 const express = require('express');
+const path = require('path');
 const cors = require('cors');
 
 const register_cont = require('./src/controllers/register_cont');
@@ -12,11 +13,16 @@ app.use(express.json());
 
 const PORT = 3001;
 
+// ¡Esto es importante! Sirve la carpeta "public"
+app.use('/lugares', express.static(path.join(__dirname, 'public', 'lugares')));
+app.use('/imgs', express.static(path.join(__dirname, 'public', 'imgs')));
+
 app.post('/register', register_cont.registro_regular);
 app.post('/login', login_cont.login);
 
 app.post('/get_lugares', lugares_cont.get_todos);
 app.post('/get_detalles_lugar', lugares_cont.get_detalles_lugar);
+app.post('/get_repositorio_lugar', lugares_cont.get_repositorio_lugar);
 
 app.listen(PORT, () => {
   console.log(`Servidor en funcionamiento en http://localhost:${PORT}`);

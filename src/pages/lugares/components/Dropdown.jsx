@@ -37,20 +37,10 @@ const FiltroDropdown = ({ label, value, onChange, opciones, sx }) => {
         value={value}
         onChange={onChange}
         label={label}
-        renderValue={(selected) =>
-          selected ? (
-            <span
-              style={{
-                overflow: 'hidden',
-                textOverflow: 'ellipsis',
-                whiteSpace: 'nowrap',
-                display: 'block',
-              }}
-            >
-              {selected}
-            </span>
-          ) : ''
-        }
+        renderValue={(selected) => {
+  const opcionSeleccionada = opciones.find(op => op.value === selected);
+  return opcionSeleccionada ? opcionSeleccionada.label : '';
+}}
       >
         {opciones.map((opcion, idx) => (
           <MenuItem key={idx} value={opcion.value}>

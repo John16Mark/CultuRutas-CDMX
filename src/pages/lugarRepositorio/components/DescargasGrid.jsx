@@ -8,9 +8,19 @@ import ImageIcon from '@mui/icons-material/Image';
 import DescriptionIcon from '@mui/icons-material/Description';
 import InsertDriveFileIcon from '@mui/icons-material/InsertDriveFile';
 
+function getTitulo(titulo) {
+  switch (titulo) {
+    case 'imagenes':
+      return 'Imágenes'
+    case 'documentos':
+      return 'Documentos'
+    default:
+      return 'Otros'
+  }
+} 
+
 function DescargasGrid({ categorias }) {
 
-  
   // Función para elegir el ícono según la extensión
   const getIconByExtension = (filename) => {
     const ext = filename.split('.').pop().toLowerCase();
@@ -42,25 +52,9 @@ function DescargasGrid({ categorias }) {
                   }}
                   
                 >
-                  {categoria.tipo}
+                  {getTitulo(categoria.tipo)}
                 </Box>
 
-                {/* Lista de archivos */}
-                {/*<Box mt={1} pl={2}>
-                  {categoria.archivos.map((archivo, i) => (
-                    <Button
-                      key={i}
-                      variant="outlined"
-                      startIcon={<DownloadIcon />}
-                      sx={{ mt: 1, textTransform: 'none' }}
-                      // Aquí iría el link real del archivo
-                      href={`#`} // ← Esto deberás reemplazar con el link real
-                      download
-                    >
-                      {archivo}
-                    </Button>
-                  ))}
-                </Box>*/}
                 <Box mt={1} pl={2}>
                   <List dense>
                     {categoria.archivos.map((archivo, i) => (
@@ -73,12 +67,12 @@ function DescargasGrid({ categorias }) {
                           style={{paddingLeft: 0, marginLeft: 0, }}
                           primary={
                             <MuiLink
-                              href={`#`} // ← Reemplaza por la URL real
+                              href={archivo}
                               underline="hover"
                               color="inherit"
                               download
                             >
-                              {archivo}
+                              {archivo.split('/').pop()}
                             </MuiLink>
                           }
                         />
