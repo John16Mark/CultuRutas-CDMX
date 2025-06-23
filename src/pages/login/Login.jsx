@@ -1,24 +1,41 @@
-// src/pages/LoginPage.jsx
 import React, { useState } from 'react';
-import { Container, TextField, Button, Typography, Divider, IconButton, InputAdornment, Box, Paper } from '@mui/material';
+import { 
+  Container, 
+  TextField, 
+  Button, 
+  Typography, 
+  Divider, 
+  IconButton, 
+  InputAdornment, 
+  Box, 
+  Paper,
+  Snackbar,
+  Alert
+} from '@mui/material';
 import { Visibility, VisibilityOff } from '@mui/icons-material';
+import { Link, useNavigate } from 'react-router-dom';
 import Navbar from '../../components/NavBar/NavBar';
 import Footer from '../../components/Footer/Footer';
-import { Link } from 'react-router-dom';
-
-import image from "./../../img/fondo_1.jpg";
-
-import './Login.css'
-
 import { validarCorreo, validarContraseña } from './../../utils/validaciones';
 import { handleLogin } from './login_handler';
+import image from "./../../img/fondo_1.jpg";
+import './Login.css';
 
 const Login = () => {
   const [showPassword, setShowPassword] = useState(false);
-
   const [correo, setCorreo] = useState('');
   const [contraseña, setContraseña] = useState('');
   const [errors, setErrors] = useState({});
+  const [snackbar, setSnackbar] = useState({
+    open: false,
+    message: '',
+    severity: 'success'
+  });
+  const navigate = useNavigate();
+
+  const handleCloseSnackbar = () => {
+    setSnackbar(prev => ({ ...prev, open: false }));
+  };
 
   const handleEmailChange = (e) => {
     const value = e.target.value;
@@ -41,53 +58,47 @@ const Login = () => {
   const handleFormSubmit = async (e) => {
     e.preventDefault();
     
-    // Validar si los campos no están vacíos
     if(!correo || !contraseña) {
-      console.log("Favor de completar todos los campos")
-      setErrors((prevErrors) => ({
-        ...prevErrors,
-        camposObligatorios: true, // Añadir error para campos vacíos
-      }));
-      return
+      setSnackbar({
+        open: true,
+        message: 'Por favor completa todos los campos',
+        severity: 'error'
+      });
+      return;
     }
 
-    // Validar correo
     const correoRules = validarCorreo(correo);
     if(!correoRules.sinEspacios || !correoRules.arrobaCaracteres || !correoRules.dominioConPunto || !correoRules.noVacio) {
-      console.log("Correo inválido")
-      setErrors((prevErrors) => ({
-        ...prevErrors,
-        correo: correoRules,
-      }));
-      //setAlertContentError('Por favor, verifique correctamente su correo electrónico.');
-      //handleClickOpenError();
+      setSnackbar({
+        open: true,
+        message: 'Por favor ingresa un correo válido',
+        severity: 'error'
+      });
       return;
     }
 
-    // Validar contraseñas
-    const passwordRules = validarContraseña(contraseña);
-    // Si la contraseña no cumple las reglas
-    if (!passwordRules.longitudValida || !passwordRules.mayuscula || !passwordRules.minuscula || !passwordRules.numero || !passwordRules.noVacio) {
-      console.log("La contraseña no cumple los requisitos")
-      setErrors((prevErrors) => ({
-        ...prevErrors,
-        contraseña: passwordRules,
-      }));
-      //setAlertContentError('Por favor, verifique correctamente su contraseña.');
-      //handleClickOpenError();
-      return;
-    }
-
-    const resultado = await handleLogin(e, correo, contraseña);
-    console.log(resultado);
-    if(resultado && resultado.resultado) {
-      console.log("ACCESO CONCEDIDO", resultado.resultado);
+    const loginResult = await handleLogin(e, correo, contraseña);
+    
+    if(loginResult.success) {
+      console.log("ACCESO CONCEDIDO", loginResult.resultado);
+      
+      // Redirección basada en tipo de usuario
+      if(loginResult.resultado.esGestor) {
+        navigate('/repositorio'); // Ruta para gestores
+      } else {
+        navigate('/'); // Ruta para visitantes
+      }
+      
+      // Guardar datos de usuario en localStorage
+      localStorage.setItem('userData', JSON.stringify(loginResult.resultado));
     } else {
-      console.log("ERROR", resultado);
+      setSnackbar({
+        open: true,
+        message: loginResult.error || 'Error al iniciar sesión',
+        severity: 'error'
+      });
     }
-
-  }
-
+  };
 
   const togglePasswordVisibility = () => {
     setShowPassword((prev) => !prev);
@@ -97,7 +108,7 @@ const Login = () => {
     <Box
       sx={{
         minHeight: '100vh',
-        backgroundImage: `url(${image})`, // Cambia a tu imagen real
+        backgroundImage: `url(${image})`,
         backgroundSize: 'cover',
         backgroundPosition: 'center',
         display: 'flex',
@@ -125,7 +136,7 @@ const Login = () => {
           <Button
             fullWidth
             variant="contained"
-           style={{backgroundColor: '#a9825a', color: 'rgb(20,20,20)'}}
+            style={{backgroundColor: '#a9825a', color: 'rgb(20,20,20)'}}
             sx={{ mt: 1, mb: 3 }}
           >
             Iniciar sesión con Google
@@ -142,6 +153,8 @@ const Login = () => {
             fullWidth
             margin="normal"
             variant="outlined"
+            error={!!errors.correo && !errors.correo.noVacio}
+            helperText={errors.correo && !errors.correo.noVacio ? 'Correo inválido' : ''}
           />
 
           <TextField
@@ -185,6 +198,21 @@ const Login = () => {
       </Container>
 
       <Footer/>
+
+      <Snackbar
+        open={snackbar.open}
+        autoHideDuration={6000}
+        onClose={handleCloseSnackbar}
+        anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
+      >
+        <Alert 
+          onClose={handleCloseSnackbar} 
+          severity={snackbar.severity}
+          sx={{ width: '100%' }}
+        >
+          {snackbar.message}
+        </Alert>
+      </Snackbar>
     </Box>
   );
 };

@@ -5,20 +5,22 @@ const handleLogin = async (e, correo, contraseña) => {
 
   try {
     const response = await axios.post('http://localhost:3001/login', { correo, contraseña });
-    if (response.data.resultado.id) {
-      console.log("Inicio de sesión exitoso. ID de usuario:", response.data.resultado.id);
-      return response.data;
+    
+    if (response.data.resultado?.id) {
+      return {
+        success: true,
+        resultado: response.data.resultado
+      };
     } else {
-      throw(new Error('Algo falló en la solicitud'));
+      throw new Error('Credenciales incorrectas');
     }
   } catch (error) {
-    if (error.response && error.response.data && error.response.data.error) {
-      return error.response.data.error
-    } else {
-      console.error("Error al intentar iniciar sesión:", error);
-      return 'Algo falló en la solicitud';
-    }
+    console.error("Error en handleLogin:", error);
+    return {
+      success: false,
+      error: error.response?.data?.error || 'Error al iniciar sesión'
+    };
   }
 };
 
-export {handleLogin}
+export { handleLogin };

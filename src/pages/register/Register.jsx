@@ -1,25 +1,42 @@
-// src/pages/LoginPage.jsx
 import React, { useState } from 'react';
-import { Container, TextField, Button, Typography, Divider, IconButton, InputAdornment, Box, Paper } from '@mui/material';
+import { 
+  Container, 
+  TextField, 
+  Button, 
+  Typography, 
+  Divider, 
+  IconButton, 
+  InputAdornment, 
+  Box, 
+  Paper,
+  Snackbar,
+  Alert 
+} from '@mui/material';
 import { Visibility, VisibilityOff } from '@mui/icons-material';
 import Navbar from '../../components/NavBar/NavBar';
 import Footer from '../../components/Footer/Footer';
 import { Link } from 'react-router-dom';
 
 import image from "./../../img/fondo_oscuro1.jpg";
-
 import './Register.css'
-
 import { validarCorreo, validarContraseña, validarConfirmarContraseña } from './../../utils/validaciones';
 import { handleRegistro } from './register_handler';
 
 const Register = () => {
   const [showPassword, setShowPassword] = useState(false);
-
   const [correo, setCorreo] = useState('');
   const [contraseña, setContraseña] = useState('');
   const [contraseña2, setContraseña2] = useState('');
   const [errors, setErrors] = useState({});
+  const [snackbar, setSnackbar] = useState({
+    open: false,
+    message: '',
+    severity: 'success' // 'success', 'error', 'warning', 'info'
+  });
+
+  const handleCloseSnackbar = () => {
+    setSnackbar(prev => ({ ...prev, open: false }));
+  };
 
   const handleEmailChange = (e) => {
     const value = e.target.value;
@@ -53,63 +70,94 @@ const Register = () => {
     
     // Validar si los campos no están vacíos
     if(!correo || !contraseña || !contraseña2) {
-      console.log("Favor de completar todos los campos")
       setErrors((prevErrors) => ({
         ...prevErrors,
-        camposObligatorios: true, // Añadir error para campos vacíos
+        camposObligatorios: true,
       }));
-      return
+      setSnackbar({
+        open: true,
+        message: 'Por favor completa todos los campos',
+        severity: 'error'
+      });
+      return;
     }
 
     // Validar correo
     const correoRules = validarCorreo(correo);
     if(!correoRules.sinEspacios || !correoRules.arrobaCaracteres || !correoRules.dominioConPunto || !correoRules.noVacio) {
-      console.log("Correo inválido")
       setErrors((prevErrors) => ({
         ...prevErrors,
         correo: correoRules,
       }));
-      //setAlertContentError('Por favor, verifique correctamente su correo electrónico.');
-      //handleClickOpenError();
+      setSnackbar({
+        open: true,
+        message: 'Por favor ingresa un correo electrónico válido',
+        severity: 'error'
+      });
       return;
     }
 
     // Validar contraseñas
     const passwordRules = validarContraseña(contraseña);
     const passwordsMatch = validarConfirmarContraseña(contraseña, contraseña2);
-    // Si la contraseña no cumple las reglas
-    if (!passwordRules.longitudValida || !passwordRules.mayuscula || !passwordRules.minuscula || !passwordRules.numero || !passwordRules.noVacio) {
-      console.log("La contraseña no cumple los requisitos")
+    
+    if (!passwordRules.longitudValida || !passwordRules.mayuscula || 
+        !passwordRules.minuscula || !passwordRules.numero || !passwordRules.noVacio) {
       setErrors((prevErrors) => ({
         ...prevErrors,
         contraseña: passwordRules,
       }));
-      //setAlertContentError('Por favor, verifique correctamente su contraseña.');
-      //handleClickOpenError();
+      setSnackbar({
+        open: true,
+        message: 'La contraseña debe tener al menos 8 caracteres, una mayúscula, una minúscula y un número',
+        severity: 'error'
+      });
       return;
     }
     
-    // Si las contraseñas no coinciden
     if (!passwordsMatch) {
-      console.log("Las contraseñas no coinciden")
       setErrors((prevErrors) => ({
         ...prevErrors,
-        contraseña2: false, // Marcar error en confirmar contraseña
+        contraseña2: false,
       }));
-      //setAlertContentError('Por favor, verifique que las contraseñas coinciden.');
-      //handleClickOpenError();
+      setSnackbar({
+        open: true,
+        message: 'Las contraseñas no coinciden',
+        severity: 'error'
+      });
       return;
     }
 
-    const resultado = await handleRegistro(e, correo, contraseña);
-    console.log(resultado);
-    if(resultado && resultado.resultado) {
-      console.log("Se mandará un correo de confirmación");
-    } else {
-      console.log("ERROR", resultado);
+    try {
+      const resultado = await handleRegistro(e, correo, contraseña);
+      
+      if (resultado.success) {
+        setSnackbar({
+          open: true,
+          message: resultado.message,
+          severity: resultado.emailSent ? 'success' : 'warning'
+        });
+        
+        // Opcional: Redirigir después de registro exitoso
+        // if (resultado.emailSent) {
+        //   setTimeout(() => navigate('/login'), 3000);
+        // }
+      } else {
+        setSnackbar({
+          open: true,
+          message: resultado.error || 'Error en el registro',
+          severity: 'error'
+        });
+      }
+    } catch (error) {
+      console.error("Error inesperado:", error);
+      setSnackbar({
+        open: true,
+        message: 'Ocurrió un error inesperado. Por favor intenta nuevamente.',
+        severity: 'error'
+      });
     }
-
-  }
+  };
 
   const togglePasswordVisibility = () => {
     setShowPassword((prev) => !prev);
@@ -119,7 +167,7 @@ const Register = () => {
     <Box
       sx={{
         minHeight: '100vh',
-        backgroundImage: `url(${image})`, // Cambia a tu imagen real
+        backgroundImage: `url(${image})`,
         backgroundSize: 'cover',
         backgroundPosition: 'center',
         display: 'flex',
@@ -147,7 +195,7 @@ const Register = () => {
           <Button
             fullWidth
             variant="contained"
-           style={{backgroundColor: '#a9825a', color: 'rgb(20,20,20)'}}
+            style={{backgroundColor: '#a9825a', color: 'rgb(20,20,20)'}}
             sx={{ mt: 1, mb: 3 }}
           >
             Registrarse con Google
@@ -164,6 +212,8 @@ const Register = () => {
             variant="outlined"
             value={correo}
             onChange={handleEmailChange}
+            error={!!errors.correo && !errors.correo.noVacio}
+            helperText={errors.correo && !errors.correo.noVacio ? 'Correo inválido' : ''}
           />
 
           <TextField
@@ -176,6 +226,9 @@ const Register = () => {
             fullWidth
             margin="normal"
             variant="outlined"
+            error={!!errors.contraseña && !errors.contraseña.noVacio}
+            helperText={errors.contraseña && !errors.contraseña.noVacio ? 
+              'Mínimo 8 caracteres con mayúscula, minúscula y número' : ''}
             InputProps={{
               endAdornment: (
                 <InputAdornment position="end">
@@ -196,6 +249,8 @@ const Register = () => {
             fullWidth
             margin="normal"
             variant="outlined"
+            error={errors.contraseña2 === false}
+            helperText={errors.contraseña2 === false ? 'Las contraseñas no coinciden' : ''}
             InputProps={{
               endAdornment: (
                 <InputAdornment position="end">
@@ -228,6 +283,22 @@ const Register = () => {
       </Container>
 
       <Footer/>
+
+      {/* Snackbar para mostrar mensajes */}
+      <Snackbar
+        open={snackbar.open}
+        autoHideDuration={6000}
+        onClose={handleCloseSnackbar}
+        anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
+      >
+        <Alert 
+          onClose={handleCloseSnackbar} 
+          severity={snackbar.severity}
+          sx={{ width: '100%' }}
+        >
+          {snackbar.message}
+        </Alert>
+      </Snackbar>
     </Box>
   );
 };

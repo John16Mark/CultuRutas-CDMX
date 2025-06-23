@@ -1,17 +1,26 @@
 const visitante_model = require('../models/MySQL/visitante_model');
+const gestor_model = require('../models/MySQL/gestor_model'); // Asegúrate de tener este modelo
 
 class login_cont {
   static async login(req, res) {
     const { correo, contraseña } = req.body;
 
     try {
-      const resultado = await visitante_model.login_regular(correo);
+      // Primero intenta como visitante
+      let resultado = await visitante_model.login_regular(correo);
+      let esGestor = false;
+
+      // Si no es visitante, intenta como gestor
+      if (resultado?.error === 'correo_no_registrado') {
+        resultado = await gestor_model.login_gestor(correo);
+        esGestor = true;
+      }
 
       if (!resultado.correo_verificado) {
         return res.status(400).json({ error: 'Correo no confirmado' });
       }
 
-      // Aquí podrías usar bcrypt si contraseñas están hasheadas
+      
       if (contraseña !== resultado.contrasena) {
         return res.status(400).json({ error: 'Contraseña incorrecta' });
       }
@@ -20,7 +29,8 @@ class login_cont {
         resultado: {
           id: resultado.id,
           correo: correo,
-          token: resultado.token
+          token: resultado.token,
+          esGestor: esGestor 
         }
       });
 
