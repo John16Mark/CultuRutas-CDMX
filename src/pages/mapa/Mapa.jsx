@@ -26,7 +26,7 @@ const iconoRojo = new L.Icon({
 const iconoMuseo = new L.Icon({
   iconUrl: '/icons/museum.png',
   shadowUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-shadow.png',
-  iconSize: [25, 41],
+  iconSize: [37, 61],
   iconAnchor: [12, 41],
   popupAnchor: [1, -34],
   shadowSize: [41, 41],
@@ -35,7 +35,7 @@ const iconoMuseo = new L.Icon({
 const iconoMonumento = new L.Icon({
   iconUrl: '/icons/monument.png',
   shadowUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-shadow.png',
-  iconSize: [25, 41],
+  iconSize: [37, 61],
   iconAnchor: [12, 41],
   popupAnchor: [1, -34],
   shadowSize: [41, 41],
@@ -44,7 +44,7 @@ const iconoMonumento = new L.Icon({
 const iconoZonaArq = new L.Icon({
   iconUrl: '/icons/archaeological_zone.png',
   shadowUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-shadow.png',
-  iconSize: [25, 41],
+  iconSize: [37, 61],
   iconAnchor: [12, 41],
   popupAnchor: [1, -34],
   shadowSize: [41, 41],
