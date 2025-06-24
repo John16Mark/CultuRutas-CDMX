@@ -57,7 +57,7 @@ function ButtonsMod({ variant, textCont, clickEvent, width, height, startIcon, t
         onClick={clickEvent}
         type={type}
       >
-        <Typography fontFamily={'Poppins'} sx={{fontSize: '0.9rem'}}>
+        <Typography /*fontFamily={'Poppins'}*/ sx={{fontSize: '0.9rem'}}>
           {textCont}
         </Typography>
 

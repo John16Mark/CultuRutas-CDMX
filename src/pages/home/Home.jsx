@@ -3,7 +3,7 @@ import React, { useEffect, useState, useMemo } from 'react';
 import { Container, Divider, Grid, Typography, Box } from '@mui/material';
 import Navbar from '../../components/NavBar/NavBar';
 import Footer from '../../components/Footer/Footer';
-import Cards from '../../components/Home/Cards';
+import TarjetaLugar from './components/TarjetaLugar';
 
 import './home.css';
 
@@ -241,7 +241,7 @@ const Home = () => {
             <Grid container spacing={2}>
               {tarjetasParaMostrar.map((item, index) => (
                 <Grid size={{ md: 4, xs: 6}}>
-                  <Cards
+                  <TarjetaLugar
                     detalles={item}/>
                 </Grid>
               ))}

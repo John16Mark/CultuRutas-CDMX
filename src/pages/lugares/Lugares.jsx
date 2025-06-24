@@ -274,7 +274,7 @@ const Lugares = () => {
         <Grid container
           spacing={3}
           size={{xs:12, md: 10}}
-          style={{backgroundColor: '#a9825a', padding: 16, marginTop: '50px' }}
+          style={{backgroundColor: '#a9825a', padding: 16, marginTop: '50px', marginBottom: '25px' }}
         >
           {lugaresFiltrados.map((lugar, index) => (
             <Grid item size={{xs: 12, md: 6, lg: 4}} key={index}>
