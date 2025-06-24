@@ -1327,3 +1327,13 @@ INSERT INTO Sitio_turistico_historico (
     0, 0, 1,
     '"No disponible"', 4, 4
 );
+
+INSERT INTO Evento (id_sitio, fecha_inicio, fecha_fin, promociones, descripcion, imagen)
+VALUES (
+  (SELECT id_sitio FROM Sitio_turistico_historico WHERE nombre = 'Palacio de Bellas Artes' LIMIT 1),
+  '2025-06-28',
+  '2025-06-30',
+  'Entrada gratuita los domingos',
+  'Exposición temporal de arte contemporáneo.',
+  'evento.jpeg'
+);

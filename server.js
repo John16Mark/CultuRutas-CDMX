@@ -26,6 +26,7 @@ app.get('/confirmar-correo', verificacion_cont.confirmarCorreo);
 
 app.post('/get_lugares', lugares_cont.get_todos);
 app.post('/get_detalles_lugar', lugares_cont.get_detalles_lugar);
+app.post('/get_eventos_lugar', lugares_cont.get_eventos_lugar);
 app.post('/get_repositorio_lugar', lugares_cont.get_repositorio_lugar);
 
 app.listen(PORT, () => {

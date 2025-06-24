@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 
-import { Grid } from '@mui/material';
+import { Card, CardMedia, CardContent, Grid, Box, Typography } from '@mui/material';
 
 import NavBar from "../../components/NavBar/NavBar";
 import HeaderLugar from "./components/HeaderLugar";
@@ -16,11 +16,28 @@ import axios from 'axios';
 import fondo1 from '../../img/fondo_1.jpg'
 import fondo2 from '../../img/fondo_oscuro1.jpg'
 
+function formatearRangoFechas(inicio, fin) {
+  const op = { day: 'numeric', month: 'long', year: 'numeric' };
+  const fInicio = new Date(inicio);
+  const fFin = new Date(fin);
+
+  const igualMes = fInicio.getMonth() === fFin.getMonth();
+  const igualAño = fInicio.getFullYear() === fFin.getFullYear();
+
+  if (igualMes && igualAño) {
+    return `${fInicio.getDate()} – ${fFin.getDate()} ${fInicio.toLocaleDateString('es-MX', { month: 'long', year: 'numeric' })}`;
+  }
+
+  return `${fInicio.toLocaleDateString('es-MX', op)} – ${fFin.toLocaleDateString('es-MX', op)}`;
+}
+
+
 const LugarDetalles = () => {
   const { id, nombre } = useParams();
   const navigate = useNavigate();
 
-  const [detalles, setDetalles] = useState({});  // ← estado para almacenar los lugares
+  const [detalles, setDetalles] = useState({});
+  const [ eventos, setEventos ] = useState([])
 
   let imgs = []
   imgs.push(fondo1)
@@ -33,9 +50,8 @@ const LugarDetalles = () => {
     }
     
     const fetchPlace = async () => {
-      const resultado = await axios.post('http://localhost:3001/get_detalles_lugar', {
-        id
-      });
+      const resultado = await axios.post('http://localhost:3001/get_detalles_lugar', {id});
+
       if(resultado && resultado.data && resultado.data.resultado) {
         console.log(resultado.data.resultado);
         let nuevo_objeto = resultado.data.resultado;
@@ -85,13 +101,32 @@ const LugarDetalles = () => {
         setDetalles(nuevo_objeto);
       }
       
-      /*if(!resultado) {
-        navigate("/");
-      }*/
     }
 
     fetchPlace();
+    
   }, []);
+
+  useEffect(() => {
+    const fetchEventos = async () => {
+      const resultado = await axios.post('http://localhost:3001/get_eventos_lugar', {id});
+      console.log("resutlado eventos: ",resultado);
+      if(resultado && resultado.data && resultado.data.resultado) {
+        let eventos = resultado.data.resultado;
+        let nuevos_eventos = []
+        eventos.forEach(evento => {
+          let temp = evento;
+          temp.imagen = '/lugares/'+detalles.nombre_normalizado+'/eventos/'+evento.imagen;
+          console.log(temp.imagen)
+          nuevos_eventos.push(temp);
+        });
+        console.log(nuevos_eventos)
+        setEventos(nuevos_eventos);
+      }
+    }
+
+    fetchEventos();
+  }, [detalles])
   
   return (
   <div className='lugDet-bg'>
@@ -127,11 +162,65 @@ const LugarDetalles = () => {
             longitud={detalles && detalles.longitud ? detalles.longitud : 0.0}
             nombre_normalizado={nombre}
             id_lugar={id}
+            eventos={eventos}
           />
         </div>
       </Grid>
+      
     </Grid>}
 
+    <Grid container spacing = {2} justifyContent="center" >
+      <Grid size={{xs: 12, md: 10}} style={{marginBottom: '35px'}}>
+        <Box sx={{ display: 'flex', alignItems: 'center', my: 4 }}>
+          <Box sx={{ flex: 1, height: 1, backgroundColor: '#000000' }} />
+          <Typography
+            variant="h5"
+            sx={{ mx: 2, fontWeight: 'bold', color: '#5a3e36', textAlign: 'center' }}
+          >
+            Eventos disponibles
+          </Typography>
+          <Box sx={{ flex: 1, height: 1, backgroundColor: '#000000' }} />
+        </Box>
+
+        <Grid container spacing={3} justifyContent="center">
+          {eventos.map((evento, index) => (
+            
+            <Grid item size={{xs:12, sm:6, md: 4 }} key={index}>
+              <Card
+                sx={{
+                  height: '100%',
+                  display: 'flex',
+                  flexDirection: 'column',
+                  boxShadow: 3,
+                }}
+              >
+                <CardMedia
+                  component="img"
+                  height="180"
+                  image={evento.imagen || '/imgs/no_image.jpg'}
+                  alt="Evento"
+                />
+                <CardContent sx={{ flexGrow: 1 }}>
+                  <Typography variant="h6" fontWeight="bold" gutterBottom>
+                    {evento.descripcion}
+                  </Typography>
+                  <Typography variant="body2" color="text.secondary">
+                    {formatearRangoFechas(evento.fecha_inicio, evento.fecha_fin)}
+                  </Typography>
+                  {evento.promociones && (
+                    <Typography variant="body2" sx={{ mt: 1 }} color="primary">
+                      🎟 {evento.promociones}
+                    </Typography>
+                  )}
+                </CardContent>
+              </Card>
+            </Grid>
+          ))}
+        </Grid>
+
+
+      </Grid>
+    </Grid>
     <Footer></Footer>
   </div>
   )

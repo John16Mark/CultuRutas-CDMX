@@ -2,6 +2,7 @@ const fs = require('fs');
 const path = require('path');
 
 const lugar_model = require('../models/MySQL/lugar_model');
+const { errorHandler } = require('../utils/errorHandler');
 
 function asegurarDirectorioExiste(ruta) {
   if (!fs.existsSync(ruta)) {
@@ -59,6 +60,7 @@ function getArchivosPorCategoria(nombreLugar) {
       .filter(dirent => dirent.isDirectory());
 
     for (const carpeta of carpetas) {
+      if(carpeta.name == 'eventos') continue;
       const carpetaPath = path.join(baseDir, carpeta.name);
       const archivos = fs.readdirSync(carpetaPath)
         .filter(file => fs.statSync(path.join(carpetaPath, file)).isFile());
@@ -123,6 +125,7 @@ class lugar_cont {
         if (resultado.registro) {
           let lugar_imagenes = { ...resultado.registro }
           lugar_imagenes.imagenes = getTodasLasImagenes(resultado.registro.nombre)
+          lugar_imagenes.nombre_normalizado = normalizarNombre(resultado.registro.nombre);
 
           return res.status(200).json({ resultado: lugar_imagenes });
         } else {
@@ -166,7 +169,25 @@ class lugar_cont {
         }
         return res.status(500).json({ error: err.message });
       });
-  } 
+  }
+
+  static async get_eventos_lugar(req, res) {
+    const { id } = req.body;
+    console.log("\n\x1b[93m .: lugar_controller :.\x1b[0m")
+    console.log("Datos recibidos:\n  \x1b[33mid: \x1b[0m", id)
+
+    try {
+      const resultado = await lugar_model.get_eventos_lugar(id);
+      console.log("resultado: ", resultado);
+      return res.status(201).json({ resultado: resultado.registro})
+    } catch (err) {
+      if(err.error) {
+        let mensaje = errorHandler(err.message);
+        return res.status(400).json({error: mensaje});
+      }
+      return res.status(500).json({ error: err.message });
+    }
+  }
 }
 
 

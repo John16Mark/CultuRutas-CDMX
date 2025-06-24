@@ -29,6 +29,7 @@ function DescripcionLugar({nombre,
   longitud,
   nombre_normalizado,
   id_lugar,
+  eventos,
 }){
   const navigate = useNavigate();
   const ir_a_repositorio = () => {
@@ -53,12 +54,9 @@ function DescripcionLugar({nombre,
 
   return (
     <section className='pp-descripcion-lugar container-fluid'>
-
       <div className='pp-descripcion-lugar-row'>
-
         {/* Sección - Información Principal: Nombre lugar, Calificación, Drescripción, Imágenes */}
         <div className='pp-informacion-principal'>
-          { /* Nombre del lugar */}
           <h1 className='pp-informacion-principal-nombre-lugar'>
             {nombre}
           </h1>
@@ -86,9 +84,6 @@ function DescripcionLugar({nombre,
 
                   }}
                 >
-                  {/*
-                  {isClickedFavoritos ? <FavoriteIcon /> : <FavoriteBorderIcon />}
-                  */}
                 </Button>
               </>
               :
@@ -121,48 +116,43 @@ function DescripcionLugar({nombre,
             </Button>
           </Box>
 
-          <div style={{justifyContent: 'right'}} >
-            
-          </div>
-
           {/*Detalles del lugar*/}
           <div className='DesLug-datos'
             style={{marginTop:30}}>
             
             <div>
-      <div
-        id="map"
-        className="pp-informacion-lugar-card-mapa"
-        style={{ height: '300px', margin: 0, padding: 0 }}
-      >
-        {latitud !== 0.0 && longitud !== 0.0 && (
-          <MapContainer
-            center={[latitud, longitud]}
-            zoom={18}
-            scrollWheelZoom={false}
-            style={{ height: '100%', width: '100%' }}
-          >
-            <TileLayer
-              url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-              attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
-            />
-            <Marker position={[latitud, longitud]}>
-              <Popup>{nombre}</Popup>
-            </Marker>
-          </MapContainer>
-        )}
+              <div
+                id="map"
+                className="pp-informacion-lugar-card-mapa"
+                style={{ height: '300px', margin: 0, padding: 0 }}
+              >
+                {latitud !== 0.0 && longitud !== 0.0 && (
+                  <MapContainer
+                    center={[latitud, longitud]}
+                    zoom={18}
+                    scrollWheelZoom={false}
+                    style={{ height: '100%', width: '100%' }}
+                  >
+                    <TileLayer
+                      url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                      attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
+                    />
+                    <Marker position={[latitud, longitud]}>
+                      <Popup>{nombre}</Popup>
+                    </Marker>
+                  </MapContainer>
+                )}
 
-      </div>
-
-      <a
-        className="pp-informacion-lugar-card-link"
-        href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(nombre)}`}
-        target="_blank"
-        rel="noopener noreferrer"
-      >
-        Ver en Google Maps
-      </a>
-    </div>
+              </div>
+              <a
+                className="pp-informacion-lugar-card-link"
+                href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(nombre)}`}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                Ver en Google Maps
+              </a>
+            </div>
             
             <table className='DesLug-tabla-detalles'>
               <tbody>
@@ -205,9 +195,11 @@ function DescripcionLugar({nombre,
 
           </div>
           
+          
         </div>
 
       </div>
+      
     </section>
   );
 }
