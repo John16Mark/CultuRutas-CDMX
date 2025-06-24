@@ -1,25 +1,54 @@
-// src/pages/LoginPage.jsx
-import React, { useState } from 'react';
+// React
+import React, { useState, useRef } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
+// MaterialUI
 import { Container, TextField, Button, Typography, Divider, IconButton, InputAdornment, Box, Paper } from '@mui/material';
 import { Visibility, VisibilityOff } from '@mui/icons-material';
+// Componentes
 import Navbar from '../../components/NavBar/NavBar';
 import Footer from '../../components/Footer/Footer';
-import { Link } from 'react-router-dom';
-
-import image from "./../../img/fondo_oscuro1.jpg";
-
+import Alerta from '../../components/Alerta/Alerta';
+// Estilos
 import './Register.css'
-
+// Recursos
+import image from "./../../img/fondo_oscuro1.jpg";
+//import alertImgError from './imgs/alert_error.png';
+// Back-End
 import { validarCorreo, validarContraseña, validarConfirmarContraseña } from './../../utils/validaciones';
 import { handleRegistro } from './register_handler';
 
 const Register = () => {
+  const navigate = useNavigate();
+  const alert_error = './imgs/alert_error.png';
+  const alert_success = './imgs/alert_success.png';
+
   const [showPassword, setShowPassword] = useState(false);
 
   const [correo, setCorreo] = useState('');
   const [contraseña, setContraseña] = useState('');
   const [contraseña2, setContraseña2] = useState('');
   const [errors, setErrors] = useState({});
+
+  // Alertas
+  const alertError = useRef();
+  const alertSuccess = useRef();
+  const [alertContentError, setAlertContentError] = useState('');
+  const handleClickOpenError = () => {
+    if (alertError.current) {
+      alertError.current.handleClickOpen();
+    }
+  };
+  const handleConfirmError = () => {
+    
+  };
+  const handleClickOpenSuccess = () => {
+    if (alertSuccess.current) {
+      alertSuccess.current.handleClickOpen();
+    }
+  };
+  const handleConfirmSuccess = () => {
+    //navigate('/');
+  };
 
   const handleEmailChange = (e) => {
     const value = e.target.value;
@@ -103,9 +132,15 @@ const Register = () => {
 
     const resultado = await handleRegistro(e, correo, contraseña);
     console.log(resultado);
-    if(resultado && resultado.resultado) {
+    if(resultado && resultado.success) {
       console.log("Se mandará un correo de confirmación");
+      handleClickOpenSuccess();
     } else {
+      if(resultado.error) {
+        console.log("Mensaje de error", resultado.error)
+        setAlertContentError(resultado.error);
+        handleClickOpenError();
+      }
       console.log("ERROR", resultado);
     }
 
@@ -128,6 +163,24 @@ const Register = () => {
     >
       <Navbar
         esTransparente={false}/>
+
+      <Alerta
+        ref={alertError}
+        titulo='Registro fallido'
+        mensaje={alertContentError}
+        imagen={alert_error}
+        boton2='Aceptar'
+        onConfirm={handleConfirmError}
+      />
+
+      <Alerta
+        ref={alertSuccess}
+        titulo='Registro exitoso'
+        mensaje='Se ha mandado un correo de confirmación.'
+        imagen={alert_success}
+        boton2='Aceptar'
+        onConfirm={handleConfirmSuccess}
+      />
 
       <Container
         component="main"

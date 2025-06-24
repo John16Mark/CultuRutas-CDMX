@@ -23,7 +23,23 @@ const enviarCorreo = async (destino, token, ruta, asunto, mensajeHTML) => {
     `
   };
 
-  await transporter.sendMail(mailOptions);
+  try {
+    const info = await transporter.sendMail(mailOptions);
+    return {
+      success: true,
+      emailSent: true,
+      messageId: info.messageId,
+      accepted: info.accepted
+    };
+  } catch (error) {
+    console.error("Error al enviar correo:", error);
+    return {
+      success: false,
+      emailSent: false,
+      error: error.message
+    };
+  }
 };
+
 
 module.exports = { enviarCorreo };

@@ -5,6 +5,8 @@ const { v4: uuidv4 } = require('uuid');
 
 class register_model {
   static async registro_regular(correo, contraseña) {
+    console.log("\x1b[94m .: lugar_model :.\x1b[0m")
+
     const hashedPassword = await bcrypt.hash(contraseña, 10);
     const token = uuidv4(); // ← token de verificación
 
@@ -14,8 +16,10 @@ class register_model {
         if (err) return reject(err);
         const resultado = results[0][0] || null;
 
-        if (resultado?.error) return reject(new Error(resultado.error));
-        else resolve({ id: resultado?.id_visitante || null, correo, token });
+        if (resultado?.error)
+          return reject(new Error(resultado.error));
+        else
+          resolve({ id: resultado?.id_visitante || null, correo, token });
       });
     });
   }

@@ -20,9 +20,9 @@ BEGIN
         p_correo, p_contrasena, FALSE, p_token
       );
 
-      SELECT 'registro_exitoso' AS mensaje;
+      SELECT 'registro_exitoso' AS 'success';
    ELSE
-      SELECT 'correo_ya_registrado' AS error;
+      SELECT 'correo_ya_registrado' AS ERROR;
    END IF;
 END //
 DELIMITER ;
@@ -47,7 +47,7 @@ BEGIN
    WHERE correo_electronico = p_correo;
 
    IF v_id IS NULL THEN
-      SELECT 'correo_no_registrado' AS error;
+      SELECT 'correo_no_registrado' AS ERROR;
    ELSE
       SELECT
          v_id AS id,

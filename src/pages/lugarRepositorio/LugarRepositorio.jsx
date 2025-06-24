@@ -131,11 +131,12 @@ const LugarRepositorio = () => {
 
 
 
-      <div style={{ flex: 1 }}>
-
-      </div>
-      <Footer />
+      
     </div>
+    <div style={{ flex: 1, backgroundColor: '#f5f5dc'}}>
+
+    </div>
+    <Footer />
   </div>
   )
 }

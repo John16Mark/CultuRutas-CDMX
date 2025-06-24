@@ -1,3 +1,5 @@
+DROP DATABASE IF EXISTS CultuRutas;
+
 CREATE DATABASE IF NOT EXISTS CultuRutas CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 USE CultuRutas;
@@ -14,7 +16,7 @@ CREATE TABLE Gestor (
     correo_verificado BOOLEAN DEFAULT FALSE,
     token_verificacion VARCHAR(64),
     fecha_creacion TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-) ENGINE=InnoDB;
+) ENGINE=INNODB;
 
 CREATE TABLE Sitio_turistico_historico (
     id_sitio INT AUTO_INCREMENT PRIMARY KEY,
@@ -45,7 +47,7 @@ CREATE TABLE Sitio_turistico_historico (
     total_calificaciones INT DEFAULT 0,
     CONSTRAINT chk_calificacion CHECK (calificacion BETWEEN 0 AND 5),
     FOREIGN KEY (id_gestor) REFERENCES Gestor(id_gestor) ON DELETE SET NULL
-) ENGINE=InnoDB;
+) ENGINE=INNODB;
 
 
 CREATE TABLE Visitante (
@@ -56,7 +58,7 @@ CREATE TABLE Visitante (
     token_verificacion VARCHAR(64),
     fecha_creacion TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     fecha_ultimo_login TIMESTAMP NULL
-) ENGINE=InnoDB;
+) ENGINE=INNODB;
 
 
 CREATE TABLE Evento (
@@ -68,7 +70,7 @@ CREATE TABLE Evento (
     descripcion VARCHAR(1000) NOT NULL,
     imagen VARCHAR(1000),
     FOREIGN KEY (id_sitio) REFERENCES Sitio_turistico_historico(id_sitio) ON DELETE CASCADE
-) ENGINE=InnoDB;
+) ENGINE=INNODB;
 
 
 CREATE TABLE A_Multimedia (
@@ -81,7 +83,7 @@ CREATE TABLE A_Multimedia (
     ruta_local VARCHAR(255),
     id_sitio INT,
     FOREIGN KEY (id_sitio) REFERENCES Sitio_turistico_historico(id_sitio) ON DELETE SET NULL
-) ENGINE=InnoDB;
+) ENGINE=INNODB;
 
 
 CREATE TABLE A_Documentos (
@@ -94,7 +96,7 @@ CREATE TABLE A_Documentos (
     ruta_local VARCHAR(255),
     id_sitio INT,
     FOREIGN KEY (id_sitio) REFERENCES Sitio_turistico_historico(id_sitio) ON DELETE SET NULL
-) ENGINE=InnoDB;
+) ENGINE=INNODB;
 
 
 CREATE TABLE Repositorio (
@@ -104,7 +106,7 @@ CREATE TABLE Repositorio (
     tipo_apartado ENUM('multimedia', 'documentos') NOT NULL,
     FOREIGN KEY (id_multimedia) REFERENCES A_Multimedia(id_multimedia) ON DELETE SET NULL,
     FOREIGN KEY (id_documento) REFERENCES A_Documentos(id_documento) ON DELETE SET NULL
-) ENGINE=InnoDB;
+) ENGINE=INNODB;
 
 
 CREATE TABLE Tokens_Recuperacion (
@@ -113,6 +115,6 @@ CREATE TABLE Tokens_Recuperacion (
     token VARCHAR(64) NOT NULL,
     tipo_usuario ENUM('gestor', 'visitante') NOT NULL,
     fecha_creacion TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    fecha_expiracion TIMESTAMP NOT NULL,
+    fecha_expiracion TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     utilizado BOOLEAN DEFAULT FALSE
-) ENGINE=InnoDB;
+) ENGINE=INNODB;
