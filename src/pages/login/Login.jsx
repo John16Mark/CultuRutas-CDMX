@@ -1,9 +1,10 @@
 // src/pages/LoginPage.jsx
-import React, { useState } from 'react';
+import { useState, useRef } from 'react';
 import { Container, TextField, Button, Typography, Divider, IconButton, InputAdornment, Box, Paper } from '@mui/material';
 import { Visibility, VisibilityOff } from '@mui/icons-material';
 import Navbar from '../../components/NavBar/NavBar';
 import Footer from '../../components/Footer/Footer';
+import Alerta from '../../components/Alerta/Alerta';
 import { Link, useNavigate } from 'react-router-dom';
 
 import image from "./../../img/fondo_1.jpg";
@@ -12,11 +13,42 @@ import { validarCorreo, validarContraseña } from './../../utils/validaciones';
 import { handleLogin } from './login_handler';
 
 const Login = () => {
+  const alert_error = './imgs/alert_error.png';
+  const alert_success = './imgs/alert_success.png';
+  
   const [showPassword, setShowPassword] = useState(false);
   const [correo, setCorreo] = useState('');
   const [contraseña, setContraseña] = useState('');
   const [errors, setErrors] = useState({});
   const navigate = useNavigate(); // Mueve el hook aquí al nivel superior
+
+  // ------------------------------------------------------------------------
+  //                                Alertas
+  // ------------------------------------------------------------------------
+
+  const alertError = useRef();
+  const alertSuccess = useRef();
+  const [alertContentError, setAlertContentError] = useState('');
+  const handleClickOpenError = () => {
+    if (alertError.current) {
+      alertError.current.handleClickOpen();
+    }
+  };
+  const handleConfirmError = () => {
+    
+  };
+  const handleClickOpenSuccess = () => {
+    if (alertSuccess.current) {
+      alertSuccess.current.handleClickOpen();
+    }
+  };
+  const handleConfirmSuccess = () => {
+    navigate('/lugares');
+  };
+
+  // ------------------------------------------------------------------------
+  //                          Valores introducidos
+  // ------------------------------------------------------------------------
 
   const handleEmailChange = (e) => {
     const value = e.target.value;
@@ -35,13 +67,23 @@ const Login = () => {
       contraseña: validarContraseña(value),
     }));
   };
+
+  const togglePasswordVisibility = () => {
+    setShowPassword((prev) => !prev);
+  };
   
+  // ------------------------------------------------------------------------
+  //                                  Submit
+  // ------------------------------------------------------------------------
+
   const handleFormSubmit = async (e) => {
     e.preventDefault();
     
     // Validar si los campos no están vacíos
     if(!correo || !contraseña) {
-      console.log("Favor de completar todos los campos")
+      console.log("Favor de completar todos los campos");
+      setAlertContentError('Favor de llenar todos los campos');
+      handleClickOpenError();
       setErrors((prevErrors) => ({
         ...prevErrors,
         camposObligatorios: true,
@@ -52,7 +94,8 @@ const Login = () => {
     // Validar correo
     const correoRules = validarCorreo(correo);
     if(!correoRules.sinEspacios || !correoRules.arrobaCaracteres || !correoRules.dominioConPunto || !correoRules.noVacio) {
-      console.log("Correo inválido")
+      setAlertContentError('Introduzca una dirección de correo válida');
+      handleClickOpenError();
       setErrors((prevErrors) => ({
         ...prevErrors,
         correo: correoRules,
@@ -63,7 +106,8 @@ const Login = () => {
     // Validar contraseñas
     const passwordRules = validarContraseña(contraseña);
     if (!passwordRules.longitudValida || !passwordRules.mayuscula || !passwordRules.minuscula || !passwordRules.numero || !passwordRules.noVacio) {
-      console.log("La contraseña no cumple los requisitos")
+      setAlertContentError('La contraseña requiere una longitud de entre 8 y 64 caracteres. El uso de al menos una mayúscula, minúscula y número');
+      handleClickOpenError();
       setErrors((prevErrors) => ({
         ...prevErrors,
         contraseña: passwordRules,
@@ -82,17 +126,13 @@ const Login = () => {
       if (usuario.esGestor) {
         navigate('/repositorio');
       } else {
-        navigate('/lugares');
+        handleClickOpenSuccess();
       }
     } 
     else {
       console.log("ERROR", resultado.error);
       setErrors({ general: resultado.error });
     }
-  };
-
-  const togglePasswordVisibility = () => {
-    setShowPassword((prev) => !prev);
   };
 
   return (
@@ -107,6 +147,25 @@ const Login = () => {
       }}
     >
       <Navbar esTransparente={false}/>
+
+      <Alerta
+        ref={alertError}
+        titulo='Inicio de sesión fallido'
+        mensaje={alertContentError}
+        imagen={alert_error}
+        boton2='Aceptar'
+        onConfirm={handleConfirmError}
+      />
+
+      <Alerta
+        ref={alertSuccess}
+        titulo='Inicio de sesión exitoso'
+        mensaje='Sea bienvenido'
+        imagen={alert_success}
+        boton2='Aceptar'
+        onConfirm={handleConfirmSuccess}
+        onCloseAction={handleConfirmSuccess}
+      />
 
       <Container
         component="main"

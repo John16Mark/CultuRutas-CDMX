@@ -12,7 +12,7 @@ const validarCorreo = (correo) => {
 // Validaciones de la contraseña
 const validarContraseña = (contraseña) => {
   const rules = {
-    longitudValida: /^(?=.{8,32}$)/.test(contraseña), // Longitud mínima de 8 y máxima de 32 caracteres
+    longitudValida: /^(?=.{8,64}$)/.test(contraseña), // Longitud mínima de 8 y máxima de 64 caracteres
     mayuscula: /[A-Z]/.test(contraseña), // Al menos una mayúscula
     minuscula: /[a-z]/.test(contraseña), // Al menos una minúscula
     numero: /\d/.test(contraseña), // Al menos un número

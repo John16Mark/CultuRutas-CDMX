@@ -1,5 +1,5 @@
 // React
-import React, { useState, useRef } from 'react';
+import { useState, useRef } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 // MaterialUI
 import { Container, TextField, Button, Typography, Divider, IconButton, InputAdornment, Box, Paper } from '@mui/material';
@@ -12,7 +12,6 @@ import Alerta from '../../components/Alerta/Alerta';
 import './Register.css'
 // Recursos
 import image from "./../../img/fondo_oscuro1.jpg";
-//import alertImgError from './imgs/alert_error.png';
 // Back-End
 import { validarCorreo, validarContraseña, validarConfirmarContraseña } from './../../utils/validaciones';
 import { handleRegistro } from './register_handler';
@@ -23,6 +22,7 @@ const Register = () => {
   const alert_success = './imgs/alert_success.png';
 
   const [showPassword, setShowPassword] = useState(false);
+  const [showPassword2, setShowPassword2] = useState(false);
 
   const [correo, setCorreo] = useState('');
   const [contraseña, setContraseña] = useState('');
@@ -47,8 +47,11 @@ const Register = () => {
     }
   };
   const handleConfirmSuccess = () => {
-    //navigate('/');
+    navigate('/login');
   };
+
+  // ------------------------------------------------------------------------
+  // ------------------------------------------------------------------------
 
   const handleEmailChange = (e) => {
     const value = e.target.value;
@@ -83,6 +86,8 @@ const Register = () => {
     // Validar si los campos no están vacíos
     if(!correo || !contraseña || !contraseña2) {
       console.log("Favor de completar todos los campos")
+      setAlertContentError('Favor de llenar todos los campos');
+      handleClickOpenError();
       setErrors((prevErrors) => ({
         ...prevErrors,
         camposObligatorios: true, // Añadir error para campos vacíos
@@ -93,6 +98,8 @@ const Register = () => {
     // Validar correo
     const correoRules = validarCorreo(correo);
     if(!correoRules.sinEspacios || !correoRules.arrobaCaracteres || !correoRules.dominioConPunto || !correoRules.noVacio) {
+      setAlertContentError('Introduzca una dirección de correo válida');
+      handleClickOpenError();
       console.log("Correo inválido")
       setErrors((prevErrors) => ({
         ...prevErrors,
@@ -109,6 +116,8 @@ const Register = () => {
     // Si la contraseña no cumple las reglas
     if (!passwordRules.longitudValida || !passwordRules.mayuscula || !passwordRules.minuscula || !passwordRules.numero || !passwordRules.noVacio) {
       console.log("La contraseña no cumple los requisitos")
+      setAlertContentError('La contraseña requiere una longitud de entre 8 y 64 caracteres. El uso de al menos una mayúscula, minúscula y número');
+      handleClickOpenError();
       setErrors((prevErrors) => ({
         ...prevErrors,
         contraseña: passwordRules,
@@ -121,6 +130,8 @@ const Register = () => {
     // Si las contraseñas no coinciden
     if (!passwordsMatch) {
       console.log("Las contraseñas no coinciden")
+      setAlertContentError("Las contaseñas no coinciden");
+      handleClickOpenError();
       setErrors((prevErrors) => ({
         ...prevErrors,
         contraseña2: false, // Marcar error en confirmar contraseña
@@ -148,6 +159,10 @@ const Register = () => {
 
   const togglePasswordVisibility = () => {
     setShowPassword((prev) => !prev);
+  };
+
+  const togglePasswordVisibility2 = () => {
+    setShowPassword2((prev) => !prev);
   };
 
   return (
@@ -180,6 +195,7 @@ const Register = () => {
         imagen={alert_success}
         boton2='Aceptar'
         onConfirm={handleConfirmSuccess}
+        onCloseAction={handleConfirmSuccess}
       />
 
       <Container
@@ -246,15 +262,15 @@ const Register = () => {
             value={contraseña2}
             onChange={handleConfirmPasswordChange}
             className='text_field'
-            type={showPassword ? 'text' : 'password'}
+            type={showPassword2 ? 'text' : 'password'}
             fullWidth
             margin="normal"
             variant="outlined"
             InputProps={{
               endAdornment: (
                 <InputAdornment position="end">
-                  <IconButton onClick={togglePasswordVisibility} edge="end">
-                    {showPassword ? <VisibilityOff /> : <Visibility />}
+                  <IconButton onClick={togglePasswordVisibility2} edge="end">
+                    {showPassword2 ? <VisibilityOff /> : <Visibility />}
                   </IconButton>
                 </InputAdornment>
               )
