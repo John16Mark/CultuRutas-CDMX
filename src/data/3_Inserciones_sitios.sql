@@ -3,14 +3,14 @@
 DELETE FROM Sitio_turistico_historico;
 
 INSERT INTO Sitio_turistico_historico (
-    nombre, latitud, longitud,
+    id_gestor, nombre, latitud, longitud,
     municipio_delegacion, calle, codigo_postal,
     h_lunes, h_martes, h_miercoles, h_jueves, h_viernes, h_sabado, h_domingo,
     tipo, descripcion,
     accesibilidadParking, accesibilidadEntrance, accesibilidadRestroom, accesibilidadSeating, petfriendly,
     costos, calificacion, total_calificaciones
 ) VALUES (
-    'Plaza de la Constitución', 19.432641999999998, -99.1333215,
+    5, 'Plaza de la Constitución', 19.432641999999998, -99.1333215,
     'Cuauhtémoc', 'P.za de la Constitución S/N, Centro Histórico de la Cdad. de México, Centro', '06010',
     NULL, NULL, NULL, NULL, NULL, NULL, NULL,
     "['plaza', 'historical_place', 'tourist_attraction', 'point_of_interest', 'establishment']", 'Con origen en los Aztecas, es la plaza más importante de la ciudad de México y sede de actividades frecuentes.',
@@ -20,14 +20,14 @@ INSERT INTO Sitio_turistico_historico (
 );
 
 INSERT INTO Sitio_turistico_historico (
-    nombre, latitud, longitud,
+    id_gestor, nombre, latitud, longitud,
     municipio_delegacion, calle, codigo_postal,
     h_lunes, h_martes, h_miercoles, h_jueves, h_viernes, h_sabado, h_domingo,
     tipo, descripcion,
     accesibilidadParking, accesibilidadEntrance, accesibilidadRestroom, accesibilidadSeating, petfriendly,
     costos, calificacion, total_calificaciones
 ) VALUES (
-    'Ex Antigua Aduana', 19.4371075, -99.1335519,
+    12, 'Ex Antigua Aduana', 19.4371075, -99.1335519,
     'Cuauhtémoc', 'República de Brasil 31, Centro Histórico de la Cdad. de México, Centro', '06020',
     NULL, NULL, NULL, NULL, NULL, NULL, NULL,
     "['historical_landmark', 'historical_place', 'point_of_interest', 'establishment']", '',
@@ -37,14 +37,14 @@ INSERT INTO Sitio_turistico_historico (
 );
 
 INSERT INTO Sitio_turistico_historico (
-    nombre, latitud, longitud,
+    id_gestor, nombre, latitud, longitud,
     municipio_delegacion, calle, codigo_postal,
     h_lunes, h_martes, h_miercoles, h_jueves, h_viernes, h_sabado, h_domingo,
     tipo, descripcion,
     accesibilidadParking, accesibilidadEntrance, accesibilidadRestroom, accesibilidadSeating, petfriendly,
     costos, calificacion, total_calificaciones
 ) VALUES (
-    'Aviario Moctezuma', 19.4223648, -99.1918675,
+    8, 'Aviario Moctezuma', 19.4223648, -99.1918675,
     'Miguel Hidalgo', 'Zoológico de Chapultepec, Calz. Chivatito 1, Bosque de Chapultepec I Secc', '11580',
     '10:00–18:00', '10:00–18:00', '10:00–18:00', '10:00–18:00', '10:00–18:00', '10:00–18:00', '10:00–18:00',
     "['zoo', 'point_of_interest', 'establishment']", '',
@@ -54,14 +54,14 @@ INSERT INTO Sitio_turistico_historico (
 );
 
 INSERT INTO Sitio_turistico_historico (
-    nombre, latitud, longitud,
+    id_gestor, nombre, latitud, longitud,
     municipio_delegacion, calle, codigo_postal,
     h_lunes, h_martes, h_miercoles, h_jueves, h_viernes, h_sabado, h_domingo,
     tipo, descripcion,
     accesibilidadParking, accesibilidadEntrance, accesibilidadRestroom, accesibilidadSeating, petfriendly,
     costos, calificacion, total_calificaciones
 ) VALUES (
-    'Museo Nacional De San Carlos', 19.438068899999998, -99.1520429,
+    3, 'Museo Nacional De San Carlos', 19.438068899999998, -99.1520429,
     'Cuauhtémoc', 'Av. México-Tenochtitlán 50, Tabacalera', '06030',
     'Cerrado', '10:00–18:00', '10:00–18:00', '10:00–18:00', '10:00–18:00', '10:00–18:00', '10:00–18:00',
     "['museum', 'tourist_attraction', 'point_of_interest', 'establishment']", 'Edificio neoclásico con una colección de arte europeo que va del siglo\xa0XIV al siglo\xa0XX.',
@@ -71,14 +71,14 @@ INSERT INTO Sitio_turistico_historico (
 );
 
 INSERT INTO Sitio_turistico_historico (
-    nombre, latitud, longitud,
+    id_gestor, nombre, latitud, longitud,
     municipio_delegacion, calle, codigo_postal,
     h_lunes, h_martes, h_miercoles, h_jueves, h_viernes, h_sabado, h_domingo,
     tipo, descripcion,
     accesibilidadParking, accesibilidadEntrance, accesibilidadRestroom, accesibilidadSeating, petfriendly,
     costos, calificacion, total_calificaciones
 ) VALUES (
-    'Aura Galerías | Juárez', 19.431521999999998, -99.1538108,
+    17, 'Aura Galerías | Juárez', 19.431521999999998, -99.1538108,
     'Cuauhtémoc', 'Atenas 30, Juárez', '06600',
     NULL, NULL, NULL, NULL, NULL, NULL, NULL,
     "['art_gallery', 'point_of_interest', 'establishment']", '',
@@ -88,14 +88,14 @@ INSERT INTO Sitio_turistico_historico (
 );
 
 INSERT INTO Sitio_turistico_historico (
-    nombre, latitud, longitud,
+    id_gestor, nombre, latitud, longitud,
     municipio_delegacion, calle, codigo_postal,
     h_lunes, h_martes, h_miercoles, h_jueves, h_viernes, h_sabado, h_domingo,
     tipo, descripcion,
     accesibilidadParking, accesibilidadEntrance, accesibilidadRestroom, accesibilidadSeating, petfriendly,
     costos, calificacion, total_calificaciones
 ) VALUES (
-    'Museo Nacional De Arte (MUNAL)', 19.436202299999998, -99.13939549999999,
+    6, 'Museo Nacional De Arte (MUNAL)', 19.436202299999998, -99.13939549999999,
     'Cuauhtémoc', 'C. de Tacuba 8, Centro Histórico de la Cdad. de México, Centro', '06000',
     'Cerrado', '10:00–17:30', '10:00–17:30', '10:00–17:30', '10:00–17:30', '10:00–17:30', '10:00–17:30',
     "['tourist_attraction', 'museum', 'point_of_interest', 'establishment']", 'Notable museo albergado en un edificio de estilo neoclásico que ofrece una amplia colección de arte mexicano.',
@@ -105,14 +105,14 @@ INSERT INTO Sitio_turistico_historico (
 );
 
 INSERT INTO Sitio_turistico_historico (
-    nombre, latitud, longitud,
+    id_gestor, nombre, latitud, longitud,
     municipio_delegacion, calle, codigo_postal,
     h_lunes, h_martes, h_miercoles, h_jueves, h_viernes, h_sabado, h_domingo,
     tipo, descripcion,
     accesibilidadParking, accesibilidadEntrance, accesibilidadRestroom, accesibilidadSeating, petfriendly,
     costos, calificacion, total_calificaciones
 ) VALUES (
-    'Antiguo Templo de San Agustín (Ex Biblioteca Nacional)', 19.4303418, -99.1364282,
+    9, 'Antiguo Templo de San Agustín (Ex Biblioteca Nacional)', 19.4303418, -99.1364282,
     'Cuauhtémoc', 'República de Uruguay 67, Centro Histórico de la Cdad. de México, Centro', '06000',
     NULL, NULL, NULL, NULL, NULL, NULL, NULL,
     "['library', 'point_of_interest', 'establishment']", '',
@@ -122,14 +122,14 @@ INSERT INTO Sitio_turistico_historico (
 );
 
 INSERT INTO Sitio_turistico_historico (
-    nombre, latitud, longitud,
+    id_gestor, nombre, latitud, longitud,
     municipio_delegacion, calle, codigo_postal,
     h_lunes, h_martes, h_miercoles, h_jueves, h_viernes, h_sabado, h_domingo,
     tipo, descripcion,
     accesibilidadParking, accesibilidadEntrance, accesibilidadRestroom, accesibilidadSeating, petfriendly,
     costos, calificacion, total_calificaciones
 ) VALUES (
-    'Templo de San Felipe Neri (La Profesa)', 19.433606800000003, -99.13634499999999,
+    14, 'Templo de San Felipe Neri (La Profesa)', 19.433606800000003, -99.13634499999999,
     'Cuauhtémoc', 'Isabel La Católica 21, Centro Histórico de la Cdad. de México, Centro', '06000',
     NULL, NULL, NULL, NULL, NULL, NULL, NULL,
     "['church', 'museum', 'place_of_worship', 'point_of_interest', 'establishment']", '',
@@ -139,14 +139,14 @@ INSERT INTO Sitio_turistico_historico (
 );
 
 INSERT INTO Sitio_turistico_historico (
-    nombre, latitud, longitud,
+    id_gestor, nombre, latitud, longitud,
     municipio_delegacion, calle, codigo_postal,
     h_lunes, h_martes, h_miercoles, h_jueves, h_viernes, h_sabado, h_domingo,
     tipo, descripcion,
     accesibilidadParking, accesibilidadEntrance, accesibilidadRestroom, accesibilidadSeating, petfriendly,
     costos, calificacion, total_calificaciones
 ) VALUES (
-    'Estatua Ecuestre de Carlos IV', 19.4362356, -99.13962889999999,
+    2, 'Estatua Ecuestre de Carlos IV', 19.4362356, -99.13962889999999,
     'Cuauhtémoc', 'C. de Tacuba 5, Centro Histórico de la Cdad. de México, Centro', '06010',
     '00:00 23:59', '00:00 23:59', '00:00 23:59', '00:00 23:59', '00:00 23:59', '00:00 23:59', '00:00 23:59',
     "['historical_landmark', 'historical_place', 'tourist_attraction', 'point_of_interest', 'establishment']", 'Escultura grande de bronce que muestra al rey Carlos IV de España a caballo y que data del año 1802.',
@@ -156,14 +156,14 @@ INSERT INTO Sitio_turistico_historico (
 );
 
 INSERT INTO Sitio_turistico_historico (
-    nombre, latitud, longitud,
+    id_gestor, nombre, latitud, longitud,
     municipio_delegacion, calle, codigo_postal,
     h_lunes, h_martes, h_miercoles, h_jueves, h_viernes, h_sabado, h_domingo,
     tipo, descripcion,
     accesibilidadParking, accesibilidadEntrance, accesibilidadRestroom, accesibilidadSeating, petfriendly,
     costos, calificacion, total_calificaciones
 ) VALUES (
-    'Museo del Templo Mayor', 19.434603799999998, -99.13188099999999,
+    7, 'Museo del Templo Mayor', 19.434603799999998, -99.13188099999999,
     'Cuauhtémoc', 'Seminario 8, Centro Histórico de la Cdad. de México, Centro', '06060',
     'Cerrado', '9:00–17:00', '9:00–17:00', '9:00–17:00', '9:00–17:00', '9:00–17:00', '9:00–17:00',
     "['museum', 'tourist_attraction', 'point_of_interest', 'establishment', 'archaeological_zone']", 'Museo con hallazgos arqueológicos y exposiciones relacionadas con la civilización azteca.',
@@ -173,14 +173,14 @@ INSERT INTO Sitio_turistico_historico (
 );
 
 INSERT INTO Sitio_turistico_historico (
-    nombre, latitud, longitud,
+    id_gestor, nombre, latitud, longitud,
     municipio_delegacion, calle, codigo_postal,
     h_lunes, h_martes, h_miercoles, h_jueves, h_viernes, h_sabado, h_domingo,
     tipo, descripcion,
     accesibilidadParking, accesibilidadEntrance, accesibilidadRestroom, accesibilidadSeating, petfriendly,
     costos, calificacion, total_calificaciones
 ) VALUES (
-    'Planetario Luis Enrique Erro', 19.496233, -99.13994849999999,
+    11, 'Planetario Luis Enrique Erro', 19.496233, -99.13994849999999,
     'Gustavo A. Madero', 'Av. Wilfrido Massieu, Nueva Industrial Vallejo', '07700',
     'Cerrado', '10:00–18:00', '10:00–18:00', '10:00–18:00', '10:00–18:00', '10:00–18:00', '10:00–18:00',
     "['museum', 'point_of_interest', 'establishment']", '',
@@ -190,14 +190,14 @@ INSERT INTO Sitio_turistico_historico (
 );
 
 INSERT INTO Sitio_turistico_historico (
-    nombre, latitud, longitud,
+    id_gestor, nombre, latitud, longitud,
     municipio_delegacion, calle, codigo_postal,
     h_lunes, h_martes, h_miercoles, h_jueves, h_viernes, h_sabado, h_domingo,
     tipo, descripcion,
     accesibilidadParking, accesibilidadEntrance, accesibilidadRestroom, accesibilidadSeating, petfriendly,
     costos, calificacion, total_calificaciones
 ) VALUES (
-    'Antigua Casa del General Porfirio Diaz', 19.431792299999998, -99.1405693,
+    19, 'Antigua Casa del General Porfirio Diaz', 19.431792299999998, -99.1405693,
     'Cuauhtémoc', 'Centro Histórico de la Cdad. de México, Centro', '06000',
     NULL, NULL, NULL, NULL, NULL, NULL, NULL,
     "['historical_landmark', 'historical_place', 'point_of_interest', 'establishment']", '',
@@ -207,14 +207,14 @@ INSERT INTO Sitio_turistico_historico (
 );
 
 INSERT INTO Sitio_turistico_historico (
-    nombre, latitud, longitud,
+    id_gestor, nombre, latitud, longitud,
     municipio_delegacion, calle, codigo_postal,
     h_lunes, h_martes, h_miercoles, h_jueves, h_viernes, h_sabado, h_domingo,
     tipo, descripcion,
     accesibilidadParking, accesibilidadEntrance, accesibilidadRestroom, accesibilidadSeating, petfriendly,
     costos, calificacion, total_calificaciones
 ) VALUES (
-    'Aguafuerte Galería', 19.4166159, -99.16002669999999,
+    16, 'Aguafuerte Galería', 19.4166159, -99.16002669999999,
     'Cuauhtémoc', 'Guanajuato 118, Roma Nte.', '06700',
     '12:00–19:00', '12:00–20:00', '12:00–20:00', '12:00–20:00', '12:00–20:00', '12:00–20:00', '12:00–19:00',
     "['art_gallery', 'point_of_interest', 'establishment']", '',
@@ -224,14 +224,14 @@ INSERT INTO Sitio_turistico_historico (
 );
 
 INSERT INTO Sitio_turistico_historico (
-    nombre, latitud, longitud,
+    id_gestor, nombre, latitud, longitud,
     municipio_delegacion, calle, codigo_postal,
     h_lunes, h_martes, h_miercoles, h_jueves, h_viernes, h_sabado, h_domingo,
     tipo, descripcion,
     accesibilidadParking, accesibilidadEntrance, accesibilidadRestroom, accesibilidadSeating, petfriendly,
     costos, calificacion, total_calificaciones
 ) VALUES (
-    'Géiser Madero', 19.434707, -99.14223,
+    4, 'Géiser Madero', 19.434707, -99.14223,
     'Cuauhtémoc', 'Av. Juarez 24, Colonia Centro, Centro', '06050',
     NULL, NULL, NULL, NULL, NULL, NULL, NULL,
     "['historical_landmark', 'historical_place', 'point_of_interest', 'establishment']", '',
@@ -241,14 +241,14 @@ INSERT INTO Sitio_turistico_historico (
 );
 
 INSERT INTO Sitio_turistico_historico (
-    nombre, latitud, longitud,
+    id_gestor, nombre, latitud, longitud,
     municipio_delegacion, calle, codigo_postal,
     h_lunes, h_martes, h_miercoles, h_jueves, h_viernes, h_sabado, h_domingo,
     tipo, descripcion,
     accesibilidadParking, accesibilidadEntrance, accesibilidadRestroom, accesibilidadSeating, petfriendly,
     costos, calificacion, total_calificaciones
 ) VALUES (
-    'Plaza de la República', 19.436043899999998, -99.1538176,
+    10, 'Plaza de la República', 19.436043899999998, -99.1538176,
     'Cuauhtémoc', 'Av. de la República S/N, Tabacalera', '06030',
     '00:00 23:59', '00:00 23:59', '00:00 23:59', '00:00 23:59', '00:00 23:59', '00:00 23:59', '00:00 23:59',
     "['historical_landmark', 'historical_place', 'park', 'point_of_interest', 'establishment']", '',
@@ -258,14 +258,14 @@ INSERT INTO Sitio_turistico_historico (
 );
 
 INSERT INTO Sitio_turistico_historico (
-    nombre, latitud, longitud,
+    id_gestor, nombre, latitud, longitud,
     municipio_delegacion, calle, codigo_postal,
     h_lunes, h_martes, h_miercoles, h_jueves, h_viernes, h_sabado, h_domingo,
     tipo, descripcion,
     accesibilidadParking, accesibilidadEntrance, accesibilidadRestroom, accesibilidadSeating, petfriendly,
     costos, calificacion, total_calificaciones
 ) VALUES (
-    'Monumento A San Juan Pablo II', 19.434303699999997, -99.13345009999999,
+    15, 'Monumento A San Juan Pablo II', 19.434303699999997, -99.13345009999999,
     'Cuauhtémoc', 'Calle Monte de Piedad 303, Centro Histórico de la Cdad. de México, Centro', '06060',
     '00:00 23:59', '00:00 23:59', '00:00 23:59', '00:00 23:59', '00:00 23:59', '00:00 23:59', '00:00 23:59',
     "['monument', 'point_of_interest', 'establishment']", '',
@@ -275,14 +275,14 @@ INSERT INTO Sitio_turistico_historico (
 );
 
 INSERT INTO Sitio_turistico_historico (
-    nombre, latitud, longitud,
+    id_gestor, nombre, latitud, longitud,
     municipio_delegacion, calle, codigo_postal,
     h_lunes, h_martes, h_miercoles, h_jueves, h_viernes, h_sabado, h_domingo,
     tipo, descripcion,
     accesibilidadParking, accesibilidadEntrance, accesibilidadRestroom, accesibilidadSeating, petfriendly,
     costos, calificacion, total_calificaciones
 ) VALUES (
-    'Museo Manuel Tolsá', 19.435816900000003, -99.1393511,
+    13, 'Museo Manuel Tolsá', 19.435816900000003, -99.1393511,
     'Cuauhtémoc', 'C. de Tacuba 7, Centro Histórico de la Cdad. de México, Centro', '06000',
     'Cerrado', 'Cerrado', '10:00–17:30', '10:00–17:30', '10:00–17:30', '10:00–17:30', '10:00–17:30',
     "['museum', 'point_of_interest', 'establishment']", '',
@@ -292,14 +292,14 @@ INSERT INTO Sitio_turistico_historico (
 );
 
 INSERT INTO Sitio_turistico_historico (
-    nombre, latitud, longitud,
+    id_gestor, nombre, latitud, longitud,
     municipio_delegacion, calle, codigo_postal,
     h_lunes, h_martes, h_miercoles, h_jueves, h_viernes, h_sabado, h_domingo,
     tipo, descripcion,
     accesibilidadParking, accesibilidadEntrance, accesibilidadRestroom, accesibilidadSeating, petfriendly,
     costos, calificacion, total_calificaciones
 ) VALUES (
-    'Universum, Museo de las Ciencias', 19.3111465, -99.1803998,
+    1, 'Universum, Museo de las Ciencias', 19.3111465, -99.1803998,
     'Coyoacán', 'Circuito Cultural de Ciudad Universitaria S/N, Coyoacán, C.U.', '04510',
     'Cerrado', 'Cerrado', '10:00–17:00', '10:00–17:00', '10:00–17:00', '10:00–17:00', '10:00–17:00',
     "['museum', 'point_of_interest', 'establishment']", 'Museo de exposiciones de ciencia y tecnología que incluye un robot interactivo y rocas lunares.',
@@ -309,14 +309,14 @@ INSERT INTO Sitio_turistico_historico (
 );
 
 INSERT INTO Sitio_turistico_historico (
-    nombre, latitud, longitud,
+    id_gestor, nombre, latitud, longitud,
     municipio_delegacion, calle, codigo_postal,
     h_lunes, h_martes, h_miercoles, h_jueves, h_viernes, h_sabado, h_domingo,
     tipo, descripcion,
     accesibilidadParking, accesibilidadEntrance, accesibilidadRestroom, accesibilidadSeating, petfriendly,
     costos, calificacion, total_calificaciones
 ) VALUES (
-    'Palacio Nacional', 19.4328868, -99.1313531,
+    18, 'Palacio Nacional', 19.4328868, -99.1313531,
     'Cuauhtémoc', 'P.za de la Constitución S/N, Centro Histórico de la Cdad. de México, Centro', '06066',
     'Cerrado', '9:00–17:00', '9:00–17:00', '9:00–17:00', '9:00–17:00', '9:00–17:00', '9:00–17:00',
     "['historical_landmark', 'tourist_attraction', 'historical_place', 'government_office', 'point_of_interest', 'establishment']", 'Palacio de uso oficial, con un despacho para el presidente de México, y murales de Diego Rivera.',
@@ -326,14 +326,14 @@ INSERT INTO Sitio_turistico_historico (
 );
 
 INSERT INTO Sitio_turistico_historico (
-    nombre, latitud, longitud,
+    id_gestor, nombre, latitud, longitud,
     municipio_delegacion, calle, codigo_postal,
     h_lunes, h_martes, h_miercoles, h_jueves, h_viernes, h_sabado, h_domingo,
     tipo, descripcion,
     accesibilidadParking, accesibilidadEntrance, accesibilidadRestroom, accesibilidadSeating, petfriendly,
     costos, calificacion, total_calificaciones
 ) VALUES (
-    'Museo Franz Mayer', 19.437117, -99.1431399,
+    20, 'Museo Franz Mayer', 19.437117, -99.1431399,
     'Cuauhtémoc', 'Av. Hidalgo 45, Centro Histórico de la Cdad. de México, Guerrero', '06300',
     'Cerrado', '10:00–17:00', '10:00–17:00', '10:00–17:00', '10:00–17:00', '10:00–17:00', '10:00–17:00',
     "['museum', 'tourist_attraction', 'point_of_interest', 'establishment']", 'Colección internacional de artes decorativas del siglo\xa0XVI al\xa0XIX que incluye objetos de plata y textiles.',
@@ -343,14 +343,14 @@ INSERT INTO Sitio_turistico_historico (
 );
 
 INSERT INTO Sitio_turistico_historico (
-    nombre, latitud, longitud,
+    id_gestor, nombre, latitud, longitud,
     municipio_delegacion, calle, codigo_postal,
     h_lunes, h_martes, h_miercoles, h_jueves, h_viernes, h_sabado, h_domingo,
     tipo, descripcion,
     accesibilidadParking, accesibilidadEntrance, accesibilidadRestroom, accesibilidadSeating, petfriendly,
     costos, calificacion, total_calificaciones
 ) VALUES (
-    'Estatua Josefa Ortiz De Domínguez (La Corregidora)', 19.4372754, -99.13379510000001,
+    7, 'Estatua Josefa Ortiz De Domínguez (La Corregidora)', 19.4372754, -99.13379510000001,
     'Cuauhtémoc', 'República de Brasil 31, Centro Histórico de la Cdad. de México, Centro', '06020',
     '00:00 23:59', '00:00 23:59', '00:00 23:59', '00:00 23:59', '00:00 23:59', '00:00 23:59', '00:00 23:59',
     "['historical_landmark', 'historical_place', 'point_of_interest', 'establishment']", '',
@@ -360,14 +360,14 @@ INSERT INTO Sitio_turistico_historico (
 );
 
 INSERT INTO Sitio_turistico_historico (
-    nombre, latitud, longitud,
+    id_gestor, nombre, latitud, longitud,
     municipio_delegacion, calle, codigo_postal,
     h_lunes, h_martes, h_miercoles, h_jueves, h_viernes, h_sabado, h_domingo,
     tipo, descripcion,
     accesibilidadParking, accesibilidadEntrance, accesibilidadRestroom, accesibilidadSeating, petfriendly,
     costos, calificacion, total_calificaciones
 ) VALUES (
-    'Palacio de Cultura Banamex - Palacio de Iturbide', 19.4337824, -99.13905129999999,
+    5, 'Palacio de Cultura Banamex - Palacio de Iturbide', 19.4337824, -99.13905129999999,
     'Cuauhtémoc', 'Av Francisco I. Madero 17, Centro Histórico de la Cdad. de México, Centro', '06000',
     '10:00–19:00', '10:00–19:00', '10:00–19:00', '10:00–19:00', '10:00–19:00', '10:00–19:00', '10:00–19:00',
     "['museum', 'cultural_center', 'point_of_interest', 'establishment']", 'Palacio diseñado por el arquitecto barroco Francisco Guerrero y Torres, construido en la década de 1780.',
@@ -377,14 +377,14 @@ INSERT INTO Sitio_turistico_historico (
 );
 
 INSERT INTO Sitio_turistico_historico (
-    nombre, latitud, longitud,
+    id_gestor, nombre, latitud, longitud,
     municipio_delegacion, calle, codigo_postal,
     h_lunes, h_martes, h_miercoles, h_jueves, h_viernes, h_sabado, h_domingo,
     tipo, descripcion,
     accesibilidadParking, accesibilidadEntrance, accesibilidadRestroom, accesibilidadSeating, petfriendly,
     costos, calificacion, total_calificaciones
 ) VALUES (
-    'Monumento a Cuauhtémoc', 19.431085, -99.1590175,
+    3, 'Monumento a Cuauhtémoc', 19.431085, -99.1590175,
     'Cuauhtémoc', 'Av. P.º de la Reforma S/N, Juárez', '06600',
     '00:00 23:59', '00:00 23:59', '00:00 23:59', '00:00 23:59', '00:00 23:59', '00:00 23:59', '00:00 23:59',
     "['monument', 'tourist_attraction', 'sculpture', 'point_of_interest', 'establishment']", '',
@@ -394,14 +394,14 @@ INSERT INTO Sitio_turistico_historico (
 );
 
 INSERT INTO Sitio_turistico_historico (
-    nombre, latitud, longitud,
+    id_gestor, nombre, latitud, longitud,
     municipio_delegacion, calle, codigo_postal,
     h_lunes, h_martes, h_miercoles, h_jueves, h_viernes, h_sabado, h_domingo,
     tipo, descripcion,
     accesibilidadParking, accesibilidadEntrance, accesibilidadRestroom, accesibilidadSeating, petfriendly,
     costos, calificacion, total_calificaciones
 ) VALUES (
-    'Papalote Museo del Niño', 19.411895899999998, -99.19474059999999,
+    8, 'Papalote Museo del Niño', 19.411895899999998, -99.19474059999999,
     'Miguel Hidalgo', 'Av Constituyentes 268, Bosque de Chapultepec II Secc', '11100',
     'Cerrado', '10:00–18:00', '10:00–18:00', '10:00–18:00', '10:00–18:00', '10:00–19:00', '10:00–19:00',
     "['tourist_attraction', 'amusement_center', 'museum', 'point_of_interest', 'establishment']", 'Museo infantil con una amplia gama de exhibiciones interactivas, así como un planetario y un cine IMAX.',
@@ -411,14 +411,14 @@ INSERT INTO Sitio_turistico_historico (
 );
 
 INSERT INTO Sitio_turistico_historico (
-    nombre, latitud, longitud,
+    id_gestor, nombre, latitud, longitud,
     municipio_delegacion, calle, codigo_postal,
     h_lunes, h_martes, h_miercoles, h_jueves, h_viernes, h_sabado, h_domingo,
     tipo, descripcion,
     accesibilidadParking, accesibilidadEntrance, accesibilidadRestroom, accesibilidadSeating, petfriendly,
     costos, calificacion, total_calificaciones
 ) VALUES (
-    'kurimanzutto', 19.411393, -99.18759969999999,
+    2, 'kurimanzutto', 19.411393, -99.18759969999999,
     'Miguel Hidalgo', 'C. Gobernador Rafael Rebollar 94, San Miguel Chapultepec I Secc', '11850',
     'Cerrado', '11:00–18:00', '11:00–18:00', 'Cerrado', 'Cerrado', 'Cerrado', 'Cerrado',
     "['art_gallery', 'tourist_attraction', 'sculpture', 'point_of_interest', 'establishment']", 'Galería tranquila que exhibe diversas obras de arte de artistas internacionales y locales.',
@@ -426,6 +426,9 @@ INSERT INTO Sitio_turistico_historico (
     0, 0, 1,
     '"No disponible"', 4, 606
 );
+
+
+-- Corregir
 
 INSERT INTO Sitio_turistico_historico (
     nombre, latitud, longitud,
