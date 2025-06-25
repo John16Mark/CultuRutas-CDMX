@@ -228,7 +228,7 @@ class lugar_cont {
 
       res.status(201).json({ resultado: evento });
     } catch (error) {
-      console.error('❌ Error en crearEvento:', error);
+      console.error('Error en crearEvento:', error);
       res.status(500).json({ error: error.message });
     }
   }
@@ -252,7 +252,7 @@ class lugar_cont {
 
       res.status(200).json({ resultado: eventoActualizado });
     } catch (error) {
-      console.error('❌ Error al editar evento:', error);
+      console.error('Error al editar evento:', error);
       res.status(500).json({ error: error.message });
     }
   }
@@ -263,7 +263,7 @@ class lugar_cont {
       const resultado = await lugar_model.eliminarEvento(id_evento);
       res.status(200).json({ resultado });
     } catch (error) {
-      console.error('❌ Error al eliminar evento:', error);
+      console.error('Error al eliminar evento:', error);
       res.status(500).json({ error: error.message });
     }
   }

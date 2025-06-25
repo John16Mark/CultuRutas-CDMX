@@ -2,6 +2,7 @@ import axios from 'axios';
 
 const handleLogin = async (e, correo, contraseña) => {
   e.preventDefault();
+  console.log("Sending login request with:", { correo, contraseña }); // Add this line
 
   try {
     const response = await axios.post('http://localhost:3001/login', { correo, contraseña });

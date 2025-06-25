@@ -14,11 +14,18 @@ const verificacion_cont = require('./src/controllers/verificacion_cont');
 const lugarRoutes = require('./src/routes/lugar');
 
 
+
+
 const app = express();
 app.use(cors());
 app.use(express.json());
 app.use(bodyParser.json());
 app.use(cookieParser());
+
+app.use(express.urlencoded({ extended: true })); // OK para formularios normales
+
+
+app.use('/api/lugares', lugarRoutes);
 
 const PORT = 3001;
 
