@@ -49,57 +49,8 @@ import {
 import fondoOscuro from '../../img/crema2.png';
 
 import NavBar from '../../components/NavBar/NavBar';
+import Footer from './../../components/Footer/Footer'
 
-
-// Componente Footer
-const Footer = () => {
-  return (
-    <Box 
-      component="footer" 
-      sx={{ 
-        py: 3,
-        px: 2,
-        mt: 'auto',
-        backgroundColor: 'rgba(0, 0, 0, 0.85)',
-        color: 'white',
-        borderTop: '1px solid rgba(255, 255, 255, 0.12)'
-      }}
-    >
-      <Container maxWidth="lg">
-        <Grid container spacing={3}>
-          <Grid item xs={12} sm={4}>
-            <Typography variant="h6" gutterBottom sx={{ color: 'white' }}>
-              CultuRutas
-            </Typography>
-            <Typography variant="body2" sx={{ color: 'rgba(255, 255, 255, 0.7)' }}>
-              Descubre los lugares históricos de la Ciudad de México
-            </Typography>
-          </Grid>
-          <Grid item xs={12} sm={4}>
-            <Typography variant="h6" gutterBottom sx={{ color: 'white' }}>
-              Enlaces
-            </Typography>
-            <Link href="/" color="inherit" display="block" underline="hover" sx={{ color: 'rgba(255, 255, 255, 0.7)' }}>Inicio</Link>
-            <Link href="/gestor" color="inherit" display="block" underline="hover" sx={{ color: 'rgba(255, 255, 255, 0.7)' }}>Gestor</Link>
-            <Link href="/lugares" color="inherit" display="block" underline="hover" sx={{ color: 'rgba(255, 255, 255, 0.7)' }}>Lugares</Link>
-          </Grid>
-          <Grid item xs={12} sm={4}>
-            <Typography variant="h6" gutterBottom sx={{ color: 'white' }}>
-              Contacto
-            </Typography>
-            <Typography variant="body2" sx={{ color: 'rgba(255, 255, 255, 0.7)' }}>contacto@culturutas.com</Typography>
-            <Typography variant="body2" sx={{ color: 'rgba(255, 255, 255, 0.7)' }}>+52 55 1234 5678</Typography>
-          </Grid>
-        </Grid>
-        <Box mt={3}>
-          <Typography variant="body2" align="center" sx={{ color: 'rgba(255, 255, 255, 0.7)' }}>
-            © {new Date().getFullYear()} CultuRutas - Todos los derechos reservados
-          </Typography>
-        </Box>
-      </Container>
-    </Box>
-  );
-};
 
 const PlacesCRUD = () => {
   const [places, setPlaces] = useState([]);
@@ -685,7 +636,7 @@ const PlacesCRUD = () => {
         </Dialog>
       </Container>
 
-      <Footer />
+      <Footer esTransparente={false} />
     </Box>
   );
 };
