@@ -48,30 +48,8 @@ import {
 // Importa tu imagen de fondo
 import fondoOscuro from '../../img/crema2.png';
 
-// Componente Navbar
-const Navbar = () => {
-  return (
-    <AppBar 
-      position="static" 
-      sx={{ 
-        backgroundColor: 'rgba(0, 0, 0, 0.85)',
-        boxShadow: 'none',
-        borderBottom: '1px solid rgba(255, 255, 255, 0.12)'
-      }}
-    >
-      <Toolbar>
-        <Typography variant="h6" component="div" sx={{ flexGrow: 1, color: 'white' }}>
-          CultuRutas
-        </Typography>
-        <Box sx={{ display: 'flex', gap: 2 }}>
-          <Link href="/" color="inherit" underline="hover" sx={{ color: 'white' }}>Cerrar Sesion</Link>
-          <Link href="/gestor" color="inherit" underline="hover" sx={{ color: 'white', fontWeight: 'bold' }}>Gestor</Link>
-          <Link href="/lugares" color="inherit" underline="hover" sx={{ color: 'white' }}>Lugares</Link>
-        </Box>
-      </Toolbar>
-    </AppBar>
-  );
-};
+import NavBar from '../../components/NavBar/NavBar';
+
 
 // Componente Footer
 const Footer = () => {
@@ -305,7 +283,7 @@ const PlacesCRUD = () => {
         }
       }}
     >
-      <Navbar />
+      <NavBar esTransparente={false} />
 
       <Container 
         maxWidth="lg" 
