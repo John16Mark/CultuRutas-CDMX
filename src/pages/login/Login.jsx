@@ -124,7 +124,7 @@ const Login = () => {
       console.log("ACCESO CONCEDIDO", usuario);
 
       if (usuario.esGestor) {
-        navigate('/repositorio');
+        navigate('/gestor');
       } else {
         handleClickOpenSuccess();
       }

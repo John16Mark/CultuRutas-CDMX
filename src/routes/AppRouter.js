@@ -8,6 +8,8 @@ import Mapa from '../pages/mapa/Mapa';
 import Lugares from '../pages/lugares/Lugares';
 import LugarDetalles from '../pages/lugarDetalles/LugarDetalles';
 import LugarRepositorio from '../pages/lugarRepositorio/LugarRepositorio';
+import PlacesCRUD from '../pages/gestor/PlacesCRUD';
+
 
 function AppRouter() {
   return(
@@ -22,6 +24,8 @@ function AppRouter() {
         <Route path='/lugares' element={<Lugares/>} />
         <Route path='/lugar/:id/:nombre' element={<LugarDetalles/>} />
         <Route path='/lugar/:id/:nombre/repositorio' element={<LugarRepositorio/>} />
+        <Route path="/gestor" element={<PlacesCRUD />} />
+
 
       </Routes>
     </Router>
