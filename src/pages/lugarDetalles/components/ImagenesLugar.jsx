@@ -1,17 +1,26 @@
-// src/components/ImagenesLugar.jsx
-import React from 'react';
-import { Grid, Box, Card, CardMedia } from '@mui/material';
+import { useState } from 'react';
+import { Grid, Box, Card, CardMedia, Dialog, DialogContent } from '@mui/material';
 
 const ImagenesLugar = ({ imagenes }) => {
+  const [imagenSeleccionada, setImagenSeleccionada] = useState(null);
+
   if (!imagenes || imagenes.length === 0) return null;
 
   const primera = imagenes[0];
   const restantes = imagenes.slice(1);
 
+  const abrirModal = (img) => {
+    setImagenSeleccionada(img);
+  };
+
+  const cerrarModal = () => {
+    setImagenSeleccionada(null);
+  };
+
   return (
     <Box sx={{ padding: 2 }}>
-      {/* Primera imagen en grande */}
-      <Card sx={{ mb: 2 }}>
+      {/* Imagen principal */}
+      <Card sx={{ mb: 2, cursor: 'pointer' }} onClick={() => abrirModal(primera)}>
         <CardMedia
           component="img"
           height="250"
@@ -21,11 +30,11 @@ const ImagenesLugar = ({ imagenes }) => {
         />
       </Card>
 
-      {/* Las demás imágenes en 2 columnas */}
-      <Grid container spacing={2}>
+      {/* Galería de imágenes restantes */}
+      <Grid container spacing={2} justifyContent="left">
         {restantes.map((img, index) => (
-          <Grid item xs={6} key={index}>
-            <Card>
+          <Grid item size={{ xs: 12, sm: 6 }} key={index} sx={{ display: 'flex' }}>
+            <Card sx={{ width: '100%', cursor: 'pointer' }} onClick={() => abrirModal(img)}>
               <CardMedia
                 component="img"
                 height="140"
@@ -37,6 +46,24 @@ const ImagenesLugar = ({ imagenes }) => {
           </Grid>
         ))}
       </Grid>
+
+      {/* Modal para mostrar imagen completa */}
+      <Dialog
+        open={Boolean(imagenSeleccionada)}
+        onClose={cerrarModal}
+        maxWidth="md"
+        fullWidth
+        style={{padding:0}}
+      >
+        <DialogContent sx={{ padding: 0 }}>
+          <img
+            src={imagenSeleccionada}
+            alt="Vista ampliada"
+            style={{ width: '100%', height: 'auto', padding:0, margin: 0 }}
+          />
+        </DialogContent>
+      </Dialog>
+
     </Box>
   );
 };
