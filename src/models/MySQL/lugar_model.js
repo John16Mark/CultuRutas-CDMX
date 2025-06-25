@@ -73,6 +73,62 @@ class lugar_model {
       });
     });
   }
+
+  static async obtenerSitiosPorGestor(id_gestor) {
+    const query = 'SELECT * FROM Sitio_turistico_historico WHERE id_gestor = ?';
+    return new Promise((resolve, reject) => {
+      db.query(query, [id_gestor], (err, results) => {
+        if (err) return reject(err);
+        resolve(results || []);
+      });
+    });
+  }
+
+  static async crearEvento(evento) {
+    const { id_sitio, fecha_inicio, fecha_fin, descripcion, promociones, imagen } = evento;
+    const query = `INSERT INTO Evento (id_sitio, fecha_inicio, fecha_fin, descripcion, promociones, imagen)
+                  VALUES (?, ?, ?, ?, ?, ?)`;
+    return new Promise((resolve, reject) => {
+      db.query(query, [id_sitio, fecha_inicio, fecha_fin, descripcion, promociones, imagen], (err, results) => {
+        if (err) return reject(err);
+        resolve({ id_evento: results.insertId });
+      });
+    });
+  }
+
+
+
+
+  static async editarEvento(evento) {
+    const { id_evento, fecha_inicio, fecha_fin, descripcion, promociones, imagen } = evento;
+    const query = `
+      UPDATE Evento
+      SET fecha_inicio = ?, fecha_fin = ?, descripcion = ?, promociones = ?, imagen = COALESCE(?, imagen)
+      WHERE id_evento = ?;
+    `;
+
+    return new Promise((resolve, reject) => {
+      db.query(query, [fecha_inicio, fecha_fin, descripcion, promociones, imagen, id_evento], (err, results) => {
+        if (err) return reject(err);
+        resolve({ updated: results.affectedRows });
+      });
+    });
+  }
+
+
+
+  static async eliminarEvento(id_evento) {
+    const query = 'DELETE FROM Evento WHERE id_evento = ?';
+    return new Promise((resolve, reject) => {
+      db.query(query, [id_evento], (err, results) => {
+        if (err) return reject(err);
+        resolve({ deleted: results.affectedRows });
+      });
+    });
+  }
+
+
+
 }
 
 module.exports = lugar_model;

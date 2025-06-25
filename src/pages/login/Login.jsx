@@ -121,6 +121,7 @@ const Login = () => {
     
     if (resultado.success && resultado.usuario) {
       const usuario = resultado.usuario;
+      localStorage.setItem('usuario', JSON.stringify(usuario));
       console.log("ACCESO CONCEDIDO", usuario);
 
       if (usuario.esGestor) {

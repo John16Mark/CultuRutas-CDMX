@@ -8,10 +8,16 @@ const register_cont = require('./src/controllers/register_cont');
 const login_cont = require('./src/controllers/login_cont');
 const lugares_cont = require('./src/controllers/lugar_cont');
 const verificacion_cont = require('./src/controllers/verificacion_cont');
+const lugarRoutes = require('./src/routes/lugar');
+
 
 const app = express();
 app.use(cors());
 app.use(express.json());
+app.use(express.urlencoded({ extended: true })); // OK para formularios normales
+
+
+app.use('/api/lugares', lugarRoutes);
 
 const PORT = 3001;
 

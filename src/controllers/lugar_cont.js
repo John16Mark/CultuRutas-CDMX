@@ -172,7 +172,7 @@ class lugar_cont {
   }
 
   static async get_eventos_lugar(req, res) {
-    const { id } = req.body;
+    const id = req.params.id;
     console.log("\n\x1b[93m .: lugar_controller :.\x1b[0m")
     console.log("Datos recibidos:\n  \x1b[33mid: \x1b[0m", id)
 
@@ -188,6 +188,92 @@ class lugar_cont {
       return res.status(500).json({ error: err.message });
     }
   }
+
+  static async obtenerSitiosPorGestor(req, res) {
+    const { id_gestor } = req.params;
+    try {
+      const sitios = await lugar_model.obtenerSitiosPorGestor(id_gestor);
+      const sitiosConImagen = sitios.map(sitio => ({
+        ...sitio,
+        imagen: getPrimeraImagen(sitio.nombre),
+        nombre_normalizado: normalizarNombre(sitio.nombre)
+      }));
+      res.status(200).json({ resultado: sitiosConImagen });
+    } catch (error) {
+      res.status(500).json({ error: error.message });
+    }
+  }
+
+  static async crearEvento(req, res) {
+  try {
+      console.log('📥 Datos recibidos:');
+      console.log('Body:', req.body);
+      console.log('File:', req.file);
+
+      const { id_sitio, fecha_inicio, fecha_fin, descripcion, promociones } = req.body;
+      const imagen = req.file ? `/eventos/${req.file.filename}` : null;
+
+      if (!id_sitio) {
+        return res.status(400).json({ error: 'Falta el id_sitio' });
+      }
+
+      const evento = await lugar_model.crearEvento({
+        id_sitio,
+        fecha_inicio,
+        fecha_fin,
+        descripcion,
+        promociones,
+        imagen
+      });
+
+      res.status(201).json({ resultado: evento });
+    } catch (error) {
+      console.error('❌ Error en crearEvento:', error);
+      res.status(500).json({ error: error.message });
+    }
+  }
+
+
+
+  static async editarEvento(req, res) {
+  try {
+      const { fecha_inicio, fecha_fin, descripcion, promociones } = req.body;
+      const id_evento = req.params.id_evento;
+      const imagen = req.file ? `/eventos/${req.file.filename}` : null;
+
+      const eventoActualizado = await lugar_model.editarEvento({
+        id_evento,
+        fecha_inicio,
+        fecha_fin,
+        descripcion,
+        promociones,
+        imagen
+      });
+
+      res.status(200).json({ resultado: eventoActualizado });
+    } catch (error) {
+      console.error('❌ Error al editar evento:', error);
+      res.status(500).json({ error: error.message });
+    }
+  }
+
+  static async eliminarEvento(req, res) {
+    try {
+      const id_evento = req.params.id_evento;
+      const resultado = await lugar_model.eliminarEvento(id_evento);
+      res.status(200).json({ resultado });
+    } catch (error) {
+      console.error('❌ Error al eliminar evento:', error);
+      res.status(500).json({ error: error.message });
+    }
+  }
+
+
+
+
+
+
+
 }
 
 

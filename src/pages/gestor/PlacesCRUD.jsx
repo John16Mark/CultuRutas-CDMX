@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import axios from 'axios';
 import {
   Container,
   Typography,
@@ -63,7 +64,7 @@ const Navbar = () => {
           CultuRutas
         </Typography>
         <Box sx={{ display: 'flex', gap: 2 }}>
-          <Link href="/" color="inherit" underline="hover" sx={{ color: 'white' }}>Inicio</Link>
+          <Link href="/" color="inherit" underline="hover" sx={{ color: 'white' }}>Cerrar Sesion</Link>
           <Link href="/gestor" color="inherit" underline="hover" sx={{ color: 'white', fontWeight: 'bold' }}>Gestor</Link>
           <Link href="/lugares" color="inherit" underline="hover" sx={{ color: 'white' }}>Lugares</Link>
         </Box>
@@ -123,218 +124,151 @@ const Footer = () => {
 };
 
 const PlacesCRUD = () => {
-  // Datos iniciales con eventos
-  const initialPlaces = [
-    {
-      id: 1,
-      name: 'Biblioteca de México',
-      description: 'Biblioteca pública ubicada en el centro de la Ciudad de México.',
-      categories: ['Biblioteca', 'Cultural'],
-      type: 'Cultural',
-      image: '/imagenes/biblioteca_mexico.png',
-      events: [
-        {
-          id: 1,
-          title: 'Lectura de poesía',
-          date: '2023-11-15',
-          description: 'Lectura de poesía contemporánea',
-          attendees: 25
-        },
-        {
-          id: 2,
-          title: 'Taller de escritura',
-          date: '2023-11-20',
-          description: 'Taller para principiantes',
-          attendees: 15
-        }
-      ]
-    },
-    {
-      id: 2,
-      name: 'Ángel de la Independencia',
-      description: 'Monumento emblemático de la Ciudad de México.',
-      categories: ['Monumento', 'Histórico'],
-      type: 'Histórico',
-      image: '/imagenes/angel.png',
-      events: []
-    },
-    {
-      id: 3,
-      name: 'Castillo de Chapultepec',
-      description: 'Único castillo real en América del Norte.',
-      categories: ['Museo', 'Histórico'],
-      type: 'Histórico',
-      image: '/imagenes/castillo.png',
-      events: []
-    },
-    {
-      id: 4,
-      name: 'Lago de Xochimilco',
-      description: 'Red de canales y chinampas declaradas Patrimonio de la Humanidad.',
-      categories: ['Naturaleza', 'Paseo'],
-      type: 'Natural',
-      image: '/imagenes/lago.png',
-      events: []
-    }
-  ];
-
-  // Estados para lugares
-  const [places, setPlaces] = useState(initialPlaces);
-  const [filteredPlaces, setFilteredPlaces] = useState(initialPlaces);
-  const [editingPlace, setEditingPlace] = useState(null);
-  const [openDialog, setOpenDialog] = useState(false);
-  const [newCategory, setNewCategory] = useState('');
+  const [places, setPlaces] = useState([]);
+  const [expandedPlaceId, setExpandedPlaceId] = useState(null);
+  const [eventDialogOpen, setEventDialogOpen] = useState(false);
+  const [currentEvent, setCurrentEvent] = useState({
+    id_evento: null,
+    title: '',
+    startDate: '',
+    endDate: '',
+    description: '',
+    file: null
+  });
+  const [currentPlaceId, setCurrentPlaceId] = useState(null);
   const [searchTerm, setSearchTerm] = useState('');
   const [filters, setFilters] = useState({
     category: '',
     type: ''
   });
 
-  // Estados para eventos
-  const [eventDialogOpen, setEventDialogOpen] = useState(false);
-  const [currentEvent, setCurrentEvent] = useState(null);
-  const [currentPlaceId, setCurrentPlaceId] = useState(null);
-  const [expandedPlaceId, setExpandedPlaceId] = useState(null);
-
   // Tipos y categorías disponibles
   const placeTypes = ['Cultural', 'Histórico', 'Natural', 'Religioso'];
   const allCategories = ['Biblioteca', 'Monumento', 'Museo', 'Naturaleza', 'Paseo', 'Histórico', 'Cultural'];
 
-  // Filtrado de lugares
   useEffect(() => {
-    let results = places;
+    const fetchData = async () => {
+      const usuario = JSON.parse(localStorage.getItem('usuario'));
+      if (!usuario?.id_gestor) return;
+
+      try {
+        const { data } = await axios.get(`http://localhost:3001/api/lugares/gestor/${usuario.id_gestor}`);
+        const sitios = data.resultado;
+
+        const sitiosConEventos = await Promise.all(
+          sitios.map(async sitio => {
+            const eventosRes = await axios.get(`http://localhost:3001/api/lugares/evento/${sitio.id_sitio}`);
+            return { 
+              ...sitio, 
+              events: eventosRes.data.resultado || [],
+              type: sitio.tipo || 'Cultural', // Asignar un tipo por defecto
+              categories: [sitio.tipo || 'Cultural'] // Usar el tipo como categoría por defecto
+            };
+          })
+        );
+
+        setPlaces(sitiosConEventos);
+      } catch (error) {
+        console.error('Error cargando sitios:', error);
+      }
+    };
+
+    fetchData();
+  }, []);
+
+  // Filtrado de lugares
+  const filteredPlaces = places.filter(place => {
+    const matchesSearch = place.nombre.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                         place.descripcion.toLowerCase().includes(searchTerm.toLowerCase());
     
-    if (searchTerm) {
-      results = results.filter(place =>
-        place.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        place.description.toLowerCase().includes(searchTerm.toLowerCase())
-      );
-    }
+    const matchesCategory = !filters.category || 
+                          (place.categories && place.categories.includes(filters.category));
     
-    if (filters.category) {
-      results = results.filter(place => 
-        place.categories.includes(filters.category)
-      );
-    }
+    const matchesType = !filters.type || place.type === filters.type;
     
-    if (filters.type) {
-      results = results.filter(place => place.type === filters.type);
-    }
-    
-    setFilteredPlaces(results);
-  }, [searchTerm, filters, places]);
+    return matchesSearch && matchesCategory && matchesType;
+  });
 
-  // Manejadores para lugares
-  const handleAddPlace = () => {
-    setEditingPlace({
-      id: null,
-      name: '',
-      description: '',
-      categories: [],
-      type: '',
-      image: null,
-      events: []
-    });
-    setOpenDialog(true);
+  const toggleExpandPlace = (placeId) => {
+    setExpandedPlaceId(expandedPlaceId === placeId ? null : placeId);
   };
 
-  const handleEditPlace = (place) => {
-    setEditingPlace({ ...place });
-    setOpenDialog(true);
-  };
-
-  const handleDeletePlace = (id) => {
-    setPlaces(places.filter(place => place.id !== id));
-  };
-
-  const handleSavePlace = () => {
-    if (editingPlace.id) {
-      setPlaces(places.map(place => 
-        place.id === editingPlace.id ? editingPlace : place
-      ));
-    } else {
-      const newId = Math.max(...places.map(p => p.id), 0) + 1;
-      setPlaces([...places, { ...editingPlace, id: newId }]);
-    }
-    setOpenDialog(false);
-  };
-
-  // Manejadores para categorías
-  const addCategory = () => {
-    if (newCategory && !editingPlace.categories.includes(newCategory)) {
-      setEditingPlace(prev => ({
-        ...prev,
-        categories: [...prev.categories, newCategory]
-      }));
-      setNewCategory('');
-    }
-  };
-
-  const removeCategory = (category) => {
-    setEditingPlace(prev => ({
-      ...prev,
-      categories: prev.categories.filter(c => c !== category)
-    }));
-  };
-
-  // Manejadores para eventos
   const handleAddEvent = (placeId) => {
     setCurrentPlaceId(placeId);
-    setCurrentEvent({
-      id: null,
-      title: '',
-      date: '',
-      description: '',
-      attendees: 0
-    });
+    setCurrentEvent({ id_evento: null, title: '', startDate: '', endDate: '', description: '', file: null });
     setEventDialogOpen(true);
   };
 
   const handleEditEvent = (placeId, event) => {
     setCurrentPlaceId(placeId);
-    setCurrentEvent({ ...event });
+    setCurrentEvent({
+      id_evento: event.id_evento,
+      title: event.promociones,
+      startDate: event.fecha_inicio,
+      endDate: event.fecha_fin,
+      description: event.descripcion,
+      file: null
+    });
     setEventDialogOpen(true);
   };
 
-  const handleDeleteEvent = (placeId, eventId) => {
-    setPlaces(places.map(place => {
-      if (place.id === placeId) {
-        return {
-          ...place,
-          events: place.events.filter(event => event.id !== eventId)
-        };
-      }
-      return place;
-    }));
+  const handleDeleteEvent = async (eventId) => {
+    try {
+      await axios.delete(`http://localhost:3001/api/lugares/evento/${eventId}`);
+      const usuario = JSON.parse(localStorage.getItem('usuario'));
+      const { data } = await axios.get(`http://localhost:3001/api/lugares/gestor/${usuario.id_gestor}`);
+      const sitiosConEventos = await Promise.all(
+        data.resultado.map(async sitio => {
+          const eventosRes = await axios.get(`http://localhost:3001/api/lugares/evento/${sitio.id_sitio}`);
+          return { ...sitio, events: eventosRes.data.resultado || [] };
+        })
+      );
+      setPlaces(sitiosConEventos);
+    } catch (error) {
+      console.error('Error al eliminar evento:', error);
+    }
   };
 
-  const handleSaveEvent = () => {
-    setPlaces(places.map(place => {
-      if (place.id === currentPlaceId) {
-        if (currentEvent.id) {
-          // Editar evento existente
-          return {
-            ...place,
-            events: place.events.map(event => 
-              event.id === currentEvent.id ? currentEvent : event
-            )
-          };
-        } else {
-          // Agregar nuevo evento
-          const newId = Math.max(...place.events.map(e => e.id), 0) + 1;
-          return {
-            ...place,
-            events: [...place.events, { ...currentEvent, id: newId }]
-          };
-        }
-      }
-      return place;
-    }));
-    setEventDialogOpen(false);
+  const handleFileChange = (e) => {
+    setCurrentEvent(prev => ({ ...prev, file: e.target.files[0] }));
   };
 
-  const toggleExpandPlace = (placeId) => {
-    setExpandedPlaceId(expandedPlaceId === placeId ? null : placeId);
+  const handleSaveEvent = async () => {
+    try {
+      const formData = new FormData();
+      formData.append('id_sitio', currentPlaceId);
+      formData.append('fecha_inicio', currentEvent.startDate);
+      formData.append('fecha_fin', currentEvent.endDate);
+      formData.append('descripcion', currentEvent.description);
+      formData.append('promociones', currentEvent.title);
+      if (currentEvent.file) {
+        formData.append('imagen', currentEvent.file);
+      }
+
+      if (currentEvent.id_evento) {
+        // Edición
+        await axios.put(
+          `http://localhost:3001/api/lugares/evento/${currentEvent.id_evento}`,
+          formData
+        );
+      } else {
+        // Creación
+        await axios.post('http://localhost:3001/api/lugares/evento', formData);
+      }
+
+      const usuario = JSON.parse(localStorage.getItem('usuario'));
+      const updated = await axios.get(`http://localhost:3001/api/lugares/gestor/${usuario.id_gestor}`);
+      const sitiosConEventos = await Promise.all(
+        updated.data.resultado.map(async sitio => {
+          const eventosRes = await axios.get(`http://localhost:3001/api/lugares/evento/${sitio.id_sitio}`);
+          return { ...sitio, events: eventosRes.data.resultado || [] };
+        })
+      );
+      setPlaces(sitiosConEventos);
+      setEventDialogOpen(false);
+    } catch (error) {
+      console.error('Error al guardar evento:', error);
+    }
   };
 
   // Manejadores de filtros
@@ -391,17 +325,10 @@ const PlacesCRUD = () => {
           gap: 2,
           color: 'white'
         }}>
-          <Typography variant="h4" component="h1" color="black">
-            Gestor de Lugares Turísticos
+          
+          <Typography variant="h4" component="h1" color="black" style={{ textAlign: 'center', width: '100%' }}>
+            Panel de Sitios Turísticos
           </Typography>
-          <Button 
-            variant="contained" 
-            startIcon={<Add />}
-            onClick={handleAddPlace}
-            sx={{ ml: 'auto' }}
-          >
-            Agregar Lugar
-          </Button>
         </Box>
 
         {/* Filtros */}
@@ -499,9 +426,9 @@ const PlacesCRUD = () => {
 
         {/* Listado de lugares */}
         {filteredPlaces.length > 0 ? (
-          <Grid container spacing={3}>
+          <Grid container spacing={3} justifyContent="center">
             {filteredPlaces.map((place) => (
-              <Grid item xs={12} sm={6} md={4} key={place.id}>
+              <Grid item xs={12} sm={6} md={4} key={place.id_sitio}>
                 <Card sx={{ 
                   height: '100%', 
                   display: 'flex', 
@@ -517,21 +444,21 @@ const PlacesCRUD = () => {
                   <CardMedia
                     component="img"
                     height="130"
-                    image={place.image}
-                    alt={place.name}
+                    image={place.imagen || '/imgs/no_image.jpg'}
+                    alt={place.nombre}
                     sx={{ objectFit: 'cover' }}
                   />
                   <CardContent sx={{ flexGrow: 1 }}>
                     <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
                       <Typography gutterBottom variant="h5" component="h2">
-                        {place.name}
+                        {place.nombre}
                       </Typography>
                       <IconButton 
-                        onClick={() => toggleExpandPlace(place.id)}
+                        onClick={() => toggleExpandPlace(place.id_sitio)}
                         size="small"
                         sx={{ color: 'white' }}
                       >
-                        {expandedPlaceId === place.id ? <ExpandLess /> : <ExpandMore />}
+                        {expandedPlaceId === place.id_sitio ? <ExpandLess /> : <ExpandMore />}
                       </IconButton>
                     </Box>
                     <Chip 
@@ -541,23 +468,12 @@ const PlacesCRUD = () => {
                       sx={{ mb: 1 }}
                     />
                     <Typography variant="body2" sx={{ mb: 2, color: 'rgba(255, 255, 255, 0.7)' }}>
-                      {place.description}
+                      {place.descripcion}
                     </Typography>
-                    <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5 }}>
-                      {place.categories.map((category, index) => (
-                        <Chip 
-                          key={index} 
-                          label={category} 
-                          size="small" 
-                          variant="outlined"
-                          sx={{ color: 'white', borderColor: 'rgba(255, 255, 255, 0.23)' }}
-                        />
-                      ))}
-                    </Box>
                   </CardContent>
                   
                   {/* Sección de eventos colapsable */}
-                  <Collapse in={expandedPlaceId === place.id} timeout="auto" unmountOnExit>
+                  <Collapse in={expandedPlaceId === place.id_sitio} timeout="auto" unmountOnExit>
                     <Divider sx={{ borderColor: 'rgba(255, 255, 255, 0.12)' }} />
                     <Box sx={{ p: 2 }}>
                       <Box sx={{ 
@@ -573,7 +489,7 @@ const PlacesCRUD = () => {
                           variant="outlined" 
                           size="small" 
                           startIcon={<Add />}
-                          onClick={() => handleAddEvent(place.id)}
+                          onClick={() => handleAddEvent(place.id_sitio)}
                           sx={{ color: 'white', borderColor: 'rgba(255, 255, 255, 0.23)' }}
                         >
                           Agregar
@@ -586,7 +502,7 @@ const PlacesCRUD = () => {
                           borderRadius: 1
                         }}>
                           {place.events.map((event) => (
-                            <ListItem key={event.id} sx={{ borderBottom: '1px solid rgba(255, 255, 255, 0.05)' }}>
+                            <ListItem key={event.id_evento} sx={{ borderBottom: '1px solid rgba(255, 255, 255, 0.05)' }}>
                               <Avatar sx={{ 
                                 bgcolor: 'primary.main', 
                                 mr: 2,
@@ -596,22 +512,22 @@ const PlacesCRUD = () => {
                                 <Event fontSize="small" />
                               </Avatar>
                               <ListItemText
-                                primary={event.title}
-                                secondary={`${event.date} - ${event.attendees} asistentes`}
+                                primary={event.promociones}
+                                secondary={`Del ${event.fecha_inicio} al ${event.fecha_fin} - ${event.descripcion}`}
                                 primaryTypographyProps={{ color: 'white' }}
                                 secondaryTypographyProps={{ color: 'rgba(255, 255, 255, 0.7)' }}
                               />
                               <ListItemSecondaryAction>
                                 <IconButton 
                                   edge="end" 
-                                  onClick={() => handleEditEvent(place.id, event)}
+                                  onClick={() => handleEditEvent(place.id_sitio, event)}
                                   sx={{ color: 'rgba(255, 255, 255, 0.7)' }}
                                 >
                                   <Edit fontSize="small" />
                                 </IconButton>
                                 <IconButton 
                                   edge="end" 
-                                  onClick={() => handleDeleteEvent(place.id, event.id)}
+                                  onClick={() => handleDeleteEvent(event.id_evento)}
                                   sx={{ color: 'rgba(255, 255, 255, 0.7)' }}
                                 >
                                   <Delete fontSize="small" />
@@ -631,23 +547,6 @@ const PlacesCRUD = () => {
                       )}
                     </Box>
                   </Collapse>
-                  
-                  <CardActions sx={{ justifyContent: 'flex-end' }}>
-                    <IconButton 
-                      aria-label="editar"
-                      onClick={() => handleEditPlace(place)}
-                      color="primary"
-                    >
-                      <Edit />
-                    </IconButton>
-                    <IconButton 
-                      aria-label="eliminar"
-                      onClick={() => handleDeletePlace(place.id)}
-                      color="error"
-                    >
-                      <Delete />
-                    </IconButton>
-                  </CardActions>
                 </Card>
               </Grid>
             ))}
@@ -677,199 +576,10 @@ const PlacesCRUD = () => {
           </Paper>
         )}
 
-        {/* Diálogo para agregar/editar lugares */}
-        <Dialog 
-          open={openDialog} 
-          onClose={() => setOpenDialog(false)} 
-          maxWidth="md" 
-          fullWidth
-          PaperProps={{
-            sx: {
-              backgroundColor: 'rgba(0, 0, 0, 0.8)',
-              color: 'white'
-            }
-          }}
-        >
-          <DialogTitle>
-            {editingPlace?.id ? 'Editar Lugar' : 'Agregar Nuevo Lugar'}
-          </DialogTitle>
-          <DialogContent dividers>
-            {editingPlace && (
-              <Grid container spacing={3} sx={{ pt: 1 }}>
-                <Grid item xs={12} md={6}>
-                  <TextField
-                    fullWidth
-                    label="Nombre del lugar"
-                    value={editingPlace.name}
-                    onChange={(e) => setEditingPlace({...editingPlace, name: e.target.value})}
-                    margin="normal"
-                    required
-                    sx={{
-                      '& .MuiInputLabel-root': { color: 'white' },
-                      '& .MuiOutlinedInput-root': {
-                        '& fieldset': { borderColor: 'rgba(255, 255, 255, 0.23)' },
-                        '& input': { color: 'white' }
-                      }
-                    }}
-                  />
-                  <TextField
-                    fullWidth
-                    multiline
-                    rows={4}
-                    label="Descripción"
-                    value={editingPlace.description}
-                    onChange={(e) => setEditingPlace({...editingPlace, description: e.target.value})}
-                    margin="normal"
-                    required
-                    sx={{
-                      '& .MuiInputLabel-root': { color: 'white' },
-                      '& .MuiOutlinedInput-root': {
-                        '& fieldset': { borderColor: 'rgba(255, 255, 255, 0.23)' },
-                        '& textarea': { color: 'white' }
-                      }
-                    }}
-                  />
-                  <FormControl fullWidth margin="normal">
-                    <InputLabel sx={{ color: 'white' }}>Tipo *</InputLabel>
-                    <Select
-                      label="Tipo *"
-                      value={editingPlace.type}
-                      onChange={(e) => setEditingPlace({...editingPlace, type: e.target.value})}
-                      required
-                      sx={{
-                        color: 'white',
-                        '& .MuiOutlinedInput-notchedOutline': {
-                          borderColor: 'rgba(255, 255, 255, 0.23)'
-                        },
-                        '& .MuiSvgIcon-root': { color: 'white' }
-                      }}
-                    >
-                      {placeTypes.map((type, index) => (
-                        <MenuItem key={index} value={type}>{type}</MenuItem>
-                      ))}
-                    </Select>
-                  </FormControl>
-                </Grid>
-                <Grid item xs={12} md={6}>
-                  <InputLabel sx={{ mb: 1, color: 'white' }}>Imagen</InputLabel>
-                  <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
-                    <Button 
-                      variant="contained" 
-                      component="label" 
-                      fullWidth
-                      sx={{ backgroundColor: 'primary.main' }}
-                    >
-                      Subir Imagen
-                      <input 
-                        type="file" 
-                        hidden 
-                        accept="image/*"
-                        onChange={(e) => {
-                          const file = e.target.files[0];
-                          if (file) {
-                            const imageUrl = URL.createObjectURL(file);
-                            setEditingPlace({...editingPlace, image: imageUrl});
-                          }
-                        }}
-                      />
-                    </Button>
-                    {editingPlace.image && (
-                      <Box sx={{ 
-                        border: '1px dashed rgba(255, 255, 255, 0.23)', 
-                        p: 1, 
-                        display: 'flex', 
-                        justifyContent: 'center',
-                        borderRadius: 1
-                      }}>
-                        <img 
-                          src={editingPlace.image} 
-                          alt="Preview" 
-                          style={{ 
-                            maxWidth: '100%', 
-                            maxHeight: '200px',
-                            borderRadius: 4
-                          }} 
-                        />
-                      </Box>
-                    )}
-                  </Box>
-                </Grid>
-                <Grid item xs={12}>
-                  <Typography variant="subtitle1" gutterBottom sx={{ color: 'white' }}>
-                    Categorías
-                  </Typography>
-                  <Box sx={{ display: 'flex', alignItems: 'center', mb: 2, gap: 2 }}>
-                    <FormControl fullWidth>
-                      <InputLabel sx={{ color: 'white' }}>Categoría</InputLabel>
-                      <Select
-                        value={newCategory}
-                        onChange={(e) => setNewCategory(e.target.value)}
-                        label="Categoría"
-                        sx={{
-                          color: 'white',
-                          '& .MuiOutlinedInput-notchedOutline': {
-                            borderColor: 'rgba(255, 255, 255, 0.23)'
-                          },
-                          '& .MuiSvgIcon-root': { color: 'white' }
-                        }}
-                      >
-                        {allCategories.map((cat, index) => (
-                          <MenuItem key={index} value={cat}>{cat}</MenuItem>
-                        ))}
-                      </Select>
-                    </FormControl>
-                    <Button 
-                      variant="outlined" 
-                      onClick={addCategory}
-                      disabled={!newCategory}
-                      sx={{ 
-                        minWidth: 120,
-                        color: 'white',
-                        borderColor: 'rgba(255, 255, 255, 0.23)'
-                      }}
-                    >
-                      Agregar
-                    </Button>
-                  </Box>
-                  <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1 }}>
-                    {editingPlace.categories.map((category, index) => (
-                      <Chip
-                        key={index}
-                        label={category}
-                        onDelete={() => removeCategory(category)}
-                        sx={{ 
-                          color: 'white',
-                          '& .MuiChip-deleteIcon': { color: 'rgba(255, 255, 255, 0.7)' }
-                        }}
-                      />
-                    ))}
-                  </Box>
-                </Grid>
-              </Grid>
-            )}
-          </DialogContent>
-          <DialogActions>
-            <Button 
-              onClick={() => setOpenDialog(false)}
-              sx={{ color: 'white' }}
-            >
-              Cancelar
-            </Button>
-            <Button 
-              onClick={handleSavePlace} 
-              variant="contained"
-              disabled={!editingPlace?.name || !editingPlace?.description || !editingPlace?.type}
-              sx={{ backgroundColor: 'primary.main' }}
-            >
-              Guardar
-            </Button>
-          </DialogActions>
-        </Dialog>
-
         {/* Diálogo para agregar/editar eventos */}
         <Dialog 
           open={eventDialogOpen} 
-          onClose={() => setEventDialogOpen(false)}
+          onClose={() => setEventDialogOpen(false)} 
           maxWidth="sm"
           fullWidth
           PaperProps={{
@@ -880,16 +590,16 @@ const PlacesCRUD = () => {
           }}
         >
           <DialogTitle>
-            {currentEvent?.id ? 'Editar Evento' : 'Agregar Nuevo Evento'}
+            {currentEvent.id_evento ? 'Editar Evento' : 'Agregar Nuevo Evento'}
           </DialogTitle>
           <DialogContent dividers>
             <Grid container spacing={2} sx={{ pt: 1 }}>
               <Grid item xs={12}>
                 <TextField
                   fullWidth
-                  label="Título del evento"
-                  value={currentEvent?.title || ''}
-                  onChange={(e) => setCurrentEvent({...currentEvent, title: e.target.value})}
+                  label="Título o Promoción"
+                  value={currentEvent.title}
+                  onChange={(e) => setCurrentEvent({ ...currentEvent, title: e.target.value })}
                   margin="normal"
                   required
                   sx={{
@@ -904,10 +614,10 @@ const PlacesCRUD = () => {
               <Grid item xs={12} md={6}>
                 <TextField
                   fullWidth
-                  label="Fecha"
+                  label="Fecha de inicio"
                   type="date"
-                  value={currentEvent?.date || ''}
-                  onChange={(e) => setCurrentEvent({...currentEvent, date: e.target.value})}
+                  value={currentEvent.startDate}
+                  onChange={(e) => setCurrentEvent({ ...currentEvent, startDate: e.target.value })}
                   margin="normal"
                   required
                   InputLabelProps={{ shrink: true }}
@@ -923,11 +633,12 @@ const PlacesCRUD = () => {
               <Grid item xs={12} md={6}>
                 <TextField
                   fullWidth
-                  label="Asistentes"
-                  type="number"
-                  value={currentEvent?.attendees || 0}
-                  onChange={(e) => setCurrentEvent({...currentEvent, attendees: parseInt(e.target.value) || 0})}
+                  label="Fecha de fin"
+                  type="date"
+                  value={currentEvent.endDate}
+                  onChange={(e) => setCurrentEvent({ ...currentEvent, endDate: e.target.value })}
                   margin="normal"
+                  InputLabelProps={{ shrink: true }}
                   sx={{
                     '& .MuiInputLabel-root': { color: 'white' },
                     '& .MuiOutlinedInput-root': {
@@ -943,8 +654,8 @@ const PlacesCRUD = () => {
                   multiline
                   rows={3}
                   label="Descripción"
-                  value={currentEvent?.description || ''}
-                  onChange={(e) => setCurrentEvent({...currentEvent, description: e.target.value})}
+                  value={currentEvent.description}
+                  onChange={(e) => setCurrentEvent({ ...currentEvent, description: e.target.value })}
                   margin="normal"
                   sx={{
                     '& .MuiInputLabel-root': { color: 'white' },
@@ -954,6 +665,26 @@ const PlacesCRUD = () => {
                     }
                   }}
                 />
+              </Grid>
+              <Grid item xs={12}>
+                <InputLabel sx={{ color: 'white' }}>Imagen del evento</InputLabel>
+                <Button 
+                  variant="contained" 
+                  component="label" 
+                  fullWidth
+                  sx={{ 
+                    mt: 1,
+                    backgroundColor: 'primary.main'
+                  }}
+                >
+                  Subir Imagen
+                  <input 
+                    type="file" 
+                    hidden 
+                    accept="image/*"
+                    onChange={handleFileChange}
+                  />
+                </Button>
               </Grid>
             </Grid>
           </DialogContent>
@@ -967,7 +698,7 @@ const PlacesCRUD = () => {
             <Button 
               onClick={handleSaveEvent} 
               variant="contained"
-              disabled={!currentEvent?.title || !currentEvent?.date}
+              disabled={!currentEvent.title || !currentEvent.startDate}
               sx={{ backgroundColor: 'primary.main' }}
             >
               Guardar
