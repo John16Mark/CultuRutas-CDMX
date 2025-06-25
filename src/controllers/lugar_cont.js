@@ -82,11 +82,11 @@ function getArchivosPorCategoria(nombreLugar) {
 
 class lugar_cont {
   static async get_todos(req, res) {
-    console.log("\n\x1b[93m .: lugar_controller :.\x1b[0m")
+    //console.log("\n\x1b[93m .: lugar_controller :.\x1b[0m")
     lugar_model
       .get_todos()
       .then((resultado) => {
-        console.log("\x1b[33m  resultado: \x1b[0m", resultado)
+        //console.log("\x1b[33m  resultado: \x1b[0m", resultado)
         
         if (resultado.registros) {
           // Mapear los lugares para agregar la ruta de la imagen

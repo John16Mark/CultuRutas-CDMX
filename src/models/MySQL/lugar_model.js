@@ -11,10 +11,10 @@ class lugar_model {
         if(err) {
           reject(err);
         }
-        console.log("Resultados: ");
-        console.log("\x1b[96m  results: \x1b[0m", results)
+        //console.log("Resultados: ");
+        //console.log("\x1b[96m  results: \x1b[0m", results)
         const resultado = results || null;
-        console.log("\x1b[96m  resultado: \x1b[0m", resultado)
+        //console.log("\x1b[96m  resultado: \x1b[0m", resultado)
 
         if(resultado && resultado.error)
           return reject(new Error(resultado.error));

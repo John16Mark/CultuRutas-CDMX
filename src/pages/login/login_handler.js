@@ -13,7 +13,8 @@ const handleLogin = async (e, correo, contraseña) => {
     console.log("Inicio de sesión exitoso:", response.data.usuario);
     return {
       success: true,
-      usuario: response.data.usuario
+      usuario: response.data.usuario,
+      token_login: response.data.token_login,
     };
   }
   else {

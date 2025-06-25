@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
 
 function TarjetaLugar({detalles}) {
   const navigate = useNavigate();
-  console.log(detalles)
+  //console.log(detalles)
   const handle_ir = () => {
     navigate(`/lugar/${detalles.id_sitio}/${detalles.nombre_normalizado}`);
   }

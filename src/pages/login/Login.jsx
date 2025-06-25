@@ -126,6 +126,9 @@ const Login = () => {
       if (usuario.esGestor) {
         navigate('/gestor');
       } else {
+        console.log(resultado)
+        localStorage.setItem('access_token', resultado.token_login);
+        localStorage.setItem('id', usuario.id_visitante);
         handleClickOpenSuccess();
       }
     } 
