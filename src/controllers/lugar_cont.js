@@ -173,13 +173,14 @@ class lugar_cont {
   }
 
   static async get_eventos_lugar(req, res) {
-    const id = req.params.id;
-    console.log("\n\x1b[93m .: lugar_controller :.\x1b[0m")
+    //const id = req.params.id;
+    const { id } = req.body;
+    console.log("\n\x1b[93m .: lugar_controller :.\nget_eventos_lugar\x1b[0m")
     console.log("Datos recibidos:\n  \x1b[33mid: \x1b[0m", id)
 
     try {
       const resultado = await lugar_model.get_eventos_lugar(id);
-      console.log("resultado: ", resultado);
+      //console.log("resultado: ", resultado);
       return res.status(201).json({ resultado: resultado.registro})
     } catch (err) {
       if(err.error) {

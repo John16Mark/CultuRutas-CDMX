@@ -1,9 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import {
-  Container,
-  Typography,
-  Button,
+import { Container, Typography, Button,
   Box,
   Grid,
   Card,
@@ -50,6 +47,7 @@ import fondoOscuro from '../../img/crema2.png';
 
 import NavBar from '../../components/NavBar/NavBar';
 import Footer from './../../components/Footer/Footer';
+import BarraFiltros from './components/BarraFiltros';
 
 import { useNavigate } from 'react-router-dom';
 
@@ -73,8 +71,19 @@ const PlacesCRUD = () => {
   });
 
   // Tipos y categorías disponibles
-  const placeTypes = ['Cultural', 'Histórico', 'Natural', 'Religioso'];
-  const allCategories = ['Biblioteca', 'Monumento', 'Museo', 'Naturaleza', 'Paseo', 'Histórico', 'Cultural'];
+  const tipos = [
+    { value: '', label: 'Todas' },
+    { value: 'cultural', label: 'Cultural' },
+    { value: 'historico', label: 'Histórico' },
+    { value: 'natural', label: 'Natural' },
+    { value: 'religioso', label: 'Religioso'}
+  ];
+  const categorias = [
+    { value: '', label: 'Todas' },
+    { value: 'museum', label: 'Museos' },
+    { value: 'monument', label: 'Monumentos' },
+    { value: 'archaeological_zone', label: 'Zonas arqueológicas' },
+  ];
   
   //Evento click en las tarjetas.
   const navigate = useNavigate();
@@ -94,7 +103,10 @@ const PlacesCRUD = () => {
 
         const sitiosConEventos = await Promise.all(
           sitios.map(async sitio => {
-            const eventosRes = await axios.get(`http://localhost:3001/api/lugares/evento/${sitio.id_sitio}`);
+            // Buscar los eventos del sitio
+            let id = sitio.id_sitio;
+            const eventosRes = await axios.post('http://localhost:3001/get_eventos_lugar', {id});
+            console.log("eventosRes", eventosRes)
             return { 
               ...sitio, 
               events: eventosRes.data.resultado || [],
@@ -269,103 +281,23 @@ const PlacesCRUD = () => {
         </Box>
 
         {/* Filtros */}
-        <Paper elevation={2} sx={{ 
-          p: 3, 
-          mb: 4,
-          backgroundColor: 'rgba(49, 112, 33, 0.79)',
-          color: 'white'
-        }}>
-          <Box sx={{ 
-            display: 'flex', 
-            alignItems: 'center', 
-            gap: 2, 
-            mb: 2,
-            flexWrap: 'wrap'
-          }}>
-            <TextField
-              label="Buscar lugares"
-              variant="outlined"
-              size="small"
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-              InputProps={{
-                startAdornment: <Search sx={{ color: 'action.active', mr: 1 }} />,
-                sx: { color: 'white' }
-              }}
-              sx={{ 
-                minWidth: 250,
-                '& .MuiInputLabel-root': { color: 'white' },
-                '& .MuiOutlinedInput-root': {
-                  '& fieldset': { borderColor: 'rgba(255, 255, 255, 0.23)' }
-                }
-              }}
-            />
-            
-            <FormControl size="small" sx={{ minWidth: 180 }}>
-              <InputLabel sx={{ color: 'white' }}>Categoría</InputLabel>
-              <Select
-                name="category"
-                value={filters.category}
-                label="Categoría"
-                onChange={handleFilterChange}
-                sx={{ 
-                  color: 'white',
-                  '& .MuiOutlinedInput-notchedOutline': {
-                    borderColor: 'rgba(255, 255, 255, 0.23)'
-                  },
-                  '& .MuiSvgIcon-root': { color: 'white' }
-                }}
-              >
-                <MenuItem value=""><em>Todas</em></MenuItem>
-                {allCategories.map((cat, index) => (
-                  <MenuItem key={index} value={cat}>{cat}</MenuItem>
-                ))}
-              </Select>
-            </FormControl>
-            
-            <FormControl size="small" sx={{ minWidth: 180 }}>
-              <InputLabel sx={{ color: 'white' }}>Tipo</InputLabel>
-              <Select
-                name="type"
-                value={filters.type}
-                label="Tipo"
-                onChange={handleFilterChange}
-                sx={{ 
-                  color: 'white',
-                  '& .MuiOutlinedInput-notchedOutline': {
-                    borderColor: 'rgba(255, 255, 255, 0.23)'
-                  },
-                  '& .MuiSvgIcon-root': { color: 'white' }
-                }}
-              >
-                <MenuItem value=""><em>Todos</em></MenuItem>
-                {placeTypes.map((type, index) => (
-                  <MenuItem key={index} value={type}>{type}</MenuItem>
-                ))}
-              </Select>
-            </FormControl>
-            
-            <Button 
-              variant="outlined" 
-              startIcon={<Clear />}
-              onClick={clearFilters}
-              disabled={!searchTerm && !filters.category && !filters.type}
-              sx={{ color: 'white', borderColor: 'rgba(255, 255, 255, 0.95)' }}
-            >
-              Limpiar
-            </Button>
-          </Box>
-          
-          <Typography variant="body2" sx={{ color: 'rgba(255, 255, 255, 0.7)' }}>
-            Mostrando {filteredPlaces.length} de {places.length} lugares
-          </Typography>
-        </Paper>
+        <BarraFiltros
+          searchTerm={searchTerm}
+          setSearchTerm={setSearchTerm}
+          filters={filters}
+          handleFilterChange={handleFilterChange}
+          clearFilters={clearFilters}
+          filteredCount={filteredPlaces.length}
+          totalCount={places.length}
+          categorias={categorias}
+          tipos={tipos}
+        />
 
         {/* Listado de lugares */}
         {filteredPlaces.length > 0 ? (
           <Grid container spacing={3} justifyContent="center">
             {filteredPlaces.map((place) => (
-              <Grid item xs={12} sm={6} md={4} key={place.id_sitio}>
+              <Grid size={{xs:12, sm:6, md:4}} key={place.id_sitio}>
                 <Card sx={{ 
                   height: '100%', 
                   display: 'flex', 
@@ -534,7 +466,7 @@ const PlacesCRUD = () => {
           </DialogTitle>
           <DialogContent dividers>
             <Grid container spacing={2} sx={{ pt: 1 }}>
-              <Grid item xs={12}>
+              <Grid size={{xs: 12}}>
                 <TextField
                   fullWidth
                   label="Título o Promoción"
@@ -551,7 +483,7 @@ const PlacesCRUD = () => {
                   }}
                 />
               </Grid>
-              <Grid item xs={12} md={6}>
+              <Grid item size={{xs:12, md:6}}>
                 <TextField
                   fullWidth
                   label="Fecha de inicio"
@@ -570,7 +502,7 @@ const PlacesCRUD = () => {
                   }}
                 />
               </Grid>
-              <Grid item xs={12} md={6}>
+              <Grid item size={{xs:12, md:6}}>
                 <TextField
                   fullWidth
                   label="Fecha de fin"
@@ -588,7 +520,7 @@ const PlacesCRUD = () => {
                   }}
                 />
               </Grid>
-              <Grid item xs={12}>
+              <Grid item size={{xs:12}}>
                 <TextField
                   fullWidth
                   multiline
@@ -606,7 +538,7 @@ const PlacesCRUD = () => {
                   }}
                 />
               </Grid>
-              <Grid item xs={12}>
+              <Grid item size={{xs:12}}>
                 <InputLabel sx={{ color: 'white' }}>Imagen del evento</InputLabel>
                 <Button 
                   variant="contained" 

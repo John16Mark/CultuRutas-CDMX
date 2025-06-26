@@ -18,7 +18,7 @@ import axios from 'axios';
 
 import NavBar from "../../components/NavBar/NavBar";
 import Footer from './../../components/Footer/Footer'
-import Dropdown from './components/Dropdown';
+import Dropdown from '../../components/Dropdown';
 
 const clasificarUbicacion = (lat) => {
   if (lat >= 19.45) return 'norte';

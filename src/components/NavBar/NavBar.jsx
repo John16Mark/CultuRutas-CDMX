@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { AppBar, Toolbar, Typography, Button, Box, IconButton, Menu, MenuItem } from '@mui/material';
+import { AppBar, Toolbar, Typography, Button, Box, IconButton, Menu, MenuItem, useMediaQuery  } from '@mui/material';
 import { Link as RouterLink, useNavigate } from 'react-router-dom';
+import { useTheme } from '@mui/material/styles';
 
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 
@@ -73,6 +74,8 @@ function NavBar({ esTransparente, esEstatica }) {
     window.location.reload(); // Asegura reinicio total
   };
 
+  const theme = useTheme();
+  const isSmallScreen = useMediaQuery(theme.breakpoints.down('sm'));
 
   return (
     <AppBar
@@ -85,17 +88,27 @@ function NavBar({ esTransparente, esEstatica }) {
         >
         {/* Lado izquierdo */}
         <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-          <IconButton component={RouterLink} to="/" edge="start" color="inherit">
+          <IconButton
+            component={RouterLink}
+            to="/"
+            edge="start"
+            color="inherit"
+            sx={{ display: 'flex', alignItems: 'center', textDecoration: 'none' }}
+          >
             <img src="/logo.png" alt="logo" style={{ height: '36px' }} />
-            <Typography
-              component={RouterLink}
-              to="/"
-              variant="h6"
-              sx={{ textDecoration: 'none', color: 'inherit', fontWeight: 'bold' }}
-              style={{marginLeft: 10, color: '#5A3E36'}}
-            >
-              CultuRutas CDMX
-            </Typography>
+            {!isSmallScreen && (
+              <Typography
+                variant="h6"
+                sx={{
+                  textDecoration: 'none',
+                  color: '#5A3E36',
+                  fontWeight: 'bold',
+                  marginLeft: 1,
+                }}
+              >
+                CultuRutas CDMX
+              </Typography>
+            )}
           </IconButton>
 
           <Button component={RouterLink} to="/mapa" style={{color: '#5A3E36'}}>
