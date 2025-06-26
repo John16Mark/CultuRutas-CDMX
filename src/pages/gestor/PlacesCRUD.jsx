@@ -173,6 +173,7 @@ const PlacesCRUD = () => {
         })
       );
       setPlaces(sitiosConEventos);
+      window.location.reload();
     } catch (error) {
       console.error('Error al eliminar evento:', error);
     }
@@ -215,6 +216,7 @@ const PlacesCRUD = () => {
       );
       setPlaces(sitiosConEventos);
       setEventDialogOpen(false);
+      window.location.reload();
     } catch (error) {
       console.error('Error al guardar evento:', error);
     }

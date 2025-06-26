@@ -235,15 +235,24 @@ class lugar_cont {
   }
 
   static async editarEvento(req, res) {
-  try {
+    try {
       const { fecha_inicio, fecha_fin, descripcion, promociones } = req.body;
       const id_evento = req.params.id_evento;
       const imagen = req.file ? `/eventos/${req.file.filename}` : null;
 
+      // Convertir las fechas a formato YYYY-MM-DD
+      const formatoFecha = (iso) => {
+        const date = new Date(iso);
+        return date.toISOString().split('T')[0]; // "2025-06-27"
+      };
+
+      const fecha_inicio_format = formatoFecha(fecha_inicio);
+      const fecha_fin_format = formatoFecha(fecha_fin);
+
       const eventoActualizado = await lugar_model.editarEvento({
         id_evento,
-        fecha_inicio,
-        fecha_fin,
+        fecha_inicio: fecha_inicio_format,
+        fecha_fin: fecha_fin_format,
         descripcion,
         promociones,
         imagen
@@ -255,6 +264,7 @@ class lugar_cont {
       res.status(500).json({ error: error.message });
     }
   }
+
 
   static async eliminarEvento(req, res) {
     try {
