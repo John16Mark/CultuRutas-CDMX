@@ -4,8 +4,6 @@ const path = require('path');
 const lugar_model = require('../models/MySQL/lugar_model');
 const { errorHandler } = require('../utils/errorHandler');
 
-const db = require('../models/MySQL/db');
-
 function asegurarDirectorioExiste(ruta) {
   if (!fs.existsSync(ruta)) {
     fs.mkdirSync(ruta, { recursive: true });
@@ -268,6 +266,42 @@ class lugar_cont {
       res.status(500).json({ error: error.message });
     }
   }
+
+  static async get_archivos_bd_por_sitio(req, res) {
+    const { id } = req.body;
+    if (!id) return res.status(400).json({ error: 'Falta el ID del sitio' });
+
+    try {
+      const archivos_multimedia = await lugar_model.get_multimedia_por_sitio(id);
+      const archivos_documentos = await lugar_model.get_documentos_por_sitio(id);
+      console.log(archivos_multimedia);
+      console.log(archivos_documentos);
+      return res.status(200).json({
+
+        multimedia: archivos_multimedia,
+        documentos: archivos_documentos
+       
+      });
+    } catch (err) {
+      console.error('Error al obtener archivos desde BD:', err);
+      return res.status(500).json({ error: err.message });
+    }
+  }
+
+
+  static async editarSitio(req, res) {
+    const { id } = req.params;
+    const datos = req.body;
+    try {
+      const resultado = await lugar_model.actualizarSitio(id, datos);
+      res.status(200).json(resultado);
+    } catch (error) {
+      res.status(500).json({ error: error.message });
+    }
+  }
+
+
+
 
 }
 
