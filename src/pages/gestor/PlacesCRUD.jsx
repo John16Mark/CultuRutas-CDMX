@@ -86,7 +86,10 @@ const PlacesCRUD = () => {
 
         const sitiosConEventos = await Promise.all(
           sitios.map(async sitio => {
-            const eventosRes = await axios.get(`http://localhost:3001/api/lugares/evento/${sitio.id_sitio}`);
+            // Buscar los eventos del sitio
+            let id = sitio.id_sitio;
+            const eventosRes = await axios.post('http://localhost:3001/get_eventos_lugar', {id});
+            console.log("eventosRes", eventosRes)
             return { 
               ...sitio, 
               events: eventosRes.data.resultado || [],
@@ -357,7 +360,7 @@ const PlacesCRUD = () => {
         {filteredPlaces.length > 0 ? (
           <Grid container spacing={3} justifyContent="center">
             {filteredPlaces.map((place) => (
-              <Grid item xs={12} sm={6} md={4} key={place.id_sitio}>
+              <Grid size={{xs:12, sm:6, md:4}} key={place.id_sitio}>
                 <Card sx={{ 
                   height: '100%', 
                   display: 'flex', 
@@ -523,7 +526,7 @@ const PlacesCRUD = () => {
           </DialogTitle>
           <DialogContent dividers>
             <Grid container spacing={2} sx={{ pt: 1 }}>
-              <Grid item xs={12}>
+              <Grid size={{xs: 12}}>
                 <TextField
                   fullWidth
                   label="Título o Promoción"
@@ -540,7 +543,7 @@ const PlacesCRUD = () => {
                   }}
                 />
               </Grid>
-              <Grid item xs={12} md={6}>
+              <Grid item size={{xs:12, md:6}}>
                 <TextField
                   fullWidth
                   label="Fecha de inicio"
@@ -559,7 +562,7 @@ const PlacesCRUD = () => {
                   }}
                 />
               </Grid>
-              <Grid item xs={12} md={6}>
+              <Grid item size={{xs:12, md:6}}>
                 <TextField
                   fullWidth
                   label="Fecha de fin"
@@ -577,7 +580,7 @@ const PlacesCRUD = () => {
                   }}
                 />
               </Grid>
-              <Grid item xs={12}>
+              <Grid item size={{xs:12}}>
                 <TextField
                   fullWidth
                   multiline
@@ -595,7 +598,7 @@ const PlacesCRUD = () => {
                   }}
                 />
               </Grid>
-              <Grid item xs={12}>
+              <Grid item size={{xs:12}}>
                 <InputLabel sx={{ color: 'white' }}>Imagen del evento</InputLabel>
                 <Button 
                   variant="contained" 
