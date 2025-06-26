@@ -6,32 +6,33 @@ import { Container, Typography, Button,
   Card,
   CardMedia,
   CardContent,
-  CardActions,
-  TextField,
+  //CardActions,
+  //TextField,
   Paper,
   Chip,
   Divider,
-  InputLabel,
-  MenuItem,
-  Select,
+  //InputLabel,
+  //MenuItem,
+  //Select,
   IconButton,
-  FormControl,
-  AppBar,
-  Toolbar,
-  Link,
+  //FormControl,
+  //AppBar,
+  //Toolbar,
+  //Link,
   List,
   ListItem,
   ListItemText,
   ListItemSecondaryAction,
   Collapse,
   Avatar,
-  Badge, Stack
+  //Badge, 
+  Stack
 } from '@mui/material';
 import { 
   Add, 
   Edit, 
   Delete, 
-  Search, 
+  //Search, 
   Clear, 
   Event, 
   ExpandMore, 
@@ -306,6 +307,12 @@ const PlacesCRUD = () => {
                     boxShadow: '0 4px 20px rgba(49, 26, 26, 0.68)',
                     cursor: 'pointer'
                   }
+                }}
+
+                onClick={(e) => {
+                  if (e.target.closest('button')) return;
+
+                  handleClick(place.id_sitio);
                 }}
                 //onClick={() => handleClick(place.id_sitio)}
               >

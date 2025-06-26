@@ -4,6 +4,7 @@ const path = require('path');
 const lugar_model = require('../models/MySQL/lugar_model');
 const { errorHandler } = require('../utils/errorHandler');
 
+const db = require('../models/MySQL/db');
 
 function asegurarDirectorioExiste(ruta) {
   if (!fs.existsSync(ruta)) {
@@ -235,8 +236,6 @@ class lugar_cont {
     }
   }
 
-
-
   static async editarEvento(req, res) {
   try {
       const { fecha_inicio, fecha_fin, descripcion, promociones } = req.body;
@@ -270,18 +269,6 @@ class lugar_cont {
     }
   }
 
-  static async editar_datos_lugar(req, res) {
-    try {
-      console.log("Datos recibidos para actualizar:", req.body);
-      await lugar_model.editar_datos_lugar(req.body);
-      res.json({ message: 'Datos del sitio actualizados correctamente.' });
-    } catch (error) {
-      console.error('Error al editar datos del sitio:', error);
-      res.status(500).json({ error: 'Error al actualizar el sitio.' });
-    }
-  }
-
 }
-
 
 module.exports = lugar_cont;
