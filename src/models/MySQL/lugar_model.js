@@ -173,6 +173,49 @@ class lugar_model {
     });
   }
 
+
+  static async insertarMultimedia({ nombre, tipo, tamano, ruta_local, fecha_publicacion, id_sitio }) {
+    const query = `
+      INSERT INTO A_Multimedia (id_multimedia, nombre, tipo, tamano, ruta_local, fecha_publicacion, id_sitio)
+      VALUES (UUID(), ?, ?, ?, ?, ?, ?)
+    `;
+    const valores = [nombre, tipo, tamano, ruta_local, fecha_publicacion, id_sitio];
+
+    return new Promise((resolve, reject) => {
+      db.query(query, valores, (err, result) => {
+        if (err) {
+          console.error("ERROR AL INSERTAR DOCUMENTO:", err);
+          return reject(err);
+        }
+        resolve(result);
+      });
+    });
+  }
+
+  static async insertarDocumento({ nombre, tipo, tamano, ruta_local, fecha_publicacion, id_sitio }) {
+    const query = `
+      INSERT INTO A_Documentos (
+        id_documento, nombre, tipo, tamano, fecha_publicacion, ruta_local, id_sitio
+      )
+      VALUES (UUID(), ?, ?, ?, ?, ?, ?)
+    `;
+    const valores = [nombre, tipo, tamano, fecha_publicacion, ruta_local, id_sitio];
+
+    return new Promise((resolve, reject) => {
+      db.query(query, valores, (err, result) => {
+        if (err) {
+          console.error("ERROR AL INSERTAR DOCUMENTO:", err);
+          return reject(err);
+        }
+        resolve(result);
+      });
+    });
+  }
+
+
+
+
+
 }
 
 

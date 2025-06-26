@@ -20,6 +20,40 @@ const storage = multer.diskStorage({
 });
 const upload = multer({ storage });
 
+
+// Configurar almacenamiento para multimedia
+const storageMultimedia = multer.diskStorage({
+  destination: function (req, file, cb) {
+    const dir = path.join(__dirname, '..', '..', 'public', 'repositorio', 'multimedia');
+    fs.mkdirSync(dir, { recursive: true });
+    cb(null, dir);
+  },
+  filename: function (req, file, cb) {
+    const nombreUnico = `${Date.now()}_${file.originalname}`;
+    cb(null, nombreUnico);
+  }
+});
+const uploadMultimedia = multer({ storage: storageMultimedia });
+
+// Configurar almacenamiento para documentos
+const storageDocumentos = multer.diskStorage({
+  destination: function (req, file, cb) {
+    const dir = path.join(__dirname, '..', '..', 'public', 'repositorio', 'documentos');
+    fs.mkdirSync(dir, { recursive: true });
+    cb(null, dir);
+  },
+  filename: function (req, file, cb) {
+    const nombreUnico = `${Date.now()}_${file.originalname}`;
+    cb(null, nombreUnico);
+  }
+});
+const uploadDocumentos = multer({ storage: storageDocumentos });
+
+// Rutas de subida
+router.post('/subir_multimedia/:id', uploadMultimedia.single('archivo'), lugar_cont.subirMultimedia);
+
+router.post('/subir_documento/:id', uploadDocumentos.single('archivo'), lugar_cont.subirDocumento);
+
 router.post('/evento', upload.single('imagen'), lugar_cont.crearEvento);
 
 router.post('/archivos_bd', lugar_cont.get_archivos_bd_por_sitio);

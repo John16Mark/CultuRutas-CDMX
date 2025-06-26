@@ -205,6 +205,59 @@ const EditarSitioGestor = () => {
           )}
         </Grid>
 
+        {/* Subir multimedia */}
+        <Grid item xs={12}>
+          <Typography variant="h6">Subir nuevo archivo multimedia</Typography>
+          <input
+            type="file"
+            accept="image/*,video/*"
+            onChange={async (e) => {
+              const archivo = e.target.files[0];
+              if (!archivo) return;
+
+              const formData = new FormData();
+              formData.append('archivo', archivo);
+
+              try {
+                await axios.post(`http://localhost:3001/api/lugares/subir_multimedia/${id}`, formData, {
+                  headers: { 'Content-Type': 'multipart/form-data' }
+                });
+                //window.location.reload(); // Refresca para mostrar el nuevo archivo
+              } catch (err) {
+                console.error('Error al subir multimedia:', err);
+                console.error("Error completo:", error);
+              }
+            }}
+          />
+        </Grid>
+
+        {/* Subir documento */}
+        <Grid item xs={12}>
+          <Typography variant="h6">Subir nuevo documento</Typography>
+          <input
+            type="file"
+            accept=".pdf,.doc,.docx,.txt"
+            onChange={async (e) => {
+              const archivo = e.target.files[0];
+              if (!archivo) return;
+
+              const formData = new FormData();
+              formData.append('archivo', archivo);
+
+              try {
+                await axios.post(`http://localhost:3001/api/lugares/subir_documento/${id}`, formData, {
+                  headers: { 'Content-Type': 'multipart/form-data' }
+                });
+                //window.location.reload(); // Refresca para mostrar el nuevo archivo
+              } catch (err) {
+                console.error("Error completo:", error);
+                console.error('Error al subir documento:', err);
+              }
+            }}
+          />
+        </Grid>
+
+
 
         <Grid item xs={12} sx={{ display: 'flex', justifyContent: 'space-between', mt: 4 }}>
           <Button variant="outlined" onClick={() => navigate('/gestor')}>Cancelar</Button>
@@ -228,6 +281,8 @@ const EditarSitioGestor = () => {
             navigate('/gestor');
           } catch (error) {
             console.error('Error al guardar sitio:', error);
+            console.error("Error completo:", error);
+
           }
         }}
       />

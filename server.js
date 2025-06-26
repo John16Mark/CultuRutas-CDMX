@@ -32,6 +32,8 @@ const PORT = 3001;
 app.use('/lugares', express.static(path.join(__dirname, 'public', 'lugares')));
 app.use('/imgs', express.static(path.join(__dirname, 'public', 'imgs')));
 
+app.use('/repositorio', express.static(path.join(__dirname, 'public', 'repositorio')));
+
 app.post('/register', register_cont.registro_regular);
 app.post('/login', login_cont.login);
 app.get('/confirmar-correo', verificacion_cont.confirmarCorreo);

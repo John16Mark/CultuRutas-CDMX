@@ -301,6 +301,56 @@ class lugar_cont {
   }
 
 
+  static async subirMultimedia(req, res) {
+    const { id } = req.params;
+    const archivo = req.file;
+    if (!archivo) return res.status(400).json({ error: 'No se subió ningún archivo.' });
+
+    try {
+      console.log("Archivo recibido:", req.file);
+      console.log("ID del sitio:", id);
+
+      const nombre = archivo.originalname;
+      const tipo = path.extname(nombre).replace('.', '');
+      const tamanoKB = (archivo.size / 1024).toFixed(2);
+      const ruta_local = `/repositorio/multimedia/${archivo.filename}`;
+      const fecha_publicacion = new Date();
+
+      const resultado = await lugar_model.insertarMultimedia({
+        nombre, tipo, tamano: `${tamanoKB} kB`, ruta_local, fecha_publicacion, id_sitio: id
+      });
+
+      res.status(200).json({ mensaje: 'Multimedia subida correctamente', resultado });
+    } catch (error) {
+      res.status(500).json({ error: error.message });
+    }
+  }
+
+  static async subirDocumento(req, res) {
+    const { id } = req.params;
+    const archivo = req.file;
+    if (!archivo) return res.status(400).json({ error: 'No se subió ningún archivo.' });
+
+    try {
+      console.log("Archivo recibido:", req.file);
+      console.log("ID del sitio:", id);
+
+      const nombre = archivo.originalname;
+      const tipo = path.extname(nombre).replace('.', '');
+      const tamanoKB = (archivo.size / 1024).toFixed(2);
+      const ruta_local = `/repositorio/documentos/${archivo.filename}`;
+      const fecha_publicacion = new Date();
+
+      const resultado = await lugar_model.insertarDocumento({
+        nombre, tipo, tamano: `${tamanoKB} kB`, ruta_local, fecha_publicacion, id_sitio: id
+      });
+
+      res.status(200).json({ mensaje: 'Documento subido correctamente', resultado });
+    } catch (error) {
+      res.status(500).json({ error: error.message });
+    }
+  }
+
 
 
 }
