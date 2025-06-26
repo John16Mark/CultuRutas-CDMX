@@ -12,6 +12,7 @@ const login_cont = require('./src/controllers/login_cont');
 const lugares_cont = require('./src/controllers/lugar_cont');
 const verificacion_cont = require('./src/controllers/verificacion_cont');
 const lugarRoutes = require('./src/routes/lugar');
+const lugar_cont = require('./src/controllers/lugar_cont');
 
 
 
@@ -61,6 +62,90 @@ app.post('/is_logged', (req, res) => {
     console.log("decoded", decoded);
   });
 });
+
+const multer = require('multer');
+const fs = require('fs');
+const { v4: uuidv4 } = require('uuid');
+const db = require('./src/models/MySQL/db'); // Ajusta si está en otra ruta
+
+// Configuración de multer
+const storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    const tipo = req.body.tipo;
+    const folder = tipo === 'documentos' ? 'documentos' : 'multimedia';
+    const dir = path.join(__dirname, 'public', 'repositorio', folder);
+    fs.mkdirSync(dir, { recursive: true }); // Crea la carpeta si no existe
+    cb(null, dir);
+  },
+  filename: function (req, file, cb) {
+    const uniqueName = `${uuidv4()}_${file.originalname}`;
+    cb(null, uniqueName);
+  }
+});
+
+const upload = multer({ storage });
+
+app.post('/subir_archivo', upload.single('archivo'), async (req, res) => {
+  try {
+    const { tipo, id_sitio } = req.body;
+    const archivo = req.file;
+    const ruta_local = `/repositorio/${tipo}/${archivo.filename}`;
+    const id = uuidv4().substring(0, 20);
+    const nombre = archivo.originalname;
+    const tipoArchivo = path.extname(archivo.originalname).replace('.', '');
+    const tamano = `${(archivo.size / 1024).toFixed(2)} KB`;
+    const fecha = new Date().toISOString().split('T')[0]; // formato YYYY-MM-DD
+
+    const tabla = tipo === 'documentos' ? 'A_Documentos' : 'A_Multimedia';
+    const idCampo = tipo === 'documentos' ? 'id_documento' : 'id_multimedia';
+
+    const sql = `INSERT INTO ${tabla} (${idCampo}, nombre, tipo, tamano, fecha_publicacion, ruta_local, id_sitio)
+                 VALUES (?, ?, ?, ?, ?, ?, ?)`;
+
+    await db.query(sql, [id, nombre, tipoArchivo, tamano, fecha, ruta_local, id_sitio]);
+
+    res.json({ message: 'Archivo subido exitosamente', archivo: ruta_local });
+  } catch (error) {
+    console.error('Error al subir archivo:', error);
+    res.status(500).json({ error: 'Error interno al subir archivo' });
+  }
+});
+
+app.post('/eliminar_archivo', async (req, res) => {
+  try {
+    const { tipo, ruta_local } = req.body;
+
+    if (!ruta_local || !tipo) {
+      return res.status(400).json({ error: 'Datos incompletos' });
+    }
+
+    const tabla = tipo === 'documentos' ? 'A_Documentos' : 'A_Multimedia';
+    const campoRuta = 'ruta_local';
+
+    // Ruta absoluta del archivo
+    const rutaFisica = path.join(__dirname, 'public', ruta_local);
+
+    // Eliminar archivo del sistema de archivos
+    if (fs.existsSync(rutaFisica)) {
+      fs.unlinkSync(rutaFisica);
+    }
+
+    // Eliminar registro de BD
+    const sql = `DELETE FROM ${tabla} WHERE ${campoRuta} = ?`;
+    await db.query(sql, [ruta_local]);
+
+    res.json({ message: 'Archivo eliminado exitosamente' });
+  } catch (error) {
+    console.error('Error al eliminar archivo:', error);
+    res.status(500).json({ error: 'Error al eliminar archivo' });
+  }
+});
+
+
+app.post('/editar_datos_lugar', lugares_cont.editar_datos_lugar);
+
+app.post('/editar_datos_lugar', lugar_cont.editar_datos_lugar);
+
 
 app.listen(PORT, () => {
   console.log(`Servidor en funcionamiento en http://localhost:${PORT}`);

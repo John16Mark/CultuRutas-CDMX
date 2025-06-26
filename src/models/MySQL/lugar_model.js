@@ -96,9 +96,6 @@ class lugar_model {
     });
   }
 
-
-
-
   static async editarEvento(evento) {
     const { id_evento, fecha_inicio, fecha_fin, descripcion, promociones, imagen } = evento;
     const query = `
@@ -128,7 +125,29 @@ class lugar_model {
   }
 
 
+  static async editar_datos_lugar (datos){
+    const sql = `
+      UPDATE Sitio_turistico_historico
+      SET 
+        h_lunes = ?, h_martes = ?, h_miercoles = ?, h_jueves = ?, h_viernes = ?, h_sabado = ?, h_domingo = ?,
+        promociones = ?, costos = ?, tipo = ?, descripcion = ?,
+        accesibilidadParking = ?, accesibilidadEntrance = ?, accesibilidadRestroom = ?, accesibilidadSeating = ?, petfriendly = ?
+      WHERE id_sitio = ?
+    `;
+
+    const valores = [
+      datos.h_lunes, datos.h_martes, datos.h_miercoles, datos.h_jueves, datos.h_viernes, datos.h_sabado, datos.h_domingo,
+      datos.promociones, datos.costos, datos.tipo, datos.descripcion,
+      datos.accesibilidadParking, datos.accesibilidadEntrance, datos.accesibilidadRestroom, datos.accesibilidadSeating, datos.petfriendly,
+      datos.id_sitio
+    ];
+
+    await db.query(sql, valores);
+
+  }
+  
 
 }
+
 
 module.exports = lugar_model;
