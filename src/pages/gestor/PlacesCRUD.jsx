@@ -29,7 +29,7 @@ import { Container, Typography, Button,
   ListItemSecondaryAction,
   Collapse,
   Avatar,
-  Badge
+  Badge, Stack
 } from '@mui/material';
 import { 
   Add, 
@@ -48,8 +48,11 @@ import fondoOscuro from '../../img/crema2.png';
 import NavBar from '../../components/NavBar/NavBar';
 import Footer from './../../components/Footer/Footer';
 import BarraFiltros from './components/BarraFiltros';
+import DialogoEvento from './components/DialogoEvento';
 
 import { useNavigate } from 'react-router-dom';
+
+import AssignmentAddIcon from '@mui/icons-material/AssignmentAdd';
 
 const PlacesCRUD = () => {
   const [places, setPlaces] = useState([]);
@@ -265,18 +268,15 @@ const PlacesCRUD = () => {
         }}
       >
         {/* Encabezado */}
-        <Box sx={{ 
-          display: 'flex', 
-          justifyContent: 'space-between', 
-          alignItems: 'center', 
-          mb: 4,
-          flexWrap: 'wrap',
-          gap: 2,
-          color: 'white'
-        }}>
-          
-          <Typography variant="h4" component="h1" color="black" style={{ textAlign: 'center', width: '100%' }}>
-            Panel de Sitios Turísticos
+        <Stack direction='row' sx={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'center' }}>
+          <AssignmentAddIcon sx={{ fontSize: {md: '2.5rem', sm: '2rem', xs: '1.5rem' } }} />
+          <Typography fontWeight='bold' sx= {{fontSize: {md: '2.5rem', sm: '2rem', xs: '1.5rem'}, lineHeight: 1 }}>
+            Gestionar Lugares
+          </Typography>
+        </Stack>
+        <Box sx={{ display: 'flex', justifyContent: 'center', width: '100%', marginTop: '10px' }}>
+          <Typography>
+            Aquí podrás editar y añadir nuevos sitios.
           </Typography>
         </Box>
 
@@ -449,134 +449,15 @@ const PlacesCRUD = () => {
         )}
 
         {/* Diálogo para agregar/editar eventos */}
-        <Dialog 
-          open={eventDialogOpen} 
-          onClose={() => setEventDialogOpen(false)} 
-          maxWidth="sm"
-          fullWidth
-          PaperProps={{
-            sx: {
-              backgroundColor: 'rgba(0, 0, 0, 0.8)',
-              color: 'white'
-            }
-          }}
-        >
-          <DialogTitle>
-            {currentEvent.id_evento ? 'Editar Evento' : 'Agregar Nuevo Evento'}
-          </DialogTitle>
-          <DialogContent dividers>
-            <Grid container spacing={2} sx={{ pt: 1 }}>
-              <Grid size={{xs: 12}}>
-                <TextField
-                  fullWidth
-                  label="Título o Promoción"
-                  value={currentEvent.title}
-                  onChange={(e) => setCurrentEvent({ ...currentEvent, title: e.target.value })}
-                  margin="normal"
-                  required
-                  sx={{
-                    '& .MuiInputLabel-root': { color: 'white' },
-                    '& .MuiOutlinedInput-root': {
-                      '& fieldset': { borderColor: 'rgba(255, 255, 255, 0.23)' },
-                      '& input': { color: 'white' }
-                    }
-                  }}
-                />
-              </Grid>
-              <Grid item size={{xs:12, md:6}}>
-                <TextField
-                  fullWidth
-                  label="Fecha de inicio"
-                  type="date"
-                  value={currentEvent.startDate}
-                  onChange={(e) => setCurrentEvent({ ...currentEvent, startDate: e.target.value })}
-                  margin="normal"
-                  required
-                  InputLabelProps={{ shrink: true }}
-                  sx={{
-                    '& .MuiInputLabel-root': { color: 'white' },
-                    '& .MuiOutlinedInput-root': {
-                      '& fieldset': { borderColor: 'rgba(255, 255, 255, 0.23)' },
-                      '& input': { color: 'white' }
-                    }
-                  }}
-                />
-              </Grid>
-              <Grid item size={{xs:12, md:6}}>
-                <TextField
-                  fullWidth
-                  label="Fecha de fin"
-                  type="date"
-                  value={currentEvent.endDate}
-                  onChange={(e) => setCurrentEvent({ ...currentEvent, endDate: e.target.value })}
-                  margin="normal"
-                  InputLabelProps={{ shrink: true }}
-                  sx={{
-                    '& .MuiInputLabel-root': { color: 'white' },
-                    '& .MuiOutlinedInput-root': {
-                      '& fieldset': { borderColor: 'rgba(255, 255, 255, 0.23)' },
-                      '& input': { color: 'white' }
-                    }
-                  }}
-                />
-              </Grid>
-              <Grid item size={{xs:12}}>
-                <TextField
-                  fullWidth
-                  multiline
-                  rows={3}
-                  label="Descripción"
-                  value={currentEvent.description}
-                  onChange={(e) => setCurrentEvent({ ...currentEvent, description: e.target.value })}
-                  margin="normal"
-                  sx={{
-                    '& .MuiInputLabel-root': { color: 'white' },
-                    '& .MuiOutlinedInput-root': {
-                      '& fieldset': { borderColor: 'rgba(255, 255, 255, 0.23)' },
-                      '& textarea': { color: 'white' }
-                    }
-                  }}
-                />
-              </Grid>
-              <Grid item size={{xs:12}}>
-                <InputLabel sx={{ color: 'white' }}>Imagen del evento</InputLabel>
-                <Button 
-                  variant="contained" 
-                  component="label" 
-                  fullWidth
-                  sx={{ 
-                    mt: 1,
-                    backgroundColor: 'primary.main'
-                  }}
-                >
-                  Subir Imagen
-                  <input 
-                    type="file" 
-                    hidden 
-                    accept="image/*"
-                    onChange={handleFileChange}
-                  />
-                </Button>
-              </Grid>
-            </Grid>
-          </DialogContent>
-          <DialogActions>
-            <Button 
-              onClick={() => setEventDialogOpen(false)}
-              sx={{ color: 'white' }}
-            >
-              Cancelar
-            </Button>
-            <Button 
-              onClick={handleSaveEvent} 
-              variant="contained"
-              disabled={!currentEvent.title || !currentEvent.startDate}
-              sx={{ backgroundColor: 'primary.main' }}
-            >
-              Guardar
-            </Button>
-          </DialogActions>
-        </Dialog>
+        <DialogoEvento
+          open={eventDialogOpen}
+          onClose={() => setEventDialogOpen(false)}
+          eventData={currentEvent}
+          setEventData={setCurrentEvent}
+          onSave={handleSaveEvent}
+          onFileChange={handleFileChange}
+        />
+
       </Container>
 
       <Footer esTransparente={false} />

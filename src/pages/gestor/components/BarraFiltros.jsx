@@ -1,9 +1,8 @@
-import React from 'react';
 import {
   Paper, Box, TextField, InputAdornment, Typography,
   Button, Grid
 } from '@mui/material';
-import { Search, Clear } from '@mui/icons-material';
+import { Clear } from '@mui/icons-material';
 import SearchIcon from '@mui/icons-material/Search';
 
 import Dropdown from './../../../components/Dropdown';
