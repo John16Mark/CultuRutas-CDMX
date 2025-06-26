@@ -65,5 +65,9 @@ router.delete('/evento/:id_evento', lugar_cont.eliminarEvento);
 
 router.put('/editar/:id', lugar_cont.editarSitio);
 
+router.delete('/documento/nombre/:nombre', lugar_cont.eliminarDocumentoPorNombre);
+router.delete('/multimedia/nombre/:nombre', lugar_cont.eliminarMultimediaPorNombre);
+
+
 
 module.exports = router;

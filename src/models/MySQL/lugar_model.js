@@ -213,6 +213,43 @@ class lugar_model {
   }
 
 
+  static async getDocumentoPorNombre(nombre) {
+    return new Promise((resolve, reject) => {
+      db.query('SELECT ruta_local FROM A_Documentos WHERE nombre = ?', [nombre], (err, res) => {
+        if (err) return reject(err);
+        resolve(res[0]);
+      });
+    });
+  }
+
+  static async eliminarDocumentoPorNombre(nombre) {
+    return new Promise((resolve, reject) => {
+      db.query('DELETE FROM A_Documentos WHERE nombre = ?', [nombre], (err, res) => {
+        if (err) return reject(err);
+        resolve(res);
+      });
+    });
+  }
+
+  static async getMultimediaPorNombre(nombre) {
+    return new Promise((resolve, reject) => {
+      db.query('SELECT ruta_local FROM A_Multimedia WHERE nombre = ?', [nombre], (err, res) => {
+        if (err) return reject(err);
+        resolve(res[0]);
+      });
+    });
+  }
+
+  static async eliminarMultimediaPorNombre(nombre) {
+    return new Promise((resolve, reject) => {
+      db.query('DELETE FROM A_Multimedia WHERE nombre = ?', [nombre], (err, res) => {
+        if (err) return reject(err);
+        resolve(res);
+      });
+    });
+  }
+
+
 
 
 

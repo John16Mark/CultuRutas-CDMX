@@ -5,9 +5,10 @@ import axios from 'axios';
 import {
   Container, Typography, Grid, Card, CardContent, Chip,
   TextField, Checkbox, FormControlLabel, Button, Box,
-  Divider, Stack, Paper, List, ListItem, Avatar
+  Divider, Stack, Paper, List, ListItem, Avatar,
+  IconButton
 } from '@mui/material';
-import { Event, ExpandMore, ExpandLess } from '@mui/icons-material';
+import { Event, ExpandMore, ExpandLess, Delete } from '@mui/icons-material';
 import Alerta from '../../components/Alerta/Alerta';
 import NavBar from '../../components/NavBar/NavBar';
 import Footer from '../../components/Footer/Footer';
@@ -429,6 +430,22 @@ const EditarSitioGestor = () => {
                   >
                     {archivo.nombre}
                   </a>
+                  <IconButton 
+                    edge="end" 
+                    onClick={async () => {
+                      console.log("Eliminando multimedia:", archivo.nombre);
+                      await axios.delete(`http://localhost:3001/api/lugares/multimedia/nombre/${archivo.nombre}`);
+                      //window.location.reload();
+                    }}
+                    sx={{ 
+                      color: 'rgba(255, 255, 255, 0.7)',
+                      '&:hover': {
+                        color: 'error.main'
+                      }
+                    }}
+                  >
+                    <Delete fontSize="small" />
+                  </IconButton>
                 </ListItem>
               ))}
             </List>
@@ -461,6 +478,22 @@ const EditarSitioGestor = () => {
                   >
                     {archivo.nombre}
                   </a>
+                  <IconButton 
+                    edge="end" 
+                    onClick={async () => {
+                      console.log("Eliminando documento:", archivo.nombre);
+                      await axios.delete(`http://localhost:3001/api/lugares/documento/nombre/${archivo.nombre}`);
+                      //window.location.reload();
+                    }}
+                    sx={{ 
+                      color: 'rgba(255, 255, 255, 0.7)',
+                      '&:hover': {
+                        color: 'error.main'
+                      }
+                    }}
+                  >
+                    <Delete fontSize="small" />
+                  </IconButton>
                 </ListItem>
               ))}
             </List>
@@ -569,10 +602,11 @@ const EditarSitioGestor = () => {
             variant="outlined" 
             onClick={() => navigate('/gestor')}
             sx={{ 
-              color: 'white', 
-              borderColor: 'rgba(255, 255, 255, 0.23)',
+              color: '#5D4037', // Color café oscuro
+              borderColor: '#5D4037',
               '&:hover': {
-                borderColor: 'rgba(255, 255, 255, 0.5)'
+                borderColor: '#3E2723',
+                backgroundColor: 'rgba(93, 64, 55, 0.08)'
               }
             }}
           >
@@ -597,7 +631,7 @@ const EditarSitioGestor = () => {
           onConfirm={async () => {
             try {
               await axios.put(`http://localhost:3001/api/lugares/editar/${id}`, formData);
-              navigate('/gestor');
+              window.location.reload();
             } catch (error) {
               console.error('Error al guardar sitio:', error);
             }

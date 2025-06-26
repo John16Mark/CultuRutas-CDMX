@@ -362,6 +362,39 @@ class lugar_cont {
   }
 
 
+  static async eliminarDocumentoPorNombre(req, res) {
+    const nombre = req.params.nombre;
+    try {
+      const archivo = await lugar_model.getDocumentoPorNombre(nombre);
+      if (!archivo) return res.status(404).json({ error: 'Documento no encontrado' });
+
+      const ruta = path.join(__dirname, '..', '..', 'public', archivo.ruta_local);
+      if (fs.existsSync(ruta)) fs.unlinkSync(ruta);
+      await lugar_model.eliminarDocumentoPorNombre(nombre);
+      res.status(200).json({ mensaje: 'Documento eliminado correctamente' });
+    } catch (err) {
+      console.error("Error al eliminar documento por nombre:", err);
+      res.status(500).json({ error: err.message });
+    }
+  }
+
+  static async eliminarMultimediaPorNombre(req, res) {
+    const nombre = req.params.nombre;
+    try {
+      const archivo = await lugar_model.getMultimediaPorNombre(nombre);
+      if (!archivo) return res.status(404).json({ error: 'Archivo multimedia no encontrado' });
+
+      const ruta = path.join(__dirname, '..', '..', 'public', archivo.ruta_local);
+      if (fs.existsSync(ruta)) fs.unlinkSync(ruta);
+      await lugar_model.eliminarMultimediaPorNombre(nombre);
+      res.status(200).json({ mensaje: 'Multimedia eliminada correctamente' });
+    } catch (err) {
+      console.error("Error al eliminar multimedia por nombre:", err);
+      res.status(500).json({ error: err.message });
+    }
+  }
+
+
 
 }
 
