@@ -4,6 +4,11 @@ import {
   TextField, Grid, InputLabel, Button
 } from '@mui/material';
 
+const formatDateForInput = (isoString) => {
+  if (!isoString) return '';
+  return isoString.split('T')[0]; // se queda con 'YYYY-MM-DD'
+};
+
 const DialogoEvento = ({
   open,
   onClose,
@@ -20,8 +25,8 @@ const DialogoEvento = ({
       fullWidth
       PaperProps={{
         sx: {
-          backgroundColor: 'rgba(0, 0, 0, 0.8)',
-          color: 'white'
+          backgroundColor: 'rgba(255, 255, 255, 1)',
+          color: '#5a3e36'
         }
       }}
     >
@@ -40,10 +45,18 @@ const DialogoEvento = ({
               margin="normal"
               required
               sx={{
-                '& .MuiInputLabel-root': { color: 'white' },
+                '& .MuiInputLabel-root': { color: '#415b2a' },
                 '& .MuiOutlinedInput-root': {
-                  '& fieldset': { borderColor: 'rgba(255, 255, 255, 0.23)' },
-                  '& input': { color: 'white' }
+                  borderRadius: 2,
+                  '& fieldset': {
+                    borderColor: '#415b2a',
+                  },
+                  '&:hover fieldset': {
+                    borderColor: '#32461f',
+                  },
+                  '&.Mui-focused fieldset': {
+                    borderColor: '#2b4a1c',
+                  },
                 }
               }}
             />
@@ -54,16 +67,24 @@ const DialogoEvento = ({
               fullWidth
               label="Fecha de inicio"
               type="date"
-              value={eventData.startDate}
+              value={formatDateForInput(eventData.startDate)}
               onChange={(e) => setEventData({ ...eventData, startDate: e.target.value })}
               margin="normal"
               required
               InputLabelProps={{ shrink: true }}
               sx={{
-                '& .MuiInputLabel-root': { color: 'white' },
+                '& .MuiInputLabel-root': { color: '#415b2a' },
                 '& .MuiOutlinedInput-root': {
-                  '& fieldset': { borderColor: 'rgba(255, 255, 255, 0.23)' },
-                  '& input': { color: 'white' }
+                  borderRadius: 2,
+                  '& fieldset': {
+                    borderColor: '#415b2a',
+                  },
+                  '&:hover fieldset': {
+                    borderColor: '#32461f',
+                  },
+                  '&.Mui-focused fieldset': {
+                    borderColor: '#2b4a1c',
+                  },
                 }
               }}
             />
@@ -74,15 +95,23 @@ const DialogoEvento = ({
               fullWidth
               label="Fecha de fin"
               type="date"
-              value={eventData.endDate}
+              value={formatDateForInput(eventData.endDate)}
               onChange={(e) => setEventData({ ...eventData, endDate: e.target.value })}
               margin="normal"
               InputLabelProps={{ shrink: true }}
               sx={{
-                '& .MuiInputLabel-root': { color: 'white' },
+                '& .MuiInputLabel-root': { color: '#415b2a' },
                 '& .MuiOutlinedInput-root': {
-                  '& fieldset': { borderColor: 'rgba(255, 255, 255, 0.23)' },
-                  '& input': { color: 'white' }
+                  borderRadius: 2,
+                  '& fieldset': {
+                    borderColor: '#415b2a',
+                  },
+                  '&:hover fieldset': {
+                    borderColor: '#32461f',
+                  },
+                  '&.Mui-focused fieldset': {
+                    borderColor: '#2b4a1c',
+                  },
                 }
               }}
             />
@@ -98,24 +127,40 @@ const DialogoEvento = ({
               onChange={(e) => setEventData({ ...eventData, description: e.target.value })}
               margin="normal"
               sx={{
-                '& .MuiInputLabel-root': { color: 'white' },
+                '& .MuiInputLabel-root': { color: '#415b2a' },
                 '& .MuiOutlinedInput-root': {
-                  '& fieldset': { borderColor: 'rgba(255, 255, 255, 0.23)' },
-                  '& textarea': { color: 'white' }
+                  borderRadius: 2,
+                  '& fieldset': {
+                    borderColor: '#415b2a',
+                  },
+                  '&:hover fieldset': {
+                    borderColor: '#32461f',
+                  },
+                  '&.Mui-focused fieldset': {
+                    borderColor: '#2b4a1c',
+                  },
                 }
               }}
             />
           </Grid>
 
           <Grid size={{ xs: 12 }}>
-            <InputLabel sx={{ color: 'white' }}>Imagen del evento</InputLabel>
+            <InputLabel sx={{ color: '#5a3e36' }}>Imagen del evento</InputLabel>
             <Button
               variant="contained"
               component="label"
               fullWidth
               sx={{
-                mt: 1,
-                backgroundColor: 'primary.main'
+                backgroundColor: '#415b2a',
+                color: '#ffffff',
+                paddingY: 1, // equivalente a paddingTop y paddingBottom de 8px
+                paddingX: 3, // equivalente a paddingLeft y paddingRight de 25px aprox
+                textTransform: 'none',
+                boxShadow: '2px 2px 5px rgba(0, 0, 0, 0.3)', // sombra normal
+                '&:hover': {
+                  backgroundColor: '#32461f', // tono más oscuro para hover
+                  boxShadow: '4px 4px 2px rgba(0, 0, 0, 0.75)', // sombra más intensa
+                },
               }}
             >
               Subir Imagen
@@ -138,7 +183,18 @@ const DialogoEvento = ({
           onClick={onSave}
           variant="contained"
           disabled={!eventData.title || !eventData.startDate}
-          sx={{ backgroundColor: 'primary.main' }}
+          sx={{
+            backgroundColor: '#a9825a',
+            color: '#ffffff',
+            paddingY: 1, // equivalente a paddingTop y paddingBottom de 8px
+            paddingX: 3, // equivalente a paddingLeft y paddingRight de 25px aprox
+            textTransform: 'none',
+            boxShadow: '2px 2px 5px rgba(0, 0, 0, 0.3)', // sombra normal
+            '&:hover': {
+              backgroundColor: '#32461f', // tono más oscuro para hover
+              boxShadow: '4px 4px 2px rgba(0, 0, 0, 0.75)', // sombra más intensa
+            },
+          }}
         >
           Guardar
         </Button>
