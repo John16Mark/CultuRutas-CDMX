@@ -379,7 +379,7 @@ const PlacesCRUD = () => {
                     cursor: 'pointer'
                   }
                 }}
-                onClick={() => handleClick(place.id_sitio)}
+                //onClick={() => handleClick(place.id_sitio)}
               >
                   <CardMedia
                     component="img"
