@@ -1,5 +1,25 @@
 -- Inserciones para la tabla Sitio_turistico_historico
 
+INSERT INTO Gestor (
+    nombre, apellido_p, apellido_m,
+    correo_electronico, contrasena,
+    numero_telefonico, rfc, correo_verificado
+) VALUES ('Ana', 'Sánchez', 'Vega', 
+    'ana.sanchez@culturutas.com', '$2b$10$C28VBBUN1aRVQ97DlNgHfemoAYqq1ccoWKcA.N/asTr/eMb4zRQUu',  -- Hash de "Visita123"
+    '5511223344', 'SAVA900101T12', TRUE
+);
+
+-- Gestor 2 (Contraseña original: "Admin456")
+INSERT INTO Gestor (
+    nombre, apellido_p, apellido_m, 
+    correo_electronico, contrasena, 
+    numero_telefonico, rfc, correo_verificado
+) VALUES (
+    'Carlos', 'Ruiz', 'Díaz', 
+    'carlos.ruiz@culturutas.com', '$2b$10$C28VBBUN1aRVQ97DlNgHfemoAYqq1ccoWKcA.N/asTr/eMb4zRQUu',  -- Hash de Visita123
+    '5544332211', 'RUDC850202M34', TRUE
+);
+
 DELETE FROM Sitio_turistico_historico;
 
 INSERT INTO Sitio_turistico_historico (

@@ -1,6 +1,6 @@
 import { FormControl, InputLabel, Select, MenuItem } from '@mui/material';
 
-const FiltroDropdown = ({ label, value, onChange, opciones, sx }) => {
+const FiltroDropdown = ({ name, label, value, onChange, opciones, sx }) => {
   return (
     <FormControl
       fullWidth
@@ -34,13 +34,14 @@ const FiltroDropdown = ({ label, value, onChange, opciones, sx }) => {
         {label}
       </InputLabel>
       <Select
+        name={name}
         value={value}
         onChange={onChange}
         label={label}
         renderValue={(selected) => {
-  const opcionSeleccionada = opciones.find(op => op.value === selected);
-  return opcionSeleccionada ? opcionSeleccionada.label : '';
-}}
+          const opcionSeleccionada = opciones.find(op => op.value === selected);
+          return opcionSeleccionada ? opcionSeleccionada.label : '';
+        }}
       >
         {opciones.map((opcion, idx) => (
           <MenuItem key={idx} value={opcion.value}>

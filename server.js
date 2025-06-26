@@ -13,9 +13,6 @@ const lugares_cont = require('./src/controllers/lugar_cont');
 const verificacion_cont = require('./src/controllers/verificacion_cont');
 const lugarRoutes = require('./src/routes/lugar');
 
-
-
-
 const app = express();
 app.use(cors());
 app.use(express.json());
@@ -24,8 +21,10 @@ app.use(cookieParser());
 
 app.use(express.urlencoded({ extended: true })); // OK para formularios normales
 
-
 app.use('/api/lugares', lugarRoutes);
+
+app.use('/repositorio', express.static(path.join(__dirname, 'public', 'repositorio')));
+
 
 const PORT = 3001;
 
@@ -33,9 +32,10 @@ const PORT = 3001;
 app.use('/lugares', express.static(path.join(__dirname, 'public', 'lugares')));
 app.use('/imgs', express.static(path.join(__dirname, 'public', 'imgs')));
 
+app.use('/repositorio', express.static(path.join(__dirname, 'public', 'repositorio')));
+
 app.post('/register', register_cont.registro_regular);
 app.post('/login', login_cont.login);
-// Confirmar correo
 app.get('/confirmar-correo', verificacion_cont.confirmarCorreo);
 
 app.post('/get_lugares', lugares_cont.get_todos);
@@ -61,6 +61,7 @@ app.post('/is_logged', (req, res) => {
     console.log("decoded", decoded);
   });
 });
+
 
 app.listen(PORT, () => {
   console.log(`Servidor en funcionamiento en http://localhost:${PORT}`);

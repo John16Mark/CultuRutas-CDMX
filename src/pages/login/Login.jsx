@@ -125,6 +125,8 @@ const Login = () => {
       console.log("ACCESO CONCEDIDO", usuario);
 
       if (usuario.esGestor) {
+        localStorage.setItem('access_token', resultado.token_login);
+        localStorage.setItem('id', usuario.id_gestor);   
         navigate('/gestor');
       } else {
         console.log(resultado)

@@ -172,13 +172,14 @@ class lugar_cont {
   }
 
   static async get_eventos_lugar(req, res) {
+    //const id = req.params.id;
     const { id } = req.body;
-    console.log("\n\x1b[93m .: lugar_controller :.\x1b[0m")
+    console.log("\n\x1b[93m .: lugar_controller :.\nget_eventos_lugar\x1b[0m")
     console.log("Datos recibidos:\n  \x1b[33mid: \x1b[0m", id)
 
     try {
       const resultado = await lugar_model.get_eventos_lugar(id);
-      console.log("resultado: ", resultado);
+      //console.log("resultado: ", resultado);
       return res.status(201).json({ resultado: resultado.registro})
     } catch (err) {
       if(err.error) {
@@ -206,7 +207,7 @@ class lugar_cont {
 
   static async crearEvento(req, res) {
   try {
-      console.log('📥 Datos recibidos:');
+      console.log('Datos recibidos:');
       console.log('Body:', req.body);
       console.log('File:', req.file);
 
@@ -233,18 +234,25 @@ class lugar_cont {
     }
   }
 
-
-
   static async editarEvento(req, res) {
-  try {
+    try {
       const { fecha_inicio, fecha_fin, descripcion, promociones } = req.body;
       const id_evento = req.params.id_evento;
       const imagen = req.file ? `/eventos/${req.file.filename}` : null;
 
+      // Convertir las fechas a formato YYYY-MM-DD
+      const formatoFecha = (iso) => {
+        const date = new Date(iso);
+        return date.toISOString().split('T')[0]; // "2025-06-27"
+      };
+
+      const fecha_inicio_format = formatoFecha(fecha_inicio);
+      const fecha_fin_format = formatoFecha(fecha_fin);
+
       const eventoActualizado = await lugar_model.editarEvento({
         id_evento,
-        fecha_inicio,
-        fecha_fin,
+        fecha_inicio: fecha_inicio_format,
+        fecha_fin: fecha_fin_format,
         descripcion,
         promociones,
         imagen
@@ -257,6 +265,7 @@ class lugar_cont {
     }
   }
 
+
   static async eliminarEvento(req, res) {
     try {
       const id_evento = req.params.id_evento;
@@ -268,13 +277,92 @@ class lugar_cont {
     }
   }
 
+  static async get_archivos_bd_por_sitio(req, res) {
+    const { id } = req.body;
+    if (!id) return res.status(400).json({ error: 'Falta el ID del sitio' });
+
+    try {
+      const archivos_multimedia = await lugar_model.get_multimedia_por_sitio(id);
+      const archivos_documentos = await lugar_model.get_documentos_por_sitio(id);
+      console.log(archivos_multimedia);
+      console.log(archivos_documentos);
+      return res.status(200).json({
+
+        multimedia: archivos_multimedia,
+        documentos: archivos_documentos
+       
+      });
+    } catch (err) {
+      console.error('Error al obtener archivos desde BD:', err);
+      return res.status(500).json({ error: err.message });
+    }
+  }
 
 
+  static async editarSitio(req, res) {
+    const { id } = req.params;
+    const datos = req.body;
+    try {
+      const resultado = await lugar_model.actualizarSitio(id, datos);
+      res.status(200).json(resultado);
+    } catch (error) {
+      res.status(500).json({ error: error.message });
+    }
+  }
 
+
+  static async subirMultimedia(req, res) {
+    const { id } = req.params;
+    const archivo = req.file;
+    if (!archivo) return res.status(400).json({ error: 'No se subió ningún archivo.' });
+
+    try {
+      console.log("Archivo recibido:", req.file);
+      console.log("ID del sitio:", id);
+
+      const nombre = archivo.originalname;
+      const tipo = path.extname(nombre).replace('.', '');
+      const tamanoKB = (archivo.size / 1024).toFixed(2);
+      const ruta_local = `/repositorio/multimedia/${archivo.filename}`;
+      const fecha_publicacion = new Date();
+
+      const resultado = await lugar_model.insertarMultimedia({
+        nombre, tipo, tamano: `${tamanoKB} kB`, ruta_local, fecha_publicacion, id_sitio: id
+      });
+
+      res.status(200).json({ mensaje: 'Multimedia subida correctamente', resultado });
+    } catch (error) {
+      res.status(500).json({ error: error.message });
+    }
+  }
+
+  static async subirDocumento(req, res) {
+    const { id } = req.params;
+    const archivo = req.file;
+    if (!archivo) return res.status(400).json({ error: 'No se subió ningún archivo.' });
+
+    try {
+      console.log("Archivo recibido:", req.file);
+      console.log("ID del sitio:", id);
+
+      const nombre = archivo.originalname;
+      const tipo = path.extname(nombre).replace('.', '');
+      const tamanoKB = (archivo.size / 1024).toFixed(2);
+      const ruta_local = `/repositorio/documentos/${archivo.filename}`;
+      const fecha_publicacion = new Date();
+
+      const resultado = await lugar_model.insertarDocumento({
+        nombre, tipo, tamano: `${tamanoKB} kB`, ruta_local, fecha_publicacion, id_sitio: id
+      });
+
+      res.status(200).json({ mensaje: 'Documento subido correctamente', resultado });
+    } catch (error) {
+      res.status(500).json({ error: error.message });
+    }
+  }
 
 
 
 }
-
 
 module.exports = lugar_cont;

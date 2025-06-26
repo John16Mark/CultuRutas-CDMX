@@ -9,6 +9,7 @@ import Lugares from '../pages/lugares/Lugares';
 import LugarDetalles from '../pages/lugarDetalles/LugarDetalles';
 import LugarRepositorio from '../pages/lugarRepositorio/LugarRepositorio';
 import PlacesCRUD from '../pages/gestor/PlacesCRUD';
+import EditarSitioGestor from '../pages/gestor/EditarSitioGestor';
 
 
 function AppRouter() {
@@ -26,6 +27,7 @@ function AppRouter() {
         <Route path='/lugar/:id/:nombre/repositorio' element={<LugarRepositorio/>} />
         <Route path="/gestor" element={<PlacesCRUD />} />
 
+        <Route path="/gestor/sitio/:id" element={<EditarSitioGestor />} />
 
       </Routes>
     </Router>

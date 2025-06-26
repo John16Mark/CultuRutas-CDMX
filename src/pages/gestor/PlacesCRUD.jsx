@@ -1,44 +1,38 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import {
-  Container,
-  Typography,
-  Button,
+import { Container, Typography, Button,
   Box,
   Grid,
   Card,
   CardMedia,
   CardContent,
-  CardActions,
-  TextField,
+  //CardActions,
+  //TextField,
   Paper,
   Chip,
   Divider,
-  Dialog,
-  DialogTitle,
-  DialogContent,
-  DialogActions,
-  InputLabel,
-  MenuItem,
-  Select,
+  //InputLabel,
+  //MenuItem,
+  //Select,
   IconButton,
-  FormControl,
-  AppBar,
-  Toolbar,
-  Link,
+  //FormControl,
+  //AppBar,
+  //Toolbar,
+  //Link,
   List,
   ListItem,
   ListItemText,
   ListItemSecondaryAction,
   Collapse,
   Avatar,
-  Badge
+  //Badge, 
+  Stack
 } from '@mui/material';
 import { 
   Add, 
   Edit, 
   Delete, 
-  Search, 
+  //Search, 
   Clear, 
   Event, 
   ExpandMore, 
@@ -48,80 +42,14 @@ import {
 // Importa tu imagen de fondo
 import fondoOscuro from '../../img/crema2.png';
 
-// Componente Navbar
-const Navbar = () => {
-  return (
-    <AppBar 
-      position="static" 
-      sx={{ 
-        backgroundColor: 'rgba(0, 0, 0, 0.85)',
-        boxShadow: 'none',
-        borderBottom: '1px solid rgba(255, 255, 255, 0.12)'
-      }}
-    >
-      <Toolbar>
-        <Typography variant="h6" component="div" sx={{ flexGrow: 1, color: 'white' }}>
-          CultuRutas
-        </Typography>
-        <Box sx={{ display: 'flex', gap: 2 }}>
-          <Link href="/" color="inherit" underline="hover" sx={{ color: 'white' }}>Cerrar Sesion</Link>
-          <Link href="/gestor" color="inherit" underline="hover" sx={{ color: 'white', fontWeight: 'bold' }}>Gestor</Link>
-          <Link href="/lugares" color="inherit" underline="hover" sx={{ color: 'white' }}>Lugares</Link>
-        </Box>
-      </Toolbar>
-    </AppBar>
-  );
-};
+import NavBar from '../../components/NavBar/NavBar';
+import Footer from './../../components/Footer/Footer';
+import BarraFiltros from './components/BarraFiltros';
+import DialogoEvento from './components/DialogoEvento';
 
-// Componente Footer
-const Footer = () => {
-  return (
-    <Box 
-      component="footer" 
-      sx={{ 
-        py: 3,
-        px: 2,
-        mt: 'auto',
-        backgroundColor: 'rgba(0, 0, 0, 0.85)',
-        color: 'white',
-        borderTop: '1px solid rgba(255, 255, 255, 0.12)'
-      }}
-    >
-      <Container maxWidth="lg">
-        <Grid container spacing={3}>
-          <Grid item xs={12} sm={4}>
-            <Typography variant="h6" gutterBottom sx={{ color: 'white' }}>
-              CultuRutas
-            </Typography>
-            <Typography variant="body2" sx={{ color: 'rgba(255, 255, 255, 0.7)' }}>
-              Descubre los lugares históricos de la Ciudad de México
-            </Typography>
-          </Grid>
-          <Grid item xs={12} sm={4}>
-            <Typography variant="h6" gutterBottom sx={{ color: 'white' }}>
-              Enlaces
-            </Typography>
-            <Link href="/" color="inherit" display="block" underline="hover" sx={{ color: 'rgba(255, 255, 255, 0.7)' }}>Inicio</Link>
-            <Link href="/gestor" color="inherit" display="block" underline="hover" sx={{ color: 'rgba(255, 255, 255, 0.7)' }}>Gestor</Link>
-            <Link href="/lugares" color="inherit" display="block" underline="hover" sx={{ color: 'rgba(255, 255, 255, 0.7)' }}>Lugares</Link>
-          </Grid>
-          <Grid item xs={12} sm={4}>
-            <Typography variant="h6" gutterBottom sx={{ color: 'white' }}>
-              Contacto
-            </Typography>
-            <Typography variant="body2" sx={{ color: 'rgba(255, 255, 255, 0.7)' }}>contacto@culturutas.com</Typography>
-            <Typography variant="body2" sx={{ color: 'rgba(255, 255, 255, 0.7)' }}>+52 55 1234 5678</Typography>
-          </Grid>
-        </Grid>
-        <Box mt={3}>
-          <Typography variant="body2" align="center" sx={{ color: 'rgba(255, 255, 255, 0.7)' }}>
-            © {new Date().getFullYear()} CultuRutas - Todos los derechos reservados
-          </Typography>
-        </Box>
-      </Container>
-    </Box>
-  );
-};
+import { useNavigate } from 'react-router-dom';
+
+import AssignmentAddIcon from '@mui/icons-material/AssignmentAdd';
 
 const PlacesCRUD = () => {
   const [places, setPlaces] = useState([]);
@@ -143,8 +71,26 @@ const PlacesCRUD = () => {
   });
 
   // Tipos y categorías disponibles
-  const placeTypes = ['Cultural', 'Histórico', 'Natural', 'Religioso'];
-  const allCategories = ['Biblioteca', 'Monumento', 'Museo', 'Naturaleza', 'Paseo', 'Histórico', 'Cultural'];
+  const tipos = [
+    { value: '', label: 'Todas' },
+    { value: 'cultural', label: 'Cultural' },
+    { value: 'historico', label: 'Histórico' },
+    { value: 'natural', label: 'Natural' },
+    { value: 'religioso', label: 'Religioso'}
+  ];
+  const categorias = [
+    { value: '', label: 'Todas' },
+    { value: 'museum', label: 'Museos' },
+    { value: 'monument', label: 'Monumentos' },
+    { value: 'archaeological_zone', label: 'Zonas arqueológicas' },
+  ];
+  
+  //Evento click en las tarjetas.
+  const navigate = useNavigate();
+
+  const handleClick = (id_sitio) => {
+    navigate(`/gestor/sitio/${id_sitio}`);
+  };
 
   useEffect(() => {
     const fetchData = async () => {
@@ -157,7 +103,10 @@ const PlacesCRUD = () => {
 
         const sitiosConEventos = await Promise.all(
           sitios.map(async sitio => {
-            const eventosRes = await axios.get(`http://localhost:3001/api/lugares/evento/${sitio.id_sitio}`);
+            // Buscar los eventos del sitio
+            let id = sitio.id_sitio;
+            const eventosRes = await axios.post('http://localhost:3001/get_eventos_lugar', {id});
+            console.log("eventosRes", eventosRes)
             return { 
               ...sitio, 
               events: eventosRes.data.resultado || [],
@@ -224,6 +173,7 @@ const PlacesCRUD = () => {
         })
       );
       setPlaces(sitiosConEventos);
+      window.location.reload();
     } catch (error) {
       console.error('Error al eliminar evento:', error);
     }
@@ -266,6 +216,7 @@ const PlacesCRUD = () => {
       );
       setPlaces(sitiosConEventos);
       setEventDialogOpen(false);
+      window.location.reload();
     } catch (error) {
       console.error('Error al guardar evento:', error);
     }
@@ -305,7 +256,7 @@ const PlacesCRUD = () => {
         }
       }}
     >
-      <Navbar />
+      <NavBar esTransparente={false} />
 
       <Container 
         maxWidth="lg" 
@@ -316,119 +267,36 @@ const PlacesCRUD = () => {
         }}
       >
         {/* Encabezado */}
-        <Box sx={{ 
-          display: 'flex', 
-          justifyContent: 'space-between', 
-          alignItems: 'center', 
-          mb: 4,
-          flexWrap: 'wrap',
-          gap: 2,
-          color: 'white'
-        }}>
-          
-          <Typography variant="h4" component="h1" color="black" style={{ textAlign: 'center', width: '100%' }}>
-            Panel de Sitios Turísticos
+        <Stack direction='row' sx={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'center' }}>
+          <AssignmentAddIcon sx={{ fontSize: {md: '2.5rem', sm: '2rem', xs: '1.5rem' } }} />
+          <Typography fontWeight='bold' sx= {{fontSize: {md: '2.5rem', sm: '2rem', xs: '1.5rem'}, lineHeight: 1 }}>
+            Gestionar Lugares
+          </Typography>
+        </Stack>
+        <Box sx={{ display: 'flex', justifyContent: 'center', width: '100%', marginTop: '10px', marginBottom: '35px' }}>
+          <Typography>
+            Aquí podrás editar y añadir nuevos sitios.
           </Typography>
         </Box>
 
         {/* Filtros */}
-        <Paper elevation={2} sx={{ 
-          p: 3, 
-          mb: 4,
-          backgroundColor: 'rgba(49, 112, 33, 0.79)',
-          color: 'white'
-        }}>
-          <Box sx={{ 
-            display: 'flex', 
-            alignItems: 'center', 
-            gap: 2, 
-            mb: 2,
-            flexWrap: 'wrap'
-          }}>
-            <TextField
-              label="Buscar lugares"
-              variant="outlined"
-              size="small"
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-              InputProps={{
-                startAdornment: <Search sx={{ color: 'action.active', mr: 1 }} />,
-                sx: { color: 'white' }
-              }}
-              sx={{ 
-                minWidth: 250,
-                '& .MuiInputLabel-root': { color: 'white' },
-                '& .MuiOutlinedInput-root': {
-                  '& fieldset': { borderColor: 'rgba(255, 255, 255, 0.23)' }
-                }
-              }}
-            />
-            
-            <FormControl size="small" sx={{ minWidth: 180 }}>
-              <InputLabel sx={{ color: 'white' }}>Categoría</InputLabel>
-              <Select
-                name="category"
-                value={filters.category}
-                label="Categoría"
-                onChange={handleFilterChange}
-                sx={{ 
-                  color: 'white',
-                  '& .MuiOutlinedInput-notchedOutline': {
-                    borderColor: 'rgba(255, 255, 255, 0.23)'
-                  },
-                  '& .MuiSvgIcon-root': { color: 'white' }
-                }}
-              >
-                <MenuItem value=""><em>Todas</em></MenuItem>
-                {allCategories.map((cat, index) => (
-                  <MenuItem key={index} value={cat}>{cat}</MenuItem>
-                ))}
-              </Select>
-            </FormControl>
-            
-            <FormControl size="small" sx={{ minWidth: 180 }}>
-              <InputLabel sx={{ color: 'white' }}>Tipo</InputLabel>
-              <Select
-                name="type"
-                value={filters.type}
-                label="Tipo"
-                onChange={handleFilterChange}
-                sx={{ 
-                  color: 'white',
-                  '& .MuiOutlinedInput-notchedOutline': {
-                    borderColor: 'rgba(255, 255, 255, 0.23)'
-                  },
-                  '& .MuiSvgIcon-root': { color: 'white' }
-                }}
-              >
-                <MenuItem value=""><em>Todos</em></MenuItem>
-                {placeTypes.map((type, index) => (
-                  <MenuItem key={index} value={type}>{type}</MenuItem>
-                ))}
-              </Select>
-            </FormControl>
-            
-            <Button 
-              variant="outlined" 
-              startIcon={<Clear />}
-              onClick={clearFilters}
-              disabled={!searchTerm && !filters.category && !filters.type}
-              sx={{ color: 'white', borderColor: 'rgba(255, 255, 255, 0.95)' }}
-            >
-              Limpiar
-            </Button>
-          </Box>
-          
-          <Typography variant="body2" sx={{ color: 'rgba(255, 255, 255, 0.7)' }}>
-            Mostrando {filteredPlaces.length} de {places.length} lugares
-          </Typography>
-        </Paper>
+        <BarraFiltros
+          searchTerm={searchTerm}
+          setSearchTerm={setSearchTerm}
+          filters={filters}
+          handleFilterChange={handleFilterChange}
+          clearFilters={clearFilters}
+          filteredCount={filteredPlaces.length}
+          totalCount={places.length}
+          categorias={categorias}
+          tipos={tipos}
+        />
 
         {/* Listado de lugares */}
         {filteredPlaces.length > 0 ? (
           <Grid container spacing={3} justifyContent="center">
             {filteredPlaces.map((place) => (
-              <Grid item xs={12} sm={6} md={4} key={place.id_sitio}>
+              <Grid size={{xs:12, sm:6, md:4}} key={place.id_sitio}>
                 <Card sx={{ 
                   height: '100%', 
                   display: 'flex', 
@@ -438,9 +306,18 @@ const PlacesCRUD = () => {
                   transition: 'transform 0.3s, box-shadow 0.3s',
                   '&:hover': { 
                     transform: 'translateY(-5px)',
-                    boxShadow: '0 4px 20px rgba(49, 26, 26, 0.68)'
+                    boxShadow: '0 4px 20px rgba(49, 26, 26, 0.68)',
+                    cursor: 'pointer'
                   }
-                }}>
+                }}
+
+                onClick={(e) => {
+                  if (e.target.closest('button')) return;
+
+                  handleClick(place.id_sitio);
+                }}
+                //onClick={() => handleClick(place.id_sitio)}
+              >
                   <CardMedia
                     component="img"
                     height="130"
@@ -577,137 +454,18 @@ const PlacesCRUD = () => {
         )}
 
         {/* Diálogo para agregar/editar eventos */}
-        <Dialog 
-          open={eventDialogOpen} 
-          onClose={() => setEventDialogOpen(false)} 
-          maxWidth="sm"
-          fullWidth
-          PaperProps={{
-            sx: {
-              backgroundColor: 'rgba(0, 0, 0, 0.8)',
-              color: 'white'
-            }
-          }}
-        >
-          <DialogTitle>
-            {currentEvent.id_evento ? 'Editar Evento' : 'Agregar Nuevo Evento'}
-          </DialogTitle>
-          <DialogContent dividers>
-            <Grid container spacing={2} sx={{ pt: 1 }}>
-              <Grid item xs={12}>
-                <TextField
-                  fullWidth
-                  label="Título o Promoción"
-                  value={currentEvent.title}
-                  onChange={(e) => setCurrentEvent({ ...currentEvent, title: e.target.value })}
-                  margin="normal"
-                  required
-                  sx={{
-                    '& .MuiInputLabel-root': { color: 'white' },
-                    '& .MuiOutlinedInput-root': {
-                      '& fieldset': { borderColor: 'rgba(255, 255, 255, 0.23)' },
-                      '& input': { color: 'white' }
-                    }
-                  }}
-                />
-              </Grid>
-              <Grid item xs={12} md={6}>
-                <TextField
-                  fullWidth
-                  label="Fecha de inicio"
-                  type="date"
-                  value={currentEvent.startDate}
-                  onChange={(e) => setCurrentEvent({ ...currentEvent, startDate: e.target.value })}
-                  margin="normal"
-                  required
-                  InputLabelProps={{ shrink: true }}
-                  sx={{
-                    '& .MuiInputLabel-root': { color: 'white' },
-                    '& .MuiOutlinedInput-root': {
-                      '& fieldset': { borderColor: 'rgba(255, 255, 255, 0.23)' },
-                      '& input': { color: 'white' }
-                    }
-                  }}
-                />
-              </Grid>
-              <Grid item xs={12} md={6}>
-                <TextField
-                  fullWidth
-                  label="Fecha de fin"
-                  type="date"
-                  value={currentEvent.endDate}
-                  onChange={(e) => setCurrentEvent({ ...currentEvent, endDate: e.target.value })}
-                  margin="normal"
-                  InputLabelProps={{ shrink: true }}
-                  sx={{
-                    '& .MuiInputLabel-root': { color: 'white' },
-                    '& .MuiOutlinedInput-root': {
-                      '& fieldset': { borderColor: 'rgba(255, 255, 255, 0.23)' },
-                      '& input': { color: 'white' }
-                    }
-                  }}
-                />
-              </Grid>
-              <Grid item xs={12}>
-                <TextField
-                  fullWidth
-                  multiline
-                  rows={3}
-                  label="Descripción"
-                  value={currentEvent.description}
-                  onChange={(e) => setCurrentEvent({ ...currentEvent, description: e.target.value })}
-                  margin="normal"
-                  sx={{
-                    '& .MuiInputLabel-root': { color: 'white' },
-                    '& .MuiOutlinedInput-root': {
-                      '& fieldset': { borderColor: 'rgba(255, 255, 255, 0.23)' },
-                      '& textarea': { color: 'white' }
-                    }
-                  }}
-                />
-              </Grid>
-              <Grid item xs={12}>
-                <InputLabel sx={{ color: 'white' }}>Imagen del evento</InputLabel>
-                <Button 
-                  variant="contained" 
-                  component="label" 
-                  fullWidth
-                  sx={{ 
-                    mt: 1,
-                    backgroundColor: 'primary.main'
-                  }}
-                >
-                  Subir Imagen
-                  <input 
-                    type="file" 
-                    hidden 
-                    accept="image/*"
-                    onChange={handleFileChange}
-                  />
-                </Button>
-              </Grid>
-            </Grid>
-          </DialogContent>
-          <DialogActions>
-            <Button 
-              onClick={() => setEventDialogOpen(false)}
-              sx={{ color: 'white' }}
-            >
-              Cancelar
-            </Button>
-            <Button 
-              onClick={handleSaveEvent} 
-              variant="contained"
-              disabled={!currentEvent.title || !currentEvent.startDate}
-              sx={{ backgroundColor: 'primary.main' }}
-            >
-              Guardar
-            </Button>
-          </DialogActions>
-        </Dialog>
+        <DialogoEvento
+          open={eventDialogOpen}
+          onClose={() => setEventDialogOpen(false)}
+          eventData={currentEvent}
+          setEventData={setCurrentEvent}
+          onSave={handleSaveEvent}
+          onFileChange={handleFileChange}
+        />
+
       </Container>
 
-      <Footer />
+      <Footer esTransparente={false} />
     </Box>
   );
 };
