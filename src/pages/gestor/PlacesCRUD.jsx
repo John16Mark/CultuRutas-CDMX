@@ -49,8 +49,9 @@ import {
 import fondoOscuro from '../../img/crema2.png';
 
 import NavBar from '../../components/NavBar/NavBar';
-import Footer from './../../components/Footer/Footer'
+import Footer from './../../components/Footer/Footer';
 
+import { useNavigate } from 'react-router-dom';
 
 const PlacesCRUD = () => {
   const [places, setPlaces] = useState([]);
@@ -74,6 +75,13 @@ const PlacesCRUD = () => {
   // Tipos y categorías disponibles
   const placeTypes = ['Cultural', 'Histórico', 'Natural', 'Religioso'];
   const allCategories = ['Biblioteca', 'Monumento', 'Museo', 'Naturaleza', 'Paseo', 'Histórico', 'Cultural'];
+  
+  //Evento click en las tarjetas.
+  const navigate = useNavigate();
+
+  const handleClick = (id_sitio) => {
+    navigate(`/gestor/sitio/${id_sitio}`);
+  };
 
   useEffect(() => {
     const fetchData = async () => {
@@ -370,9 +378,12 @@ const PlacesCRUD = () => {
                   transition: 'transform 0.3s, box-shadow 0.3s',
                   '&:hover': { 
                     transform: 'translateY(-5px)',
-                    boxShadow: '0 4px 20px rgba(49, 26, 26, 0.68)'
+                    boxShadow: '0 4px 20px rgba(49, 26, 26, 0.68)',
+                    cursor: 'pointer'
                   }
-                }}>
+                }}
+                onClick={() => handleClick(place.id_sitio)}
+              >
                   <CardMedia
                     component="img"
                     height="130"
