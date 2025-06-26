@@ -191,7 +191,7 @@ const DialogoEvento = ({
             textTransform: 'none',
             boxShadow: '2px 2px 5px rgba(0, 0, 0, 0.3)', // sombra normal
             '&:hover': {
-              backgroundColor: '#32461f', // tono más oscuro para hover
+              backgroundColor: '#7A532D', // tono más oscuro para hover
               boxShadow: '4px 4px 2px rgba(0, 0, 0, 0.75)', // sombra más intensa
             },
           }}

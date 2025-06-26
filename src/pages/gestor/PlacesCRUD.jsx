@@ -270,7 +270,7 @@ const PlacesCRUD = () => {
             Gestionar Lugares
           </Typography>
         </Stack>
-        <Box sx={{ display: 'flex', justifyContent: 'center', width: '100%', marginTop: '10px' }}>
+        <Box sx={{ display: 'flex', justifyContent: 'center', width: '100%', marginTop: '10px', marginBottom: '35px' }}>
           <Typography>
             Aquí podrás editar y añadir nuevos sitios.
           </Typography>
