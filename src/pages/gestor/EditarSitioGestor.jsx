@@ -345,6 +345,31 @@ const EditarSitioGestor = () => {
           </Grid>
         </Box>
 
+        {/* Botones de acción */}
+        <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 4 }}>
+          <Button 
+            variant="outlined" 
+            onClick={() => navigate('/gestor')}
+            sx={{ 
+              color: '#5D4037', // Color café oscuro
+              borderColor: '#5D4037',
+              '&:hover': {
+                borderColor: '#3E2723',
+                backgroundColor: 'rgba(93, 64, 55, 0.08)'
+              }
+            }}
+          >
+            Cancelar
+          </Button>
+          <Button 
+            variant="contained" 
+            color="primary" 
+            onClick={() => alertaRef.current.handleClickOpen()}
+          >
+            Guardar cambios
+          </Button>
+        </Box>
+
         {/* Repositorio */}
         <Box sx={{ 
           backgroundColor: 'rgba(0, 0, 0, 0.6)', 
@@ -435,7 +460,7 @@ const EditarSitioGestor = () => {
                     onClick={async () => {
                       console.log("Eliminando multimedia:", archivo.nombre);
                       await axios.delete(`http://localhost:3001/api/lugares/multimedia/nombre/${archivo.nombre}`);
-                      //window.location.reload();
+                      window.location.reload();
                     }}
                     sx={{ 
                       color: 'rgba(255, 255, 255, 0.7)',
@@ -483,7 +508,7 @@ const EditarSitioGestor = () => {
                     onClick={async () => {
                       console.log("Eliminando documento:", archivo.nombre);
                       await axios.delete(`http://localhost:3001/api/lugares/documento/nombre/${archivo.nombre}`);
-                      //window.location.reload();
+                      window.location.reload();
                     }}
                     sx={{ 
                       color: 'rgba(255, 255, 255, 0.7)',
@@ -550,6 +575,7 @@ const EditarSitioGestor = () => {
                     } catch (err) {
                       console.error('Error al subir multimedia:', err);
                     }
+                    window.location.reload();
                   }}
                 />
               </Button>
@@ -589,36 +615,12 @@ const EditarSitioGestor = () => {
                     } catch (err) {
                       console.error('Error al subir documento:', err);
                     }
+                    window.location.reload();
                   }}
                 />
               </Button>
             </Grid>
           </Grid>
-        </Box>
-
-        {/* Botones de acción */}
-        <Box sx={{ display: 'flex', justifyContent: 'space-between', mt: 4 }}>
-          <Button 
-            variant="outlined" 
-            onClick={() => navigate('/gestor')}
-            sx={{ 
-              color: '#5D4037', // Color café oscuro
-              borderColor: '#5D4037',
-              '&:hover': {
-                borderColor: '#3E2723',
-                backgroundColor: 'rgba(93, 64, 55, 0.08)'
-              }
-            }}
-          >
-            Cancelar
-          </Button>
-          <Button 
-            variant="contained" 
-            color="primary" 
-            onClick={() => alertaRef.current.handleClickOpen()}
-          >
-            Guardar cambios
-          </Button>
         </Box>
 
         <Alerta
